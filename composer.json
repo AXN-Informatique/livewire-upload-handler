@@ -19,6 +19,11 @@
         "livewire/livewire": "^3.1",
         "spatie/laravel-medialibrary": "^10.15"
     },
+    "require-dev": {
+        "laravel/pint": "^1.25.1",
+        "driftingly/rector-laravel": "^2.1.1",
+        "rector/rector": "^2.2.6"
+    },
     "autoload": {
         "psr-4": {
             "Axn\\LivewireUploadHandler\\": "src/"
