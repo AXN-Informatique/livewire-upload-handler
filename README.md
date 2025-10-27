@@ -20,6 +20,8 @@ A Laravel package providing powerful file upload handling using Livewire 3, with
 - Laravel 12.0+
 - Livewire 3.1+
 
+> **Note:** This package uses modern PHP 8.4 features including asymmetric visibility, property hooks, enums, and typed exceptions for better type safety and developer experience.
+
 ## Installation
 
 Install the package via Composer:
@@ -280,6 +282,47 @@ return [
 ```
 
 ## Advanced Usage
+
+### Exception Handling
+
+The package uses typed exceptions for better error handling:
+
+```php
+use Axn\LivewireUploadHandler\Exceptions\UploadException;
+use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
+
+// Catch upload exceptions
+try {
+    // Upload logic
+} catch (UploadException $e) {
+    // Handle upload-specific errors
+    logger()->error('Upload failed', ['exception' => $e]);
+}
+
+// FileNotHandledException is thrown when required methods aren't implemented
+catch (FileNotHandledException $e) {
+    // This guides you to either implement the method or use MediaItem/MediaGroup
+}
+```
+
+### Using Enums
+
+The package provides type-safe enums:
+
+```php
+use Axn\LivewireUploadHandler\Enums\MediaType;
+
+$mimeType = 'image/jpeg';
+$mediaType = MediaType::fromMimeType($mimeType);
+
+if ($mediaType->isImage()) {
+    // Handle image
+}
+
+if ($mediaType->supportsPreview()) {
+    // Generate preview
+}
+```
 
 ### Custom Upload Handler
 

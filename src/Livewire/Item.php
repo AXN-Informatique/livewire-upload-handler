@@ -1,10 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Livewire;
 
+use Axn\LivewireUploadHandler\Enums\MediaType;
+use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
+use Axn\LivewireUploadHandler\Exceptions\UploadException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -29,9 +33,10 @@ class Item extends Component
     use HasThemes;
     use WithFileUploads;
 
-    public ?int $uploadingFileSize = null;
+    // PHP 8.4 Asymmetric Visibility
+    public private(set) ?int $uploadingFileSize = null;
 
-    public bool $hasErrorOnUpload = false;
+    public private(set) bool $hasErrorOnUpload = false;
 
     public ?TemporaryUploadedFile $chunkFile = null;
 
@@ -57,7 +62,7 @@ class Item extends Component
     public ?TemporaryUploadedFile $uploadedFile = null;
 
     #[Locked]
-    public bool $hasFile = false;
+    public private(set) bool $hasFile = false;
 
     #[Locked]
     public array $acceptsMimeTypes = [];
@@ -102,7 +107,9 @@ class Item extends Component
     }
 
     /**
-     * https://fly.io/laravel-bytes/chunked-file-upload-livewire/
+     * Handles chunked file upload.
+     *
+     * @see https://fly.io/laravel-bytes/chunked-file-upload-livewire/
      */
     public function updatedChunkFile(): void
     {
@@ -116,27 +123,17 @@ class Item extends Component
         }
 
         try {
-            $chunkHandle = fopen($this->chunkFile->getPathname(), 'rb');
-            $chunkBuffer = fread($chunkHandle, config('livewire-upload-handler.chunk_size'));
-            fclose($chunkHandle);
-
-            $this->chunkFile->delete();
-            $this->chunkFile = null;
-
-            $finalHandle = fopen(TemporaryUploadedFile::createFromLivewire($this->uploadingFileName)->getPathname(), 'ab');
-            fwrite($finalHandle, $chunkBuffer);
-            fclose($finalHandle);
-
-        } catch (Exception $exception) {
+            $this->processChunk();
+        } catch (\Throwable $exception) {
             Log::error($exception);
             $this->hasErrorOnUpload = true;
 
-            return;
+            throw UploadException::chunkProcessingFailed($exception);
         }
 
         $finalFile = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName);
 
-        if ($finalFile->getSize() == $this->uploadingFileSize) {
+        if ($finalFile->getSize() === $this->uploadingFileSize) {
             $this->uploadingFileSize = null;
             $this->uploadingFileName = null;
 
@@ -145,6 +142,23 @@ class Item extends Component
         }
     }
 
+    /**
+     * Process a single chunk of the uploaded file.
+     */
+    protected function processChunk(): void
+    {
+        $chunkContent = file_get_contents($this->chunkFile->getPathname());
+
+        $this->chunkFile->delete();
+        $this->chunkFile = null;
+
+        $finalFilePath = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName)->getPathname();
+        file_put_contents($finalFilePath, $chunkContent, FILE_APPEND);
+    }
+
+    /**
+     * Validate the uploaded file against MIME types and size constraints.
+     */
     protected function validateUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
         try {
@@ -155,7 +169,6 @@ class Item extends Component
                     .($this->acceptsMimeTypes !== [] ? '|mimetypes:'.implode(',', $this->acceptsMimeTypes) : '')
                     .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : ''),
             ])->validate();
-
         } catch (ValidationException $validationException) {
             $uploadedFile->delete();
 
@@ -163,6 +176,9 @@ class Item extends Component
         }
     }
 
+    /**
+     * Called when file upload is complete.
+     */
     protected function uploadFinished(TemporaryUploadedFile $uploadedFile): void
     {
         if ($this->autoSave) {
@@ -182,9 +198,15 @@ class Item extends Component
         );
     }
 
+    /**
+     * Save the uploaded file to permanent storage.
+     * Must be implemented in child classes.
+     *
+     * @throws FileNotHandledException
+     */
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
-        throw new Exception('`saveUploadedFile` not handled by this component.');
+        throw FileNotHandledException::saveUploadedFile(static::class);
     }
 
     public function deleteUploadingFile(): void
@@ -211,9 +233,15 @@ class Item extends Component
         $this->uploadedFile = null;
     }
 
+    /**
+     * Delete a permanently saved file.
+     * Must be implemented in child classes.
+     *
+     * @throws FileNotHandledException
+     */
     public function deleteSavedFile(): void
     {
-        throw new Exception('`deleteSavedFile` not handled by this component.');
+        throw FileNotHandledException::deleteSavedFile(static::class);
     }
 
     public function downloadUploadedFile(): Response
@@ -225,9 +253,15 @@ class Item extends Component
             );
     }
 
+    /**
+     * Download a permanently saved file.
+     * Must be implemented in child classes.
+     *
+     * @throws FileNotHandledException
+     */
     public function downloadSavedFile(): Response
     {
-        throw new Exception('`downloadSavedFile` not handled by this component.');
+        throw FileNotHandledException::downloadSavedFile(static::class);
     }
 
     public function downloadFile(): Response
@@ -254,6 +288,7 @@ class Item extends Component
         return false;
     }
 
+    // PHP 8.4 Property Hooks
     #[Computed]
     protected function fileExists(): bool
     {
@@ -304,7 +339,10 @@ class Item extends Component
             return $this->savedImagePreviewUrl();
         }
 
-        if (! Str::startsWith($this->uploadedFile->getMimeType(), 'image/')) {
+        $mimeType = $this->uploadedFile->getMimeType();
+        $mediaType = MediaType::fromMimeType($mimeType);
+
+        if (! $mediaType->isImage()) {
             return null;
         }
 
@@ -321,12 +359,14 @@ class Item extends Component
     }
 
     #[Computed]
-    protected function inputBaseNameWithoutItemId(): ?string
+    protected function inputBaseNameWithoutItemId(): string
     {
         if (! $this->attachedToGroup) {
             return $this->inputBaseName;
         }
 
-        return preg_replace('/\['.$this->itemId.'\]$/', '', $this->inputBaseName);
+        return Str::of($this->inputBaseName)
+            ->beforeLast('[')
+            ->toString();
     }
 }

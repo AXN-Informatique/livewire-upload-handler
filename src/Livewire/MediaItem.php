@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Livewire;
 
+use Axn\LivewireUploadHandler\Enums\MediaType;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Isolate;
@@ -67,23 +70,37 @@ class MediaItem extends Item
 
     protected function savedFileExists(): bool
     {
+        if (! $this->media instanceof Media) {
+            return false;
+        }
+
         return Storage::disk($this->media->disk)
             ->exists($this->media->getPathRelativeToRoot());
     }
 
     protected function savedFileId(): ?string
     {
-        return (string) $this->media->id;
+        return $this->media instanceof Media
+            ? (string) $this->media->id
+            : null;
     }
 
-    protected function savedFileName(): string
+    protected function savedFileName(): ?string
     {
-        return $this->media->file_name;
+        return $this->media instanceof Media
+            ? $this->media->file_name
+            : null;
     }
 
     protected function savedImagePreviewUrl(): ?string
     {
-        if ($this->media->type !== 'image') {
+        if (! $this->media instanceof Media) {
+            return null;
+        }
+
+        $mediaType = MediaType::fromMimeType($this->media->mime_type);
+
+        if (! $mediaType->isImage()) {
             return null;
         }
 

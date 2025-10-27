@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler;
 
 use Axn\LaravelGlide\GlideServer;
@@ -7,11 +9,14 @@ use Illuminate\Support\Facades\Storage;
 
 class GlideServerFactory
 {
+    /**
+     * @var array<string, GlideServer>
+     */
     protected static array $servers = [];
 
     public static function forDisk(string $disk): GlideServer
     {
-        if (\array_key_exists($disk, self::$servers)) {
+        if (array_key_exists($disk, self::$servers)) {
             return self::$servers[$disk];
         }
 
@@ -30,5 +35,21 @@ class GlideServerFactory
         ]);
 
         return self::$servers[$disk];
+    }
+
+    /**
+     * Clear all cached server instances.
+     */
+    public static function clearCache(): void
+    {
+        self::$servers = [];
+    }
+
+    /**
+     * Check if a server instance exists for the given disk.
+     */
+    public static function has(string $disk): bool
+    {
+        return array_key_exists($disk, self::$servers);
     }
 }

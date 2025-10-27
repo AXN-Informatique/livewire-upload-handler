@@ -62,10 +62,15 @@ class ServiceProvider extends BaseServiceProvider
     {
         $config = $this->app['config']->get('livewire-upload-handler');
 
-        $manifest = json_decode(file_get_contents($this->basePath.'dist/manifest.json'), true);
+        $manifest = json_decode(
+            file_get_contents($this->basePath.'dist/manifest.json'),
+            associative: true,
+            flags: JSON_THROW_ON_ERROR
+        );
 
         $assetsBaseUrl = '/livewire-upload-handler/assets/';
-        $scriptsUrl = $assetsBaseUrl.$manifest['scripts'.(config('app.debug') ? '' : '.min').'.js'];
+        $debugMode = config('app.debug');
+        $scriptsUrl = $assetsBaseUrl.$manifest['scripts'.($debugMode ? '' : '.min').'.js'];
         $stylesUrl = $assetsBaseUrl.$manifest['styles.css'];
 
         $scriptsParams = 'window.livewireUploadHandlerParams = '.json_encode([
@@ -75,7 +80,7 @@ class ServiceProvider extends BaseServiceProvider
             'invalidFileTypeErrorMessage' => __('livewire-upload-handler::errors.invalid_file_type'),
             'fileTooLoudErrorMessage' => __('livewire-upload-handler::errors.file_too_loud'),
             'uploadErrorMessage' => __('livewire-upload-handler::errors.upload'),
-        ]);
+        ], JSON_THROW_ON_ERROR);
 
         Blade::directive('livewireUploadHandlerScripts', fn (): string => <<<HTML
             <script>{$scriptsParams}</script>
@@ -117,19 +122,7 @@ class ServiceProvider extends BaseServiceProvider
 
         // views
         $this->publishes(
-            collect([
-                'components/',
-                'group/add.blade.php',
-                'item/actions.blade.php',
-                'item/add.blade.php',
-                'item/body.blade.php',
-                'item/progress.blade.php',
-                'item.blade.php',
-                'group.blade.php',
-                'errors.blade.php',
-            ])->mapWithKeys(fn (string $viewPath): array => [
-                $this->basePath.'resources/views/'.$viewPath => $this->app->resourcePath('views/vendor/livewire-upload-handler/'.$viewPath),
-            ])->all(),
+            $this->buildViewsPublishArray(),
             'livewire-upload-handler:views'
         );
 
@@ -138,5 +131,27 @@ class ServiceProvider extends BaseServiceProvider
             $this->basePath.'resources/themes' => $this->app->resourcePath('vendor/livewire-upload-handler/themes'),
             $this->basePath.'resources/views/themes' => $this->app->resourcePath('views/vendor/livewire-upload-handler/themes'),
         ], 'livewire-upload-handler:themes');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function buildViewsPublishArray(): array
+    {
+        return collect([
+            'components/',
+            'group/add.blade.php',
+            'item/actions.blade.php',
+            'item/add.blade.php',
+            'item/body.blade.php',
+            'item/progress.blade.php',
+            'item.blade.php',
+            'group.blade.php',
+            'errors.blade.php',
+        ])
+            ->mapWithKeys(fn (string $viewPath): array => [
+                $this->basePath.'resources/views/'.$viewPath => $this->app->resourcePath('views/vendor/livewire-upload-handler/'.$viewPath),
+            ])
+            ->all();
     }
 }

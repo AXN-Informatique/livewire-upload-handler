@@ -1,9 +1,11 @@
 {
     "name": "axn/livewire-upload-handler",
-    "description": "File upload handler using Livewire",
+    "description": "Modern file upload handler for Livewire 3 with chunked uploads, image previews, and Spatie Media Library integration",
+    "keywords": ["laravel", "livewire", "upload", "file-upload", "media-library", "spatie", "chunked-upload", "glide"],
     "homepage": "https://github.com/AXN-Informatique/livewire-upload-handler",
     "support": {
-        "issues": "https://github.com/AXN-Informatique/livewire-upload-handler/issues"
+        "issues": "https://github.com/AXN-Informatique/livewire-upload-handler/issues",
+        "source": "https://github.com/AXN-Informatique/livewire-upload-handler"
     },
     "authors": [
         {

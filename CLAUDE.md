@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Laravel package that provides file upload handling using Livewire 3, with support for Spatie Media Library integration. The package handles chunked file uploads, image previews via Glide, file validation, and drag-and-drop functionality.
+This is a modern Laravel 12 package (requiring PHP 8.4+) that provides file upload handling using Livewire 3, with support for Spatie Media Library integration. The package handles chunked file uploads, image previews via Glide, file validation, and drag-and-drop functionality.
+
+**Modern PHP Features:** The codebase utilizes PHP 8.4 features including asymmetric visibility, property hooks, typed exceptions, and enums for type safety.
 
 ## Development Commands
 
@@ -146,3 +148,37 @@ The build system uses three separate webpack configs (in `webpack/` directory) t
 3. CSS bundle (`styles.css`)
 
 After compilation, `build.js` merges partial manifests into final `dist/manifest.json`.
+
+## Modern PHP 8.4 Features
+
+### Enums
+
+The package uses enums for type-safe constants:
+
+- **`FileState`** (`src/Enums/FileState.php`): Represents file upload states (Uploading, Uploaded, Saved, Error, Deleted)
+- **`MediaType`** (`src/Enums/MediaType.php`): Represents media types with MIME type detection (Image, Video, Audio, Document, Archive, Other)
+- **`AssetType`** (`src/Enums/AssetType.php`): Represents asset types for the assets controller (JavaScript, CSS)
+
+### Typed Exceptions
+
+Custom exceptions for better error handling:
+
+- **`UploadException`** (`src/Exceptions/UploadException.php`): For upload-related errors with factory methods like `chunkProcessingFailed()`, `validationFailed()`, `fileTooLarge()`
+- **`FileNotHandledException`** (`src/Exceptions/FileNotHandledException.php`): For unimplemented methods in base classes, with clear error messages guiding users to either implement the method or use Media Library components
+
+### Asymmetric Visibility (PHP 8.4)
+
+Used in `Item.php` for properties that should be publicly readable but privately writable:
+- `public private(set) ?int $uploadingFileSize`
+- `public private(set) bool $hasErrorOnUpload`
+- `public private(set) bool $hasFile`
+
+This ensures encapsulation while maintaining Livewire's reactivity.
+
+### Type Safety
+
+All classes use:
+- `declare(strict_types=1)` at the top
+- Strict type hints for parameters and return types
+- PHPDoc for array shapes (e.g., `@param array{id?: int|string|null, order?: int, deleted?: bool} $data`)
+- `instanceof` checks instead of null comparisons for consistency

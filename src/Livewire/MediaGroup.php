@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Livewire\Attributes\Locked;
@@ -32,19 +34,27 @@ class MediaGroup extends Group
         $this->maxFileSize ??= config('media-library.max_file_size');
 
         if (! $this->onlyUpload) {
-            $itemsIdsByMediaId = collect($this->items)
-                ->whereNotNull('id')
-                ->mapWithKeys(fn ($itemData, $itemId): array => [$itemData['id'] => $itemId])
-                ->all();
+            $this->loadExistingMedia();
+        }
+    }
 
-            foreach ($this->model->getMedia($this->mediaCollection, $this->mediaProperties) as $media) {
-                $itemId = $itemsIdsByMediaId[$media->id] ?? $this->addItem([
-                    'id' => $media->id,
-                    'order' => $media->order_column,
-                ]);
+    /**
+     * Load existing media items from the model.
+     */
+    protected function loadExistingMedia(): void
+    {
+        $itemsIdsByMediaId = collect($this->items)
+            ->whereNotNull('id')
+            ->mapWithKeys(fn (array $itemData, string $itemId): array => [$itemData['id'] => $itemId])
+            ->all();
 
-                $this->medias[$itemId] = $media;
-            }
+        foreach ($this->model->getMedia($this->mediaCollection, $this->mediaProperties) as $media) {
+            $itemId = $itemsIdsByMediaId[$media->id] ?? $this->addItem([
+                'id' => $media->id,
+                'order' => $media->order_column,
+            ]);
+
+            $this->medias[$itemId] = $media;
         }
     }
 
@@ -68,6 +78,9 @@ class MediaGroup extends Group
         return MediaItem::class;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function itemComponentParams(string $itemId): array
     {
         return [

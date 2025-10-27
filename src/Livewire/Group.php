@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Livewire;
 
+use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
@@ -71,6 +73,9 @@ class Group extends Component
         }
     }
 
+    /**
+     * Increment items count for batch upload.
+     */
     public function incrementItems(int $count): void
     {
         for ($index = 0; $index < $count; $index++) {
@@ -80,6 +85,11 @@ class Group extends Component
         }
     }
 
+    /**
+     * Add a new item to the group.
+     *
+     * @param array{id?: int|string|null, order?: int, deleted?: bool} $data
+     */
     protected function addItem(array $data = []): string
     {
         $data['id'] ??= null;
@@ -91,6 +101,9 @@ class Group extends Component
         return $id;
     }
 
+    /**
+     * Sort items in the group.
+     */
     #[Renderless]
     public function sortItems(array $sortedItemsIds): void
     {
@@ -102,12 +115,18 @@ class Group extends Component
             }
         }
 
-        uasort($this->items, fn ($a, $b): int => $a['order'] <=> $b['order']);
+        uasort($this->items, fn (array $a, array $b): int => $a['order'] <=> $b['order']);
     }
 
+    /**
+     * Save item order to permanent storage.
+     * Must be implemented in child classes when using autoSave with sortable.
+     *
+     * @throws FileNotHandledException
+     */
     protected function saveItemOrder(string $itemId, int $order): void
     {
-        throw new Exception('`saveItemOrder` not handled by this component.');
+        throw FileNotHandledException::saveItemOrder(static::class);
     }
 
     public function render(): View
@@ -120,11 +139,19 @@ class Group extends Component
         return 'livewire-upload-handler::group';
     }
 
+    /**
+     * Get the item component class name.
+     */
     protected function itemComponentClassName(): string
     {
         return Item::class;
     }
 
+    /**
+     * Get parameters to pass to item components.
+     *
+     * @return array<string, mixed>
+     */
     protected function itemComponentParams(string $itemId): array
     {
         return [
@@ -144,7 +171,10 @@ class Group extends Component
         ];
     }
 
-    protected function propertyValueFromItem($property)
+    /**
+     * Get property value from item component instance.
+     */
+    protected function propertyValueFromItem(string $property): mixed
     {
         return app($this->itemComponentClassName())->$property;
     }
