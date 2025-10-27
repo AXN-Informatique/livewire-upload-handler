@@ -16,7 +16,7 @@ return [
 
     'chunk_size' => bytes_to_int(ini_get('upload_max_filesize')),
 
-    'glide_max_image_size' => 2000*2000,
+    'glide_max_image_size' => 2000 * 2000,
 
     'glide_image_driver' => env('GLIDE_IMAGE_DRIVER', 'gd'),
 

@@ -129,6 +129,7 @@ class Item extends Component
         } catch (Exception $e) {
             Log::error($e);
             $this->hasErrorOnUpload = true;
+
             return;
         }
 
@@ -147,11 +148,11 @@ class Item extends Component
     {
         try {
             Validator::make([
-                'uploadedFile' => $uploadedFile
+                'uploadedFile' => $uploadedFile,
             ], [
                 'uploadedFile' => 'file'
                     .($this->acceptsMimeTypes !== [] ? '|mimetypes:'.implode(',', $this->acceptsMimeTypes) : '')
-                    .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : '')
+                    .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : ''),
             ])->validate();
 
         } catch (ValidationException $e) {
@@ -165,6 +166,7 @@ class Item extends Component
     {
         if ($this->autoSave) {
             $this->saveUploadedFile($uploadedFile);
+
             return;
         }
 

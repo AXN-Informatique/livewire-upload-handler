@@ -18,7 +18,7 @@ trait HasThemes
 
         if (! view()->exists($themedViewPath)) {
             return 'livewire-upload-handler::themes.default.'.$viewName;
-        };
+        }
 
         return $themedViewPath;
     }
@@ -55,6 +55,6 @@ trait HasThemes
             }
         }
 
-        return (require $path);
+        return require $path;
     }
 }

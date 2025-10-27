@@ -4,12 +4,12 @@ namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Exception;
-use function Axn\LivewireUploadHandler\str_arr_to_dot;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
-
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
+
+use function Axn\LivewireUploadHandler\str_arr_to_dot;
 
 class Group extends Component
 {

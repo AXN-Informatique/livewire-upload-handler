@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler;
 
+use Axn\LivewireUploadHandler\Components\Dropzone;
 use Axn\LivewireUploadHandler\Livewire\Group;
 use Axn\LivewireUploadHandler\Livewire\Item;
 use Axn\LivewireUploadHandler\Livewire\MediaGroup;
 use Axn\LivewireUploadHandler\Livewire\MediaItem;
-use Axn\LivewireUploadHandler\Components\Dropzone;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;

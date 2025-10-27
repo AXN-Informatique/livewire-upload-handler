@@ -12,7 +12,7 @@ function bytes_to_int(string|int $value): int
 
     $unit = strtoupper(substr($value, -1));
 
-    return match($unit) {
+    return match ($unit) {
         'G' => $intValue * 1024 * 1024 * 1024,
         'M' => $intValue * 1024 * 1024,
         'K' => $intValue * 1024,

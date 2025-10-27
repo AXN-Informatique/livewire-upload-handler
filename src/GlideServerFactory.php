@@ -11,7 +11,7 @@ class GlideServerFactory
 
     public static function forDisk(string $disk): GlideServer
     {
-        if (array_key_exists($disk, self::$servers)) {
+        if (\array_key_exists($disk, self::$servers)) {
             return self::$servers[$disk];
         }
 

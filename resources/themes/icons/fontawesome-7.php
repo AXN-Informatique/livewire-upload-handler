@@ -11,5 +11,5 @@ return [
 
     'cancel' => '<i class="fa-light fa-undo"></i>',
 
-    'sort' => '<i class="fa-light fa-arrows-up-down"></i>'
+    'sort' => '<i class="fa-light fa-arrows-up-down"></i>',
 ];
