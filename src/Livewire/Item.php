@@ -24,6 +24,7 @@ use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 use function Axn\LivewireUploadHandler\str_arr_to_dot;
 
@@ -124,11 +125,11 @@ class Item extends Component
 
         try {
             $this->processChunk();
-        } catch (\Throwable $exception) {
-            Log::error($exception);
+        } catch (Throwable $throwable) {
+            Log::error($throwable);
             $this->hasErrorOnUpload = true;
 
-            throw UploadException::chunkProcessingFailed($exception);
+            throw UploadException::chunkProcessingFailed($throwable);
         }
 
         $finalFile = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName);

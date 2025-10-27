@@ -88,7 +88,7 @@ class Group extends Component
     /**
      * Add a new item to the group.
      *
-     * @param array{id?: int|string|null, order?: int, deleted?: bool} $data
+     * @param  array{id?: int|string|null, order?: int, deleted?: bool}  $data
      */
     protected function addItem(array $data = []): string
     {

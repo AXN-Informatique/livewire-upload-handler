@@ -11,7 +11,7 @@ class FileNotHandledException extends LogicException
     public static function saveUploadedFile(string $componentClass): self
     {
         return new self(
-            "`saveUploadedFile` method not implemented in {$componentClass}. ".
+            \sprintf('`saveUploadedFile` method not implemented in %s. ', $componentClass).
             'Either extend this component and implement the method, or use the MediaItem component for automatic Spatie Media Library integration.'
         );
     }
@@ -19,7 +19,7 @@ class FileNotHandledException extends LogicException
     public static function deleteSavedFile(string $componentClass): self
     {
         return new self(
-            "`deleteSavedFile` method not implemented in {$componentClass}. ".
+            \sprintf('`deleteSavedFile` method not implemented in %s. ', $componentClass).
             'Either extend this component and implement the method, or use the MediaItem component for automatic Spatie Media Library integration.'
         );
     }
@@ -27,7 +27,7 @@ class FileNotHandledException extends LogicException
     public static function downloadSavedFile(string $componentClass): self
     {
         return new self(
-            "`downloadSavedFile` method not implemented in {$componentClass}. ".
+            \sprintf('`downloadSavedFile` method not implemented in %s. ', $componentClass).
             'Either extend this component and implement the method, or use the MediaItem component for automatic Spatie Media Library integration.'
         );
     }
@@ -35,7 +35,7 @@ class FileNotHandledException extends LogicException
     public static function saveItemOrder(string $componentClass): self
     {
         return new self(
-            "`saveItemOrder` method not implemented in {$componentClass}. ".
+            \sprintf('`saveItemOrder` method not implemented in %s. ', $componentClass).
             'Either extend this component and implement the method, or use the MediaGroup component for automatic Spatie Media Library integration.'
         );
     }

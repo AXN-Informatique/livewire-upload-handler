@@ -14,7 +14,7 @@ class AssetsController
         $filePath = __DIR__.'/../../dist/'.$fileName;
         $assetType = AssetType::fromFilename($fileName);
 
-        if ($assetType === null || ! file_exists($filePath)) {
+        if (! $assetType instanceof AssetType || ! file_exists($filePath)) {
             abort(404);
         }
 
