@@ -1,0 +1,44 @@
+{
+    "name": "axn/livewire-upload-handler",
+    "description": "File upload handler using Livewire",
+    "homepage": "https://github.com/AXN-Informatique/livewire-upload-handler",
+    "support": {
+        "issues": "https://github.com/AXN-Informatique/livewire-upload-handler/issues"
+    },
+    "authors": [
+        {
+            "name": "AXN Informatique",
+            "email": "developpement@axn.fr"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "axn/laravel-glide": "^2.1",
+        "laravel/framework": "^10.0",
+        "livewire/livewire": "^3.1",
+        "spatie/laravel-medialibrary": "^10.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Axn\\LivewireUploadHandler\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Axn\\LivewireUploadHandler\\ServiceProvider"
+            ]
+        }
+    },
+    "config" : {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability" : "dev",
+    "prefer-stable" : true
+}

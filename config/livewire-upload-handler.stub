@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+|--------------------------------------------------------------------------
+|   /!\ IMPORTANT
+|--------------------------------------------------------------------------
+|
+| Seules les valeurs modifiées doivent paraître dans ce fichier.
+|
+| Pour connaitre toutes les valeurs de configurations possibles,
+| veuillez vous référer au fichier :
+|
+| /vendor/axn/livewire-upload-handler/config/livewire-upload-handler.php
+|
+*/
+
+return [
+
+];
