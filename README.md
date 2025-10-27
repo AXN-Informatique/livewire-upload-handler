@@ -17,7 +17,7 @@ A Laravel package providing powerful file upload handling using Livewire 3, with
 ## Requirements
 
 - PHP 8.3+
-- Laravel 10.0+
+- Laravel 12.0+
 - Livewire 3.1+
 
 ## Installation
