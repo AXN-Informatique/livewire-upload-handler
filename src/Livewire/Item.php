@@ -127,8 +127,8 @@ class Item extends Component
             fwrite($finalHandle, $chunkBuffer);
             fclose($finalHandle);
 
-        } catch (Exception $e) {
-            Log::error($e);
+        } catch (Exception $exception) {
+            Log::error($exception);
             $this->hasErrorOnUpload = true;
 
             return;
@@ -156,10 +156,10 @@ class Item extends Component
                     .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : ''),
             ])->validate();
 
-        } catch (ValidationException $e) {
+        } catch (ValidationException $validationException) {
             $uploadedFile->delete();
 
-            throw $e;
+            throw $validationException;
         }
     }
 

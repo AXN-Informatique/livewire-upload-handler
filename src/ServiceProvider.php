@@ -65,7 +65,7 @@ class ServiceProvider extends BaseServiceProvider
         $manifest = json_decode(file_get_contents($this->basePath.'dist/manifest.json'), true);
 
         $assetsBaseUrl = '/livewire-upload-handler/assets/';
-        $scriptsUrl = $assetsBaseUrl.$manifest['scripts'.(! config('app.debug') ? '.min' : '').'.js'];
+        $scriptsUrl = $assetsBaseUrl.$manifest['scripts'.(config('app.debug') ? '' : '.min').'.js'];
         $stylesUrl = $assetsBaseUrl.$manifest['styles.css'];
 
         $scriptsParams = 'window.livewireUploadHandlerParams = '.json_encode([
