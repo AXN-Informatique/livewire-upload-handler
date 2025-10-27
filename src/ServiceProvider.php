@@ -77,12 +77,12 @@ class ServiceProvider extends BaseServiceProvider
             'uploadErrorMessage' => __('livewire-upload-handler::errors.upload'),
         ]);
 
-        Blade::directive('livewireUploadHandlerScripts', fn () => <<<HTML
+        Blade::directive('livewireUploadHandlerScripts', fn (): string => <<<HTML
             <script>{$scriptsParams}</script>
             <script src="{$scriptsUrl}"></script>
         HTML);
 
-        Blade::directive('livewireUploadHandlerStyles', fn () => <<<HTML
+        Blade::directive('livewireUploadHandlerStyles', fn (): string => <<<HTML
             <link href="{$stylesUrl}" rel="stylesheet">
         HTML);
     }

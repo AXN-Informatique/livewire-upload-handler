@@ -5,6 +5,7 @@ namespace Axn\LivewireUploadHandler\Livewire;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -82,7 +83,7 @@ class Item extends Component
     #[Locked]
     public bool $sortable = false;
 
-    public function mount()
+    public function mount(): void
     {
         if ($this->glidePreviewSettings === []) {
             $this->glidePreviewSettings = config('livewire-upload-handler.glide_preview_settings');
@@ -231,14 +232,14 @@ class Item extends Component
 
     public function downloadFile(): Response
     {
-        return $this->uploadedFile !== null
+        return $this->uploadedFile instanceof TemporaryUploadedFile
             ? $this->downloadUploadedFile()
             : $this->downloadSavedFile();
     }
 
-    public function render()
+    public function render(): View
     {
-        $this->hasFile = $this->uploadedFile !== null || $this->hasSavedFile();
+        $this->hasFile = $this->uploadedFile instanceof TemporaryUploadedFile || $this->hasSavedFile();
 
         return view($this->viewName());
     }
@@ -256,7 +257,7 @@ class Item extends Component
     #[Computed]
     protected function fileExists(): bool
     {
-        return $this->uploadedFile !== null
+        return $this->uploadedFile instanceof TemporaryUploadedFile
             ? $this->uploadedFile->exists()
             : $this->savedFileExists();
     }
@@ -269,7 +270,7 @@ class Item extends Component
     #[Computed]
     protected function fileId(): ?string
     {
-        return $this->uploadedFile !== null
+        return $this->uploadedFile instanceof TemporaryUploadedFile
             ? null
             : $this->savedFileId();
     }
@@ -282,7 +283,7 @@ class Item extends Component
     #[Computed]
     protected function fileName(): ?string
     {
-        return $this->uploadedFile !== null
+        return $this->uploadedFile instanceof TemporaryUploadedFile
             ? $this->uploadedFile->getClientOriginalName()
             : $this->savedFileName();
     }
@@ -299,7 +300,7 @@ class Item extends Component
             return null;
         }
 
-        if ($this->uploadedFile === null) {
+        if (! $this->uploadedFile instanceof TemporaryUploadedFile) {
             return $this->savedImagePreviewUrl();
         }
 
@@ -320,7 +321,7 @@ class Item extends Component
     }
 
     #[Computed]
-    protected function inputBaseNameWithoutItemId()
+    protected function inputBaseNameWithoutItemId(): ?string
     {
         if (! $this->attachedToGroup) {
             return $this->inputBaseName;

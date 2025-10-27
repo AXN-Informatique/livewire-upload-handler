@@ -18,7 +18,7 @@ class MediaGroup extends Group
 
     protected array $medias = [];
 
-    public function mount()
+    public function mount(): void
     {
         parent::mount();
 
@@ -34,7 +34,7 @@ class MediaGroup extends Group
         if (! $this->onlyUpload) {
             $itemsIdsByMediaId = collect($this->items)
                 ->whereNotNull('id')
-                ->mapWithKeys(fn ($itemData, $itemId) => [$itemData['id'] => $itemId])
+                ->mapWithKeys(fn ($itemData, $itemId): array => [$itemData['id'] => $itemId])
                 ->all();
 
             foreach ($this->model->getMedia($this->mediaCollection, $this->mediaProperties) as $media) {

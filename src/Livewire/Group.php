@@ -4,6 +4,7 @@ namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
 use Livewire\Attributes\Renderless;
@@ -47,7 +48,7 @@ class Group extends Component
 
     protected array $uploadFromGroupAtIndex = [];
 
-    public function mount()
+    public function mount(): void
     {
         $this->acceptsMimeTypes ??= $this->propertyValueFromItem('acceptsMimeTypes');
         $this->maxFileSize ??= $this->propertyValueFromItem('maxFileSize');
@@ -101,7 +102,7 @@ class Group extends Component
             }
         }
 
-        uasort($this->items, fn ($a, $b) => $a['order'] <=> $b['order']);
+        uasort($this->items, fn ($a, $b): int => $a['order'] <=> $b['order']);
     }
 
     protected function saveItemOrder(string $itemId, int $order): void
@@ -109,7 +110,7 @@ class Group extends Component
         throw new Exception('`saveItemOrder` not handled by this component.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view($this->viewName());
     }

@@ -26,7 +26,7 @@ class MediaItem extends Item
     #[Locked]
     public ?Media $media = null;
 
-    public function mount()
+    public function mount(): void
     {
         parent::mount();
 
@@ -62,7 +62,7 @@ class MediaItem extends Item
 
     protected function hasSavedFile(): bool
     {
-        return $this->media !== null;
+        return $this->media instanceof Media;
     }
 
     protected function savedFileExists(): bool
