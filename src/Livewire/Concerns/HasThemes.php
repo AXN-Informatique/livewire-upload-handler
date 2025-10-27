@@ -12,7 +12,7 @@ trait HasThemes
 
     protected function themedViewPath(string $viewName): string
     {
-        $theme = $this->theme ?: config('livewire-upload-handler.theme') ?: 'default';
+        $theme = ($this->theme ?: config('livewire-upload-handler.theme')) ?: 'default';
 
         $themedViewPath = 'livewire-upload-handler::themes.'.$theme.'.'.$viewName;
 
