@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
+use Axn\LivewireUploadHandler\Exceptions\ActionNotHandledException;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
@@ -122,11 +122,11 @@ class Group extends Component
      * Save item order to permanent storage.
      * Must be implemented in child classes when using autoSave with sortable.
      *
-     * @throws FileNotHandledException
+     * @throws ActionNotHandledException
      */
     protected function saveItemOrder(string $itemId, int $order): void
     {
-        throw FileNotHandledException::saveItemOrder(static::class);
+        throw ActionNotHandledException::saveItemOrder(static::class);
     }
 
     public function render(): View

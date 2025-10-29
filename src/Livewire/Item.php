@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Enums\FileType;
-use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
-use Axn\LivewireUploadHandler\Exceptions\UploadException;
+use Axn\LivewireUploadHandler\Exceptions\ActionNotHandledException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
@@ -125,6 +124,7 @@ class Item extends Component
 
         try {
             $this->processChunk();
+
         } catch (Throwable $throwable) {
             Log::error($throwable);
             $this->hasErrorOnUpload = true;
@@ -203,11 +203,11 @@ class Item extends Component
      * Save the uploaded file to permanent storage.
      * Must be implemented in child classes.
      *
-     * @throws FileNotHandledException
+     * @throws ActionNotHandledException
      */
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
-        throw FileNotHandledException::saveUploadedFile(static::class);
+        throw ActionNotHandledException::saveUploadedFile(static::class);
     }
 
     public function deleteUploadingFile(): void
@@ -238,11 +238,11 @@ class Item extends Component
      * Delete a permanently saved file.
      * Must be implemented in child classes.
      *
-     * @throws FileNotHandledException
+     * @throws ActionNotHandledException
      */
     public function deleteSavedFile(): void
     {
-        throw FileNotHandledException::deleteSavedFile(static::class);
+        throw ActionNotHandledException::deleteSavedFile(static::class);
     }
 
     public function downloadUploadedFile(): Response
@@ -258,11 +258,11 @@ class Item extends Component
      * Download a permanently saved file.
      * Must be implemented in child classes.
      *
-     * @throws FileNotHandledException
+     * @throws ActionNotHandledException
      */
     public function downloadSavedFile(): Response
     {
-        throw FileNotHandledException::downloadSavedFile(static::class);
+        throw ActionNotHandledException::downloadSavedFile(static::class);
     }
 
     public function downloadFile(): Response

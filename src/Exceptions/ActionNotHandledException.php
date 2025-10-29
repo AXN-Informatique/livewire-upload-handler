@@ -6,7 +6,7 @@ namespace Axn\LivewireUploadHandler\Exceptions;
 
 use LogicException;
 
-class FileNotHandledException extends LogicException
+class ActionNotHandledException extends LogicException
 {
     public static function saveUploadedFile(string $componentClass): self
     {
