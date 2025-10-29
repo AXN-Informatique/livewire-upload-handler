@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Enums;
 
-enum MediaType: string
+enum FileType: string
 {
     case Image = 'image';
     case Video = 'video';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Axn\LivewireUploadHandler\Enums\MediaType;
+use Axn\LivewireUploadHandler\Enums\FileType;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Isolate;
@@ -98,9 +98,9 @@ class MediaItem extends Item
             return null;
         }
 
-        $mediaType = MediaType::fromMimeType($this->media->mime_type);
+        $fileType = FileType::fromMimeType($this->media->mime_type);
 
-        if (! $mediaType->isImage()) {
+        if (! $fileType->isImage()) {
             return null;
         }
 

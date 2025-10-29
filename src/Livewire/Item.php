@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Axn\LivewireUploadHandler\Enums\MediaType;
+use Axn\LivewireUploadHandler\Enums\FileType;
 use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
 use Axn\LivewireUploadHandler\Exceptions\UploadException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
@@ -341,9 +341,9 @@ class Item extends Component
         }
 
         $mimeType = $this->uploadedFile->getMimeType();
-        $mediaType = MediaType::fromMimeType($mimeType);
+        $fileType = FileType::fromMimeType($mimeType);
 
-        if (! $mediaType->isImage()) {
+        if (! $fileType->isImage()) {
             return null;
         }
 
