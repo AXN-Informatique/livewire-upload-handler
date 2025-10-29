@@ -129,7 +129,7 @@ class Item extends Component
             Log::error($throwable);
             $this->hasErrorOnUpload = true;
 
-            throw UploadException::chunkProcessingFailed($throwable);
+            return;
         }
 
         $finalFile = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName);
