@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Enums\FileType;
-use Axn\LivewireUploadHandler\Exceptions\ActionNotHandledException;
+use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
@@ -70,10 +70,7 @@ class Item extends Component
     public array $compressorjsSettings = [];
 
     #[Locked]
-    public array $glidePreviewSettings = [];
-
-    #[Locked]
-    public bool $previewImage = false;
+    public bool $previewEnabled = false;
 
     #[Locked]
     public bool $autoSave = false;
@@ -86,10 +83,6 @@ class Item extends Component
 
     public function mount(): void
     {
-        if ($this->glidePreviewSettings === []) {
-            $this->glidePreviewSettings = config('livewire-upload-handler.glide_preview_settings');
-        }
-
         if (old() !== []) {
             $oldData = old(str_arr_to_dot($this->inputBaseName));
 
@@ -199,11 +192,11 @@ class Item extends Component
      * Save the uploaded file to permanent storage.
      * Must be implemented in child classes.
      *
-     * @throws ActionNotHandledException
+     * @throws MethodNotImplementedException
      */
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
-        throw ActionNotHandledException::saveUploadedFile(static::class);
+        throw MethodNotImplementedException::saveUploadedFile(static::class);
     }
 
     public function deleteUploadingFile(): void
@@ -220,6 +213,10 @@ class Item extends Component
 
     public function deleteUploadedFile(): void
     {
+        if ($this->uploadedFile === null) {
+            return;
+        }
+
         $this->dispatch(
             'livewire-upload-handler:canceled',
             inputBaseName: $this->inputBaseNameWithoutItemId,
@@ -234,38 +231,24 @@ class Item extends Component
      * Delete a permanently saved file.
      * Must be implemented in child classes.
      *
-     * @throws ActionNotHandledException
+     * @throws MethodNotImplementedException
      */
     public function deleteSavedFile(): void
     {
-        throw ActionNotHandledException::deleteSavedFile(static::class);
-    }
-
-    public function downloadUploadedFile(): Response
-    {
-        return Storage::disk(FileUploadConfiguration::disk())
-            ->download(
-                path: FileUploadConfiguration::directory().'/'.$this->uploadedFile->getFilename(),
-                name: $this->uploadedFile->getClientOriginalName()
-            );
-    }
-
-    /**
-     * Download a permanently saved file.
-     * Must be implemented in child classes.
-     *
-     * @throws ActionNotHandledException
-     */
-    public function downloadSavedFile(): Response
-    {
-        throw ActionNotHandledException::downloadSavedFile(static::class);
+        throw MethodNotImplementedException::deleteSavedFile(static::class);
     }
 
     public function downloadFile(): Response
     {
-        return $this->uploadedFile instanceof TemporaryUploadedFile
-            ? $this->downloadUploadedFile()
-            : $this->downloadSavedFile();
+        if (! $this->fileExists) {
+            abort(404);
+        }
+
+        return Storage::disk($this->fileDisk)
+            ->download(
+                path: $this->filePath,
+                name: $this->fileName,
+            );
     }
 
     public function render(): View
@@ -276,7 +259,8 @@ class Item extends Component
     #[Computed]
     protected function hasFile(): bool
     {
-        return $this->uploadedFile instanceof TemporaryUploadedFile || $this->hasSavedFile();
+        return $this->uploadedFile instanceof TemporaryUploadedFile
+            || $this->hasSavedFile();
     }
 
     protected function hasSavedFile(): bool
@@ -284,74 +268,115 @@ class Item extends Component
         return false;
     }
 
-    // PHP 8.4 Property Hooks
+    #[Computed]
+    protected function fileDisk(): ?string
+    {
+        if (! $this->hasFile) {
+            return null;
+        }
+
+        return $this->uploadedFile instanceof TemporaryUploadedFile
+            ? FileUploadConfiguration::disk()
+            : $this->savedFileDisk();
+    }
+
+    protected function savedFileDisk(): string
+    {
+        throw MethodNotImplementedException::savedFileDisk(static::class);
+    }
+
+    #[Computed]
+    protected function filePath(): ?string
+    {
+        if (! $this->hasFile) {
+            return null;
+        }
+
+        return $this->uploadedFile instanceof TemporaryUploadedFile
+            ? FileUploadConfiguration::directory().'/'.$this->uploadedFile->getFilename()
+            : $this->savedFilePath();
+    }
+
+    protected function savedFilePath(): string
+    {
+        throw MethodNotImplementedException::savedFilePath(static::class);
+    }
+
     #[Computed]
     protected function fileExists(): bool
     {
-        return $this->uploadedFile instanceof TemporaryUploadedFile
-            ? $this->uploadedFile->exists()
-            : $this->savedFileExists();
-    }
+        if (! $this->hasFile) {
+            return false;
+        }
 
-    protected function savedFileExists(): bool
-    {
-        return false;
+        return Storage::disk($this->fileDisk)
+            ->exists($this->filePath);
     }
 
     #[Computed]
     protected function fileId(): ?string
     {
+        if (! $this->hasFile) {
+            return null;
+        }
+
         return $this->uploadedFile instanceof TemporaryUploadedFile
             ? null
             : $this->savedFileId();
     }
 
-    protected function savedFileId(): ?string
+    protected function savedFileId(): string
     {
-        return null;
+        throw MethodNotImplementedException::savedFileId(static::class);
     }
 
     #[Computed]
     protected function fileName(): ?string
     {
+        if (! $this->hasFile) {
+            return null;
+        }
+
         return $this->uploadedFile instanceof TemporaryUploadedFile
             ? $this->uploadedFile->getClientOriginalName()
             : $this->savedFileName();
     }
 
-    protected function savedFileName(): ?string
+    protected function savedFileName(): string
     {
-        return null;
+        throw MethodNotImplementedException::savedFileName(static::class);
     }
 
     #[Computed]
-    protected function imagePreviewUrl(): ?string
+    protected function fileType(): ?FileType
     {
-        if (! $this->hasFile || ! $this->previewImage) {
+        if (! $this->hasFile) {
             return null;
         }
 
-        if (! $this->uploadedFile instanceof TemporaryUploadedFile) {
-            return $this->savedImagePreviewUrl();
-        }
+        $mimeType = $this->uploadedFile instanceof TemporaryUploadedFile
+            ? $this->uploadedFile->getMimeType()
+            : $this->savedFileMimeType();
 
-        $mimeType = $this->uploadedFile->getMimeType();
-        $fileType = FileType::fromMimeType($mimeType);
-
-        if (! $fileType->isImage()) {
-            return null;
-        }
-
-        return GlideServerFactory::forDisk(FileUploadConfiguration::disk())
-            ->url(
-                FileUploadConfiguration::directory().'/'.$this->uploadedFile->getFilename(),
-                $this->glidePreviewSettings,
-            );
+        return FileType::fromMimeType($mimeType);
     }
 
-    protected function savedImagePreviewUrl(): ?string
+    protected function savedFileMimeType(): string
     {
-        return null;
+        throw MethodNotImplementedException::savedFileMimeType(static::class);
+    }
+
+    protected function glideUrl(array $params = []): ?string
+    {
+        if (! $this->hasFile) {
+            return null;
+        }
+
+        return GlideServerFactory::forDisk($this->fileDisk)
+            ->url(
+                path: $this->filePath,
+                params: $params,
+            );
     }
 
     #[Computed]

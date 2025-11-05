@@ -24,10 +24,4 @@ return [
 
     'glide_base_url' => '/livewire-upload-handler/glide',
 
-    'glide_preview_settings' => [
-        'w' => 70,
-        'h' => 70,
-        'fit' => 'crop',
-    ],
-
 ];

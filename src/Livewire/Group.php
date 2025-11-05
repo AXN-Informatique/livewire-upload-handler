@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Axn\LivewireUploadHandler\Exceptions\ActionNotHandledException;
+use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
@@ -34,10 +34,7 @@ class Group extends Component
     public ?array $compressorjsSettings = null;
 
     #[Locked]
-    public ?array $glidePreviewSettings = null;
-
-    #[Locked]
-    public ?bool $previewImage = null;
+    public ?bool $previewEnabled = null;
 
     #[Locked]
     public ?bool $autoSave = null;
@@ -55,8 +52,7 @@ class Group extends Component
         $this->acceptsMimeTypes ??= $this->propertyValueFromItem('acceptsMimeTypes');
         $this->maxFileSize ??= $this->propertyValueFromItem('maxFileSize');
         $this->compressorjsSettings ??= $this->propertyValueFromItem('compressorjsSettings');
-        $this->glidePreviewSettings ??= $this->propertyValueFromItem('glidePreviewSettings');
-        $this->previewImage ??= $this->propertyValueFromItem('previewImage');
+        $this->previewEnabled ??= $this->propertyValueFromItem('previewEnabled');
         $this->autoSave ??= $this->propertyValueFromItem('autoSave');
         $this->onlyUpload ??= $this->propertyValueFromItem('onlyUpload');
 
@@ -122,11 +118,11 @@ class Group extends Component
      * Save item order to permanent storage.
      * Must be implemented in child classes when using autoSave with sortable.
      *
-     * @throws ActionNotHandledException
+     * @throws MethodNotImplementedException
      */
     protected function saveItemOrder(string $itemId, int $order): void
     {
-        throw ActionNotHandledException::saveItemOrder(static::class);
+        throw MethodNotImplementedException::saveItemOrder(static::class);
     }
 
     public function render(): View
@@ -156,8 +152,7 @@ class Group extends Component
             'acceptsMimeTypes' => $this->acceptsMimeTypes,
             'maxFileSize' => $this->maxFileSize,
             'compressorjsSettings' => $this->compressorjsSettings,
-            'glidePreviewSettings' => $this->glidePreviewSettings,
-            'previewImage' => $this->previewImage,
+            'previewEnabled' => $this->previewEnabled,
             'autoSave' => $this->autoSave,
             'onlyUpload' => $this->onlyUpload,
             'sortable' => $this->sortable,

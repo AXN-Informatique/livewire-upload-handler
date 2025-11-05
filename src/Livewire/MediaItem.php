@@ -57,58 +57,34 @@ class MediaItem extends Item
         $this->itemData['id'] = null;
     }
 
-    public function downloadSavedFile(): Response
-    {
-        return Storage::disk($this->media->disk)
-            ->download($this->media->getPathRelativeToRoot());
-    }
-
     protected function hasSavedFile(): bool
     {
         return $this->media instanceof Media;
     }
 
-    protected function savedFileExists(): bool
+    protected function savedFileDisk(): string
     {
-        if (! $this->media instanceof Media) {
-            return false;
-        }
-
-        return Storage::disk($this->media->disk)
-            ->exists($this->media->getPathRelativeToRoot());
+        return $this->media->disk;
     }
 
-    protected function savedFileId(): ?string
+    protected function savedFilePath(): string
     {
-        return $this->media instanceof Media
-            ? (string) $this->media->id
-            : null;
+        return $this->media->getPathRelativeToRoot();
     }
 
-    protected function savedFileName(): ?string
+    protected function savedFileId(): string
     {
-        return $this->media instanceof Media
-            ? $this->media->file_name
-            : null;
+        return (string) $this->media->id;
     }
 
-    protected function savedImagePreviewUrl(): ?string
+    protected function savedFileName(): string
     {
-        if (! $this->media instanceof Media) {
-            return null;
-        }
+        return $this->media->file_name;
+    }
 
-        $fileType = FileType::fromMimeType($this->media->mime_type);
-
-        if (! $fileType->isImage()) {
-            return null;
-        }
-
-        return GlideServerFactory::forDisk($this->media->disk)
-            ->url(
-                $this->media->getPathRelativeToRoot(),
-                $this->glidePreviewSettings,
-            );
+    protected function savedFileMimeType(): string
+    {
+        return $this->media->mime_type;
     }
 
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void

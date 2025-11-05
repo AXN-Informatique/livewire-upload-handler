@@ -10,9 +10,9 @@
                     </div>
                 @endif
 
-                @if ($this->imagePreviewUrl !== null)
+                @if ($this->previewEnabled && $this->fileType->isImage())
                     <div class="luh__item-preview" x-bind:class="{'luh__item--deleted': deleted}">
-                        <img src="{{ $this->imagePreviewUrl }}">
+                        <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
                     </div>
                 @endif
 
