@@ -33,10 +33,9 @@ class Item extends Component
     use HasThemes;
     use WithFileUploads;
 
-    // PHP 8.4 Asymmetric Visibility
-    public private(set) ?int $uploadingFileSize = null;
+    public ?int $uploadingFileSize = null;
 
-    public private(set) bool $hasErrorOnUpload = false;
+    public bool $hasErrorOnUpload = false;
 
     public ?TemporaryUploadedFile $chunkFile = null;
 
