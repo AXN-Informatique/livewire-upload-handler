@@ -111,6 +111,26 @@
 }
 
 /*
+ * PROGRESS
+ * =============================================================================
+ */
+
+.luh__progress {
+    display: flex;
+    align-items: center;
+}
+
+.luh__progress-bar {
+    flex-grow: 1;
+}
+
+.luh__progress-cancel {
+    flex-grow: 0;
+    padding-left: 0.75rem;
+}
+
+
+/*
  * ERRORS
  * =============================================================================
  */

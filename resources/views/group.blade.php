@@ -17,8 +17,7 @@
             @endforeach
         </div>
 
-        @include('livewire-upload-handler::group.add')
-
+        @include('livewire-upload-handler::group.actions.add')
         @include('livewire-upload-handler::errors')
     </x-livewire-upload-handler-dropzone>
 </div>

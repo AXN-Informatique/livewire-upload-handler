@@ -11,6 +11,8 @@ return [
 
     'cancel_button' => 'btn btn-sm btn-outline-secondary',
 
+    'cancel_upload_button' => 'btn btn-link',
+
     'download_link' => 'icon-link',
 
     'missing_file_warning' => 'text-danger',

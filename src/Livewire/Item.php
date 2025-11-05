@@ -61,9 +61,6 @@ class Item extends Component
     public ?TemporaryUploadedFile $uploadedFile = null;
 
     #[Locked]
-    public private(set) bool $hasFile = false;
-
-    #[Locked]
     public array $acceptsMimeTypes = [];
 
     #[Locked]
@@ -273,14 +270,13 @@ class Item extends Component
 
     public function render(): View
     {
-        $this->hasFile = $this->uploadedFile instanceof TemporaryUploadedFile || $this->hasSavedFile();
-
-        return view($this->viewName());
+        return view('livewire-upload-handler::item');
     }
 
-    protected function viewName(): string
+    #[Computed]
+    protected function hasFile(): bool
     {
-        return 'livewire-upload-handler::item';
+        return $this->uploadedFile instanceof TemporaryUploadedFile || $this->hasSavedFile();
     }
 
     protected function hasSavedFile(): bool

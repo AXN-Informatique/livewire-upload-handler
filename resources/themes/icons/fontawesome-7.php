@@ -11,5 +11,7 @@ return [
 
     'cancel' => '<i class="fa-light fa-undo"></i>',
 
+    'cancel_upload' => '<i class="fa-light fa-xmark"></i>',
+
     'sort' => '<i class="fa-light fa-arrows-up-down"></i>',
 ];

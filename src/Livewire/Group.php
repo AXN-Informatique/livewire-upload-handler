@@ -131,12 +131,7 @@ class Group extends Component
 
     public function render(): View
     {
-        return view($this->viewName());
-    }
-
-    protected function viewName(): string
-    {
-        return 'livewire-upload-handler::group';
+        return view('livewire-upload-handler::group');
     }
 
     /**

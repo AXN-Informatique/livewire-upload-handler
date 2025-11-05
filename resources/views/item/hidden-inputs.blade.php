@@ -1,4 +1,4 @@
-@if (! $autoSave && $hasFile)
+@if ($this->hasFile && ! $autoSave)
     @if ($uploadedFile !== null)
         <input
             type="hidden"
