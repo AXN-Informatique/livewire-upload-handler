@@ -1,26 +1,30 @@
-<div x-data="LivewireUploadHandlerItem($wire)" class="luh__item">
+<div x-data="LivewireUploadHandlerItem($wire)" class="luh-item">
     @include('livewire-upload-handler::item.hidden-inputs')
 
-    <x-livewire-upload-handler-dropzone :disabled="$attachedToGroup">
+    <x-livewire-upload-handler-dropzone
+        class="luh-dropzone"
+        overlay-class="luh-dropzone-overlay"
+        :disabled="$attachedToGroup"
+    >
         @if ($this->hasFile)
-            <div class="luh__item-content" x-show="! uploading">
+            <div class="luh-item-content" x-show="! uploading">
                 @if ($sortable)
-                    <div class="luh__item-sort js--luh__sort-handle">
+                    <div class="luh-item-sort luh__sort-handle">
                         {!! $this->icons['sort'] ?? '&vellip;' !!}
                     </div>
                 @endif
 
                 @if ($this->previewEnabled && $this->fileType->isImage())
-                    <div class="luh__item-preview" x-bind:class="{'luh__item--deleted': deleted}">
+                    <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
                         <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
                     </div>
                 @endif
 
-                <div class="luh__item-body" x-bind:class="{'luh__item--deleted': deleted}">
+                <div class="luh-item-body" x-bind:class="{'luh-item-deleted': deleted}">
                     @include('livewire-upload-handler::item.body')
                 </div>
 
-                <div class="luh__item-actions">
+                <div class="luh-item-actions">
                     @include('livewire-upload-handler::item.actions.update')
                     @include('livewire-upload-handler::item.actions.delete')
                     @include('livewire-upload-handler::item.actions.undelete')

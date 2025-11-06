@@ -8,6 +8,8 @@ use Illuminate\View\View;
 class Dropzone extends Component
 {
     public function __construct(
+        public string $class = '',
+        public string $overlayClass = '',
         public bool $disabled = false
     ) {}
 

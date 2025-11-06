@@ -5,11 +5,11 @@
 >
     <div x-text="uploadingFileOriginalName"></div>
 
-    <div class="luh__progress">
-        <div class="luh__progress-bar">
+    <div class="luh-progress">
+        <div class="luh-progress-bar">
             @include($this->themedViewPath('progress'))
         </div>
-        <div class="luh__progress-cancel">
+        <div class="luh-progress-cancel">
             <button
                 type="button"
                 class="{!! $this->cssClasses['cancel_upload_button'] ?? '' !!}"

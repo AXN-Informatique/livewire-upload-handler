@@ -12,17 +12,17 @@ document.addEventListener('alpine:init', () => {
             e.preventDefault()
 
             if (! _dropzoneDisabled) {
-                container.classList.add('luh__dropzone--dragging')
+                container.classList.add('luh__dropzone-dragging')
             }
         })
 
         container.addEventListener('dragleave', (e) => {
-            container.classList.remove('luh__dropzone--dragging')
+            container.classList.remove('luh__dropzone-dragging')
         })
 
         container.addEventListener('drop', (e) => {
             e.preventDefault()
-            container.classList.remove('luh__dropzone--dragging')
+            container.classList.remove('luh__dropzone-dragging')
 
             if (! _dropzoneDisabled) {
                 dropCallback(e)
@@ -99,8 +99,8 @@ document.addEventListener('alpine:init', () => {
             }
 
             this.sortablejsObj = new sortablejs(this.$el, {
-                draggable: '.js--luh__sort-draggable',
-                handle: '.js--luh__sort-handle',
+                draggable: '.luh__sort-draggable',
+                handle: '.luh__sort-handle',
                 animation: 150,
                 onStart(e) {
                     _dropzoneDisabled = true
@@ -352,4 +352,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.de3261a15d71f526c31d514685738d87.js.map
+//# sourceMappingURL=scripts.f0f199928c54bd53187f7a707ba201be.js.map

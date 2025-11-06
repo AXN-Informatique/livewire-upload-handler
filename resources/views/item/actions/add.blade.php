@@ -5,6 +5,7 @@
         wire:key="add"
     >
         @include('livewire-upload-handler::item.file-input')
+
         {!! $this->icons['upload'] ?? '' !!}
         {!! __('livewire-upload-handler::actions.add') !!}
     </label>

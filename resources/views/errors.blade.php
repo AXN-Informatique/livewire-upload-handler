@@ -1,5 +1,5 @@
 <div
-    class="luh__errors"
+    class="luh-errors"
     x-show="Object.keys(errors).length > 0"
     x-cloak
     wire:key="errors"

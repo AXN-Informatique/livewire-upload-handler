@@ -3,11 +3,20 @@
  * =============================================================================
  */
 
-.luh__dropzone {
-    position: relative;
+.luh-dropzone {
     border: 1px dashed gray;
     border-radius: 0.75rem;
     padding: 0.75rem;
+}
+
+.luh-dropzone-overlay {
+    background-color: lightgray;
+    border-radius: 0.75rem;
+    opacity: 0.5;
+}
+
+.luh__dropzone {
+    position: relative;
 }
 
 .luh__dropzone-overlay {
@@ -19,57 +28,48 @@
     z-index: 999;
     width: 100%;
     height: 100%;
-    background-color: lightgray;
-    border-radius: 0.75rem;
-    opacity: 0.5;
 }
 
-.luh__dropzone--dragging * {
+.luh__dropzone-dragging * {
     pointer-events: none;
 }
-.luh__dropzone--dragging > .luh__dropzone-overlay {
+.luh__dropzone-dragging > .luh__dropzone-overlay {
     display: block;
 }
+
 
 /*
  * SORTABLE
  * =============================================================================
  */
 
-.js--luh__sort-handle {
+.luh__sort-handle {
     cursor: pointer;
 }
+
 
 /*
  * GROUP
  * =============================================================================
  */
 
-.luh__group-item {
+.luh-group-item {
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid lightgray;
 }
+
 
 /*
  * ITEM
  * =============================================================================
  */
 
-.luh__item-sort {
-    padding-right: 0.75rem;
-
-    @media (max-width: 575px) {
-        padding-right: 0;
-        margin-bottom: 0.75rem;
-    }
-}
-
-.luh__item {
+.luh-item {
     width: 100%;
 }
 
-.luh__item-content {
+.luh-item-content {
     display: flex;
     align-items: center;
 
@@ -78,7 +78,7 @@
     }
 }
 
-.luh__item-preview {
+.luh-item-sort {
     padding-right: 0.75rem;
 
     @media (max-width: 575px) {
@@ -87,14 +87,23 @@
     }
 }
 
-.luh__item-body {
+.luh-item-preview {
+    padding-right: 0.75rem;
+
+    @media (max-width: 575px) {
+        padding-right: 0;
+        margin-bottom: 0.75rem;
+    }
+}
+
+.luh-item-body {
     flex-grow: 1;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.luh__item-actions {
+.luh-item-actions {
     flex-grow: 0;
     padding-left: 0.75rem;
     text-align: right;
@@ -106,25 +115,26 @@
     }
 }
 
-.luh__item--deleted {
+.luh-item-deleted {
     opacity: 0.3;
 }
+
 
 /*
  * PROGRESS
  * =============================================================================
  */
 
-.luh__progress {
+.luh-progress {
     display: flex;
     align-items: center;
 }
 
-.luh__progress-bar {
+.luh-progress-bar {
     flex-grow: 1;
 }
 
-.luh__progress-cancel {
+.luh-progress-cancel {
     flex-grow: 0;
     padding-left: 0.75rem;
 }
@@ -135,6 +145,6 @@
  * =============================================================================
  */
 
-.luh__errors {
+.luh-errors {
     margin-top: 0.75rem;
 }

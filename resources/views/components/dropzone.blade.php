@@ -1,11 +1,11 @@
 <div
     @if (! $disabled)
-        class="luh__dropzone"
+        class="{!! $class !!} luh__dropzone"
         x-init="initDropzone()"
     @endif
 >
     @if (! $disabled)
-        <div class="luh__dropzone-overlay"></div>
+        <div class="{!! $overlayClass !!} luh__dropzone-overlay"></div>
     @endif
 
     {!! $slot !!}

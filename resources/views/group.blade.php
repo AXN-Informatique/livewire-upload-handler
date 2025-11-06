@@ -1,9 +1,12 @@
 <div x-data="LivewireUploadHandlerGroup($wire)">
-    <x-livewire-upload-handler-dropzone>
+    <x-livewire-upload-handler-dropzone
+        class="luh-dropzone"
+        overlay-class="luh-dropzone-overlay"
+    >
         <div x-init="initSortable()">
             @foreach ($items as $itemId => $itemData)
                 <div
-                    class="luh__group-item js--luh__sort-draggable"
+                    class="luh-group-item luh__sort-draggable"
                     data-id="{!! $itemId !!}"
                     wire:key="{!! $itemId !!}"
                     x-show="! itemHidden('{!! $itemId !!}')"
