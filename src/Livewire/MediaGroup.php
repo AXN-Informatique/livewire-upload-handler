@@ -16,7 +16,7 @@ class MediaGroup extends Group
     public ?string $mediaCollection = null;
 
     #[Locked]
-    public ?array $mediaProperties = null;
+    public ?array $mediaFilters = null;
 
     protected array $medias = [];
 
@@ -25,7 +25,7 @@ class MediaGroup extends Group
         parent::mount();
 
         $this->mediaCollection ??= $this->propertyValueFromItem('mediaCollection');
-        $this->mediaProperties ??= $this->propertyValueFromItem('mediaProperties');
+        $this->mediaFilters ??= $this->propertyValueFromItem('mediaFilters');
 
         if ($this->acceptsMimeTypes === []) {
             $this->acceptsMimeTypes = $this->model->getMediaCollection($this->mediaCollection)->acceptsMimeTypes;
@@ -48,7 +48,7 @@ class MediaGroup extends Group
             ->mapWithKeys(fn (array $itemData, string $itemId): array => [$itemData['id'] => $itemId])
             ->all();
 
-        foreach ($this->model->getMedia($this->mediaCollection, $this->mediaProperties) as $media) {
+        foreach ($this->model->getMedia($this->mediaCollection, $this->mediaFilters) as $media) {
             $itemId = $itemsIdsByMediaId[$media->id] ?? $this->addItem([
                 'id' => $media->id,
                 'order' => $media->order_column,
@@ -87,7 +87,7 @@ class MediaGroup extends Group
             ...parent::itemComponentParams($itemId),
             'model' => $this->model,
             'mediaCollection' => $this->mediaCollection,
-            'mediaProperties' => $this->mediaProperties,
+            'mediaFilters' => $this->mediaFilters,
             'media' => $this->medias[$itemId] ?? null,
         ];
     }

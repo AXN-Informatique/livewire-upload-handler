@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Axn\LivewireUploadHandler\Enums\FileType;
-use Axn\LivewireUploadHandler\GlideServerFactory;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 use Livewire\Attributes\Isolate;
 use Livewire\Attributes\Locked;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Symfony\Component\HttpFoundation\Response;
 
 #[Isolate]
 class MediaItem extends Item
@@ -24,7 +21,7 @@ class MediaItem extends Item
     public string $mediaCollection = 'default';
 
     #[Locked]
-    public array $mediaProperties = [];
+    public array $mediaFilters = [];
 
     #[Locked]
     public ?Media $media = null;
@@ -89,10 +86,26 @@ class MediaItem extends Item
 
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
+        $mediaProperties = $this->mediaFilters;
+
+        if ($this->media !== null) {
+            $mediaProperties = [
+                ...$mediaProperties,
+                ...$this->media->custom_properties,
+            ];
+
+            $this->deleteSavedFile();
+        }
+
+        $mediaProperties = [
+            ...$mediaProperties,
+            ...Arr::except($this->itemData, ['id', 'order', 'deleted']),
+        ];
+
         $media = $this->model
             ->addMedia($uploadedFile)
             ->setOrder($this->itemData['order'] ?? null)
-            ->withCustomProperties($this->mediaProperties)
+            ->withCustomProperties($mediaProperties)
             ->toMediaCollection($this->mediaCollection);
 
         if (! $this->onlyUpload) {
