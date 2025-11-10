@@ -30,14 +30,14 @@ document.addEventListener('alpine:init', () => {
         })
     }
 
-    function _validateFile(file, component, $wire) {
+    function _validateFile(file, errors, $wire) {
         if (! $wire.acceptsMimeTypes.includes(file.type)) {
-            component.errors[file.name] = window.livewireUploadHandlerParams.invalidFileTypeErrorMessage
+            errors[file.name] = window.livewireUploadHandlerParams.invalidFileTypeErrorMessage
             return false
         }
 
         if ($wire.maxFileSize !== null && file.size > $wire.maxFileSize) {
-            component.errors[file.name] = window.livewireUploadHandlerParams.fileTooLoudErrorMessage
+            errors[file.name] = window.livewireUploadHandlerParams.fileTooLoudErrorMessage
             return false
         }
 
@@ -71,7 +71,7 @@ document.addEventListener('alpine:init', () => {
     // =========================================================================
 
     Alpine.data('LivewireUploadHandlerGroup', ($wire) => ({
-        errors: {},
+        groupErrors: {},
         filesFromGroup: [],
         nbRunningActions: {
             group: 0,
@@ -142,12 +142,12 @@ document.addEventListener('alpine:init', () => {
 
             this.filesFromGroup = []
             this.itemsIncrementInProgress = true
-            this.errors = {}
+            this.groupErrors = {}
 
             for (let file of files) {
                 file = await _compressImage(file, $wire.compressorjsSettings)
 
-                if (_validateFile(file, this, $wire)) {
+                if (_validateFile(file, this.groupErrors, $wire)) {
                     this.filesFromGroup.push(file)
                 }
             }
@@ -188,6 +188,7 @@ document.addEventListener('alpine:init', () => {
     // =========================================================================
 
     Alpine.data('LivewireUploadHandlerItem', ($wire) => ({
+        itemErrors: {},
         uploading: false,
         uploadingFileOriginalName: null,
         chunkIndex: 0,
@@ -195,7 +196,6 @@ document.addEventListener('alpine:init', () => {
         deleted: false,
         deleteTimer: null,
         deleteTimerInterval: null,
-        errors: {},
 
         init() {
             if ($wire.uploadFromGroupAtIndex !== null) {
@@ -220,14 +220,14 @@ document.addEventListener('alpine:init', () => {
         },
 
         async upload(file) {
-            this.errors = {}
+            this.itemErrors = {}
 
             try {
                 if (! $wire.attachedToGroup) {
                     file = await _compressImage(file, $wire.compressorjsSettings)
                 }
 
-                if (! _validateFile(file, this, $wire)) {
+                if (! _validateFile(file, this.itemErrors, $wire)) {
                     return
                 }
 
@@ -248,7 +248,7 @@ document.addEventListener('alpine:init', () => {
         cancelUpload() {
             this._waitGroupActions(() => {
                 this.uploading = false
-                $wire.itemData.deleted = true
+                $wire.itemData.deleted = ($wire.itemData.id === null)
                 $wire.cancelUpload('chunkFile')
                 return $wire.deleteUploadingFile()
             })
@@ -256,7 +256,7 @@ document.addEventListener('alpine:init', () => {
 
         deleteUploadedFile() {
             this._waitGroupActions(() => {
-                $wire.itemData.deleted = true
+                $wire.itemData.deleted = ($wire.itemData.id === null)
                 return $wire.deleteUploadedFile()
             })
         },
@@ -335,7 +335,12 @@ document.addEventListener('alpine:init', () => {
         },
 
         _errorOnUpload() {
-            this.errors[this.uploadingFileOriginalName] = window.livewireUploadHandlerParams.uploadErrorMessage
+            if ($wire.attachedToGroup && $wire.itemData.id === null) {
+                this.groupErrors[this.uploadingFileOriginalName] = window.livewireUploadHandlerParams.uploadErrorMessage
+            } else {
+                this.itemErrors[this.uploadingFileOriginalName] = window.livewireUploadHandlerParams.uploadErrorMessage
+            }
+
             this.cancelUpload()
         },
 
@@ -352,4 +357,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.f0f199928c54bd53187f7a707ba201be.js.map
+//# sourceMappingURL=scripts.47ed1ac36c31e6750d458b48c8f38b7d.js.map

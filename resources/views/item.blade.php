@@ -35,9 +35,6 @@
 
         @include('livewire-upload-handler::item.actions.add')
         @include('livewire-upload-handler::item.uploading')
-
-        @if (! $attachedToGroup)
-            @include('livewire-upload-handler::errors')
-        @endif
+        @include('livewire-upload-handler::errors', ['errorsVar' => 'itemErrors'])
     </x-livewire-upload-handler-dropzone>
 </div>

@@ -92,6 +92,11 @@ class Item extends Component
             }
 
             $this->itemData = $oldData;
+        } else {
+            $this->itemData = [
+                'id' => null,
+                'deleted' => false,
+            ];
         }
     }
 
