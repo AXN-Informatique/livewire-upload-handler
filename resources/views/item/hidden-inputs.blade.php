@@ -5,12 +5,15 @@
             name="{!! $this->inputBaseName !!}[tmpName]"
             value="{!! $uploadedFile->getFilename() !!}"
         >
-    @elseif ($this->fileId !== null)
+    @endif
+
+    @if ($this->itemData['id'] !== null)
         <input
             type="hidden"
             name="{!! $this->inputBaseName !!}[id]"
-            value="{!! $this->fileId !!}"
+            value="{!! $this->itemData['id'] !!}"
         >
+
         <input
             type="checkbox"
             name="{!! $this->inputBaseName !!}[deleted]"

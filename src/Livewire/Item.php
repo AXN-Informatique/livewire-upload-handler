@@ -92,7 +92,8 @@ class Item extends Component
             }
 
             $this->itemData = $oldData;
-        } else {
+
+        } elseif ($this->itemData === []) {
             $this->itemData = [
                 'id' => null,
                 'deleted' => false,
@@ -316,23 +317,6 @@ class Item extends Component
 
         return Storage::disk($this->fileDisk)
             ->exists($this->filePath);
-    }
-
-    #[Computed]
-    protected function fileId(): ?string
-    {
-        if (! $this->hasFile) {
-            return null;
-        }
-
-        return $this->uploadedFile instanceof TemporaryUploadedFile
-            ? null
-            : $this->savedFileId();
-    }
-
-    protected function savedFileId(): string
-    {
-        throw MethodNotImplementedException::savedFileId(static::class);
     }
 
     #[Computed]

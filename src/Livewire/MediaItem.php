@@ -36,8 +36,9 @@ class MediaItem extends Item
 
         $this->maxFileSize ??= config('media-library.max_file_size');
 
-        if (! $this->onlyUpload && ! $this->attachedToGroup && $this->model->hasMedia($this->mediaCollection)) {
+        if (! $this->onlyUpload && ! $this->attachedToGroup) {
             $this->media = $this->model->getFirstMedia($this->mediaCollection);
+            $this->itemData['id'] = $this->media?->id;
         }
     }
 
@@ -69,11 +70,6 @@ class MediaItem extends Item
         return $this->media->getPathRelativeToRoot();
     }
 
-    protected function savedFileId(): string
-    {
-        return (string) $this->media->id;
-    }
-
     protected function savedFileName(): string
     {
         return $this->media->file_name;
@@ -86,26 +82,17 @@ class MediaItem extends Item
 
     protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
-        $mediaProperties = $this->mediaFilters;
+        $customProperties = $this->mediaFilters;
 
         if ($this->media !== null) {
-            $mediaProperties = [
-                ...$mediaProperties,
-                ...$this->media->custom_properties,
-            ];
-
-            $this->deleteSavedFile();
+            $customProperties = $this->media->custom_properties;
+            $this->media->delete();
         }
-
-        $mediaProperties = [
-            ...$mediaProperties,
-            ...Arr::except($this->itemData, ['id', 'order', 'deleted']),
-        ];
 
         $media = $this->model
             ->addMedia($uploadedFile)
             ->setOrder($this->itemData['order'] ?? null)
-            ->withCustomProperties($mediaProperties)
+            ->withCustomProperties($customProperties)
             ->toMediaCollection($this->mediaCollection);
 
         if (! $this->onlyUpload) {

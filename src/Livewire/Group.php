@@ -92,7 +92,7 @@ class Group extends Component
         $data['order'] ??= collect($this->items)->max('order') + 1;
         $data['deleted'] ??= false;
 
-        $this->items[$id = uniqid()] = $data;
+        $this->items[$id = uniqid('_')] = $data;
 
         return $id;
     }

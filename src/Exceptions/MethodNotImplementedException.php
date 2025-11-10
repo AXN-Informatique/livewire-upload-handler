@@ -56,14 +56,6 @@ class MethodNotImplementedException extends LogicException
         );
     }
 
-    public static function savedFileId(string $componentClass): self
-    {
-        return new self(
-            \sprintf('`savedFileId` method not implemented in %s. ', $componentClass).
-            'Either extend this component and implement the method, or use the MediaGroup component for automatic Spatie Media Library integration.'
-        );
-    }
-
     public static function savedFileName(string $componentClass): self
     {
         return new self(
