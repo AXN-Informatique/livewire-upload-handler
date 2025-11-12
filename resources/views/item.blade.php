@@ -8,7 +8,7 @@
     >
         @if ($this->hasFile())
             <div class="luh-item-content" x-show="! uploading">
-                @if ($withImagePreview && $this->fileType()->isImage())
+                @if ($showImagePreview && $this->fileType()->isImage())
                     <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
                         <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
                     </div>
