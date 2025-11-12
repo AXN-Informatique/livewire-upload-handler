@@ -16,8 +16,13 @@ class HandleMediaFromRequest
         ?int $order = null,
     ): void
     {
+        if ($data === null || $data === []) {
+            return;
+        }
+
         if (! empty($data['deleted']) && ! empty($data['id'])) {
             $model->deleteMedia($data['id']);
+
             return;
         }
 
@@ -56,6 +61,10 @@ class HandleMediaFromRequest
         ?Closure $customizeMedia = null,
     ): void
     {
+        if ($data === null || $data === []) {
+            return;
+        }
+
         $order = 1;
 
         foreach ($data as $itemData) {
