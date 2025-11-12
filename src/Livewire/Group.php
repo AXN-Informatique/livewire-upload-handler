@@ -34,7 +34,7 @@ class Group extends Component
     public ?array $compressorjsSettings = null;
 
     #[Locked]
-    public ?bool $previewEnabled = null;
+    public ?bool $withImagePreview = null;
 
     #[Locked]
     public ?bool $autoSave = null;
@@ -52,7 +52,7 @@ class Group extends Component
         $this->acceptsMimeTypes ??= $this->propertyValueFromItem('acceptsMimeTypes');
         $this->maxFileSize ??= $this->propertyValueFromItem('maxFileSize');
         $this->compressorjsSettings ??= $this->propertyValueFromItem('compressorjsSettings');
-        $this->previewEnabled ??= $this->propertyValueFromItem('previewEnabled');
+        $this->withImagePreview ??= $this->propertyValueFromItem('withImagePreview');
         $this->autoSave ??= $this->propertyValueFromItem('autoSave');
         $this->onlyUpload ??= $this->propertyValueFromItem('onlyUpload');
 
@@ -152,7 +152,7 @@ class Group extends Component
             'acceptsMimeTypes' => $this->acceptsMimeTypes,
             'maxFileSize' => $this->maxFileSize,
             'compressorjsSettings' => $this->compressorjsSettings,
-            'previewEnabled' => $this->previewEnabled,
+            'withImagePreview' => $this->withImagePreview,
             'autoSave' => $this->autoSave,
             'onlyUpload' => $this->onlyUpload,
             'attachedToGroup' => true,

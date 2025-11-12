@@ -68,7 +68,7 @@ class Item extends Component
     public array $compressorjsSettings = [];
 
     #[Locked]
-    public bool $previewEnabled = false;
+    public bool $withImagePreview = false;
 
     #[Locked]
     public bool $autoSave = false;
