@@ -216,7 +216,7 @@ document.addEventListener('alpine:init', () => {
                 return 0
             }
 
-            return this.uploadedSizeByChunk.reduce((a, b) => a + b, 0) * 100 / $wire.uploadingFileSize
+            return Math.round(this.uploadedSizeByChunk.reduce((a, b) => a + b, 0) * 100 / $wire.uploadingFileSize)
         },
 
         async upload(file) {
@@ -357,4 +357,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.47ed1ac36c31e6750d458b48c8f38b7d.js.map
+//# sourceMappingURL=scripts.e076d650225cfffbc9fc131ff841ed30.js.map
