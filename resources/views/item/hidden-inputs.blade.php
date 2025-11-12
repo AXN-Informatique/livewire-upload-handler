@@ -1,22 +1,22 @@
-@if ($this->hasFile && ! $autoSave)
-    @if ($uploadedFile !== null)
+@if ($this->hasFile() && ! $autoSave)
+    @if ($this->hasUploadedFile())
         <input
             type="hidden"
-            name="{!! $this->inputBaseName !!}[tmpName]"
+            name="{!! $inputBaseName !!}[tmpName]"
             value="{!! $uploadedFile->getFilename() !!}"
         >
     @endif
 
-    @if ($this->itemData['id'] !== null)
+    @if ($this->hasSavedFile())
         <input
             type="hidden"
-            name="{!! $this->inputBaseName !!}[id]"
-            value="{!! $this->itemData['id'] !!}"
+            name="{!! $inputBaseName !!}[id]"
+            value="{!! $itemData['id'] !!}"
         >
 
         <input
             type="checkbox"
-            name="{!! $this->inputBaseName !!}[deleted]"
+            name="{!! $inputBaseName !!}[deleted]"
             value="1"
             style="display: none"
             wire:model="itemData.deleted"

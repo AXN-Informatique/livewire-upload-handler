@@ -1,4 +1,4 @@
-@if (! $this->hasFile && ! $attachedToGroup)
+@if (! $this->hasFile() && ! $attachedToGroup)
     <label
         class="{!! $this->cssClasses['add_button'] ?? '' !!}"
         x-show="! uploading"

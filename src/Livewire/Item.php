@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Isolate;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
@@ -30,8 +29,7 @@ use function Axn\LivewireUploadHandler\str_arr_to_dot;
 #[Isolate]
 class Item extends Component
 {
-    use HasThemes;
-    use WithFileUploads;
+    use HasThemes, WithFileUploads;
 
     public ?int $uploadingFileSize = null;
 
@@ -165,6 +163,7 @@ class Item extends Component
                     .($this->acceptsMimeTypes !== [] ? '|mimetypes:'.implode(',', $this->acceptsMimeTypes) : '')
                     .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : ''),
             ])->validate();
+
         } catch (ValidationException $validationException) {
             $uploadedFile->delete();
 
@@ -189,7 +188,7 @@ class Item extends Component
 
         $this->dispatch(
             'livewire-upload-handler:uploaded',
-            inputBaseName: $this->inputBaseNameWithoutItemId,
+            inputBaseName: $this->inputBaseNameWithoutItemId(),
             tmpName: $uploadedFile->getFilename(),
         );
     }
@@ -219,13 +218,13 @@ class Item extends Component
 
     public function deleteUploadedFile(): void
     {
-        if ($this->uploadedFile === null) {
+        if (! $this->hasUploadedFile()) {
             return;
         }
 
         $this->dispatch(
             'livewire-upload-handler:canceled',
-            inputBaseName: $this->inputBaseNameWithoutItemId,
+            inputBaseName: $this->inputBaseNameWithoutItemId(),
             tmpName: $this->uploadedFile->getFilename(),
         );
 
@@ -246,14 +245,14 @@ class Item extends Component
 
     public function downloadFile(): Response
     {
-        if (! $this->fileExists) {
+        if (! $this->fileExists()) {
             abort(404);
         }
 
-        return Storage::disk($this->fileDisk)
+        return Storage::disk($this->fileDisk())
             ->download(
-                path: $this->filePath,
-                name: $this->fileName,
+                path: $this->filePath(),
+                name: $this->fileName(),
             );
     }
 
@@ -262,26 +261,28 @@ class Item extends Component
         return view('livewire-upload-handler::item');
     }
 
-    #[Computed]
-    protected function hasFile(): bool
+    protected function hasUploadedFile(): bool
     {
-        return $this->uploadedFile instanceof TemporaryUploadedFile
-            || $this->hasSavedFile();
+        return $this->uploadedFile instanceof TemporaryUploadedFile;
     }
 
     protected function hasSavedFile(): bool
     {
-        return false;
+        return $this->itemData['id'] !== null;
     }
 
-    #[Computed]
+    protected function hasFile(): bool
+    {
+        return $this->hasUploadedFile() || $this->hasSavedFile();
+    }
+
     protected function fileDisk(): ?string
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return null;
         }
 
-        return $this->uploadedFile instanceof TemporaryUploadedFile
+        return $this->hasUploadedFile()
             ? FileUploadConfiguration::disk()
             : $this->savedFileDisk();
     }
@@ -291,14 +292,13 @@ class Item extends Component
         throw MethodNotImplementedException::savedFileDisk(static::class);
     }
 
-    #[Computed]
     protected function filePath(): ?string
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return null;
         }
 
-        return $this->uploadedFile instanceof TemporaryUploadedFile
+        return $this->hasUploadedFile()
             ? FileUploadConfiguration::directory().'/'.$this->uploadedFile->getFilename()
             : $this->savedFilePath();
     }
@@ -308,25 +308,23 @@ class Item extends Component
         throw MethodNotImplementedException::savedFilePath(static::class);
     }
 
-    #[Computed]
     protected function fileExists(): bool
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return false;
         }
 
-        return Storage::disk($this->fileDisk)
-            ->exists($this->filePath);
+        return Storage::disk($this->fileDisk())
+            ->exists($this->filePath());
     }
 
-    #[Computed]
     protected function fileName(): ?string
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return null;
         }
 
-        return $this->uploadedFile instanceof TemporaryUploadedFile
+        return $this->hasUploadedFile()
             ? $this->uploadedFile->getClientOriginalName()
             : $this->savedFileName();
     }
@@ -336,14 +334,13 @@ class Item extends Component
         throw MethodNotImplementedException::savedFileName(static::class);
     }
 
-    #[Computed]
     protected function fileType(): ?FileType
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return null;
         }
 
-        $mimeType = $this->uploadedFile instanceof TemporaryUploadedFile
+        $mimeType = $this->hasUploadedFile()
             ? $this->uploadedFile->getMimeType()
             : $this->savedFileMimeType();
 
@@ -357,18 +354,17 @@ class Item extends Component
 
     protected function glideUrl(array $params = []): ?string
     {
-        if (! $this->hasFile) {
+        if (! $this->hasFile()) {
             return null;
         }
 
-        return GlideServerFactory::forDisk($this->fileDisk)
+        return GlideServerFactory::forDisk($this->fileDisk())
             ->url(
-                path: $this->filePath,
+                path: $this->filePath(),
                 params: $params,
             );
     }
 
-    #[Computed]
     protected function inputBaseNameWithoutItemId(): string
     {
         if (! $this->attachedToGroup) {

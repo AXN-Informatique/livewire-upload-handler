@@ -1,4 +1,4 @@
-@if ($uploadedFile !== null)
+@if ($this->hasUploadedFile())
     <div wire:key="temporary-file-warning">
         <small class="{!! $this->cssClasses['temporary_file_warning'] ?? '' !!}">
             {!! __('livewire-upload-handler::messages.temporary_file_warning') !!}

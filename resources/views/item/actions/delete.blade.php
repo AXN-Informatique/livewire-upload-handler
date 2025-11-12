@@ -1,4 +1,4 @@
-@if ($this->hasFile && $uploadedFile === null)
+@if ($this->hasSavedFile() && ! $this->hasUploadedFile())
     <button
         type="button"
         class="{!! $this->cssClasses['delete_button'] ?? '' !!}"

@@ -6,7 +6,7 @@
         overlay-class="luh-dropzone-overlay"
         :disabled="$attachedToGroup"
     >
-        @if ($this->hasFile)
+        @if ($this->hasFile())
             <div class="luh-item-content" x-show="! uploading">
                 @if ($sortable)
                     <div class="luh-item-sort luh__sort-handle">
@@ -14,7 +14,7 @@
                     </div>
                 @endif
 
-                @if ($this->previewEnabled && $this->fileType->isImage())
+                @if ($previewEnabled && $this->fileType()->isImage())
                     <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
                         <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
                     </div>

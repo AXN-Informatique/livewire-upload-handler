@@ -1,4 +1,4 @@
-@if ($this->hasFile)
+@if ($this->hasFile())
     <label
         class="{!! $this->cssClasses['update_button'] ?? '' !!}"
         x-show="! deleted"

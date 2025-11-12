@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Illuminate\Support\Arr;
 use Livewire\Attributes\Isolate;
 use Livewire\Attributes\Locked;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -53,11 +52,6 @@ class MediaItem extends Item
         $this->media = null;
 
         $this->itemData['id'] = null;
-    }
-
-    protected function hasSavedFile(): bool
-    {
-        return $this->media instanceof Media;
     }
 
     protected function savedFileDisk(): string

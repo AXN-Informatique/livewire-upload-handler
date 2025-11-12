@@ -1,4 +1,4 @@
-@if ($uploadedFile !== null)
+@if ($this->hasUploadedFile())
     <button
         type="button"
         class="{!! $this->cssClasses['cancel_button'] ?? '' !!}"
