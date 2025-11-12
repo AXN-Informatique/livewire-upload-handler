@@ -3,7 +3,13 @@
     x-cloak
     wire:key="uploading"
 >
-    <div x-text="uploadingFileOriginalName"></div>
+    <div>
+        <span x-text="uploadingFileOriginalName"></span>
+
+        @if ($showFileSize)
+            (<span x-text="Math.round($wire.uploadingFileSize / 1024)"></span> KB)
+        @endif
+    </div>
 
     <div class="luh-progress">
         <div class="luh-progress-bar">

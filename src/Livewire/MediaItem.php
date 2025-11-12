@@ -69,6 +69,11 @@ class MediaItem extends Item
         return $this->media->file_name;
     }
 
+    protected function savedFileSize(): int
+    {
+        return (int) $this->media->size;
+    }
+
     protected function savedFileMimeType(): string
     {
         return $this->media->mime_type;

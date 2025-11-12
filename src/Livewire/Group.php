@@ -34,6 +34,9 @@ class Group extends Component
     public ?array $compressorjsSettings = null;
 
     #[Locked]
+    public ?bool $showFileSize = null;
+
+    #[Locked]
     public ?bool $showImagePreview = null;
 
     #[Locked]
@@ -52,6 +55,7 @@ class Group extends Component
         $this->acceptsMimeTypes ??= $this->propertyValueFromItem('acceptsMimeTypes');
         $this->maxFileSize ??= $this->propertyValueFromItem('maxFileSize');
         $this->compressorjsSettings ??= $this->propertyValueFromItem('compressorjsSettings');
+        $this->showFileSize ??= $this->propertyValueFromItem('showFileSize');
         $this->showImagePreview ??= $this->propertyValueFromItem('showImagePreview');
         $this->autoSave ??= $this->propertyValueFromItem('autoSave');
         $this->onlyUpload ??= $this->propertyValueFromItem('onlyUpload');
@@ -152,6 +156,7 @@ class Group extends Component
             'acceptsMimeTypes' => $this->acceptsMimeTypes,
             'maxFileSize' => $this->maxFileSize,
             'compressorjsSettings' => $this->compressorjsSettings,
+            'showFileSize' => $this->showFileSize,
             'showImagePreview' => $this->showImagePreview,
             'autoSave' => $this->autoSave,
             'onlyUpload' => $this->onlyUpload,

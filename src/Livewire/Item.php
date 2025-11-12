@@ -68,6 +68,9 @@ class Item extends Component
     public array $compressorjsSettings = [];
 
     #[Locked]
+    public bool $showFileSize = false;
+
+    #[Locked]
     public bool $showImagePreview = false;
 
     #[Locked]
@@ -329,6 +332,22 @@ class Item extends Component
     protected function savedFileName(): string
     {
         throw MethodNotImplementedException::savedFileName(static::class);
+    }
+
+    protected function fileSize(): ?int
+    {
+        if (! $this->hasFile()) {
+            return null;
+        }
+
+        return $this->hasUploadedFile()
+            ? $this->uploadedFile->getSize()
+            : $this->savedFileSize();
+    }
+
+    protected function savedFileSize(): int
+    {
+        throw MethodNotImplementedException::savedFileSize(static::class);
     }
 
     protected function fileType(): ?FileType

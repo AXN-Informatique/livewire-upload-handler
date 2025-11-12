@@ -6,7 +6,7 @@
             wire:click.prevent="downloadFile()"
         >
             {!! $this->icons['download'] ?? '' !!}
-            {{ $this->fileName() }}</a>
+            {{ $this->fileName().($showFileSize ? ' ('.round($this->fileSize() / 1024).' KB)' : '') }}</a>
     @else
         {{ $this->fileName() }}
     @endif
