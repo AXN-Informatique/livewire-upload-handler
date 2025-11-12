@@ -76,9 +76,6 @@ class Item extends Component
     #[Locked]
     public bool $onlyUpload = false;
 
-    #[Locked]
-    public bool $sortable = false;
-
     public function mount(): void
     {
         if (old() !== []) {

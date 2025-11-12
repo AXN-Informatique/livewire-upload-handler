@@ -155,7 +155,6 @@ class Group extends Component
             'previewEnabled' => $this->previewEnabled,
             'autoSave' => $this->autoSave,
             'onlyUpload' => $this->onlyUpload,
-            'sortable' => $this->sortable,
             'attachedToGroup' => true,
             'uploadFromGroupAtIndex' => $this->uploadFromGroupAtIndex[$itemId] ?? null,
         ];

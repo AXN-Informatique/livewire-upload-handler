@@ -54,9 +54,21 @@
  */
 
 .luh-group-item {
+    display: flex;
+    align-items: center;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid lightgray;
+}
+
+.luh-group-item-sort {
+    flex-grow: 0;
+    padding-right: 0.75rem;
+
+    @media (max-width: 575px) {
+        padding-right: 0;
+        margin-bottom: 0.75rem;
+    }
 }
 
 
@@ -78,16 +90,8 @@
     }
 }
 
-.luh-item-sort {
-    padding-right: 0.75rem;
-
-    @media (max-width: 575px) {
-        padding-right: 0;
-        margin-bottom: 0.75rem;
-    }
-}
-
 .luh-item-preview {
+    flex-grow: 0;
     padding-right: 0.75rem;
 
     @media (max-width: 575px) {

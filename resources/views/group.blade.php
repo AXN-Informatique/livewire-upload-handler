@@ -11,6 +11,12 @@
                     wire:key="{!! $itemId !!}"
                     x-show="! itemHidden('{!! $itemId !!}')"
                 >
+                    @if ($sortable)
+                        <div class="luh-group-item-sort luh__sort-handle">
+                            {!! $this->icons['sort'] ?? '&vellip;' !!}
+                        </div>
+                    @endif
+
                     @livewire(
                         $this->itemComponentClassName(),
                         $this->itemComponentParams($itemId),
