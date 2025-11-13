@@ -4,41 +4,35 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
+use Axn\LivewireUploadHandler\Livewire\Concerns\MediaCommon;
 use Livewire\Attributes\Isolate;
 use Livewire\Attributes\Locked;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Isolate]
 class MediaItem extends Item
 {
-    #[Locked]
-    public HasMedia $model;
-
-    #[Locked]
-    public string $mediaCollection = 'default';
-
-    #[Locked]
-    public array $mediaFilters = [];
+    use MediaCommon;
 
     #[Locked]
     public ?Media $media = null;
 
-    public function mount(): void
+    protected function loadInitialItemData(): void
     {
-        parent::mount();
+        $old = $this->loadUploadedFileFromOldThenGetOld();
 
-        if ($this->acceptsMimeTypes === []) {
-            $this->acceptsMimeTypes = $this->model->getMediaCollection($this->mediaCollection)->acceptsMimeTypes;
+        if ($old === null) {
+            return;
         }
 
-        $this->maxFileSize ??= config('media-library.max_file_size');
+        $this->media = $this->model->getFirstMedia($this->mediaCollection);
 
-        if (! $this->onlyUpload && ! $this->attachedToGroup) {
-            $this->media = $this->model->getFirstMedia($this->mediaCollection);
-            $this->itemData['id'] = $this->media?->id;
-        }
+        $this->itemData = [
+            'id' => $this->media->id ?? null,
+            'deleted' => ! empty($old['deleted']),
+            ...$this->initialItemDataFromMediaOrOld($this->media, $old),
+        ];
     }
 
     public function deleteSavedFile(): void

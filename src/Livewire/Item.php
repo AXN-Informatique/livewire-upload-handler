@@ -7,6 +7,7 @@ namespace Axn\LivewireUploadHandler\Livewire;
 use Axn\LivewireUploadHandler\Enums\FileType;
 use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
+use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
@@ -24,12 +25,10 @@ use Livewire\WithFileUploads;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-use function Axn\LivewireUploadHandler\str_arr_to_dot;
-
 #[Isolate]
 class Item extends Component
 {
-    use HasThemes, WithFileUploads;
+    use Common, HasThemes, WithFileUploads;
 
     public ?int $uploadingFileSize = null;
 
@@ -58,45 +57,44 @@ class Item extends Component
     #[Locked]
     public ?TemporaryUploadedFile $uploadedFile = null;
 
-    #[Locked]
-    public array $acceptsMimeTypes = [];
-
-    #[Locked]
-    public ?int $maxFileSize = null;
-
-    #[Locked]
-    public array $compressorjsSettings = [];
-
-    #[Locked]
-    public bool $showFileSize = false;
-
-    #[Locked]
-    public bool $showImagePreview = false;
-
-    #[Locked]
-    public bool $autoSave = false;
-
-    #[Locked]
-    public bool $onlyUpload = false;
-
     public function mount(): void
     {
-        if (old() !== []) {
-            $oldData = old(str_arr_to_dot($this->inputBaseName));
+        $this->loadInitialItemData();
+    }
 
-            if (isset($oldData['tmpName'])) {
-                $this->uploadedFile = TemporaryUploadedFile::createFromLivewire($oldData['tmpName']);
-                unset($oldData['tmpName']);
-            }
+    protected function loadInitialItemData(): void
+    {
+        $old = $this->loadUploadedFileFromOldThenGetOld();
 
-            $this->itemData = $oldData;
-
-        } elseif ($this->itemData === []) {
-            $this->itemData = [
-                'id' => null,
-                'deleted' => false,
-            ];
+        if ($old === null) {
+            return;
         }
+
+        $this->itemData = [
+            'id' => $old['id'] ?? null,
+            'deleted' => ! empty($old['deleted']),
+        ];
+    }
+
+    protected function loadUploadedFileFromOldThenGetOld(): ?array
+    {
+        if ($this->onlyUpload) {
+            return null;
+        }
+
+        $old = $this->old();
+
+        if (isset($old['tmpName'])) {
+            $this->uploadedFile = TemporaryUploadedFile::createFromLivewire($old['tmpName']);
+
+            unset($old['tmpName']);
+        }
+
+        if ($this->attachedToGroup) {
+            return null;
+        }
+
+        return $old;
     }
 
     /**
@@ -120,6 +118,7 @@ class Item extends Component
 
         } catch (Throwable $throwable) {
             Log::error($throwable);
+
             $this->hasErrorOnUpload = true;
 
             return;
@@ -147,6 +146,7 @@ class Item extends Component
         $this->chunkFile = null;
 
         $finalFilePath = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName)->getPathname();
+
         file_put_contents($finalFilePath, $chunkContent, FILE_APPEND);
     }
 

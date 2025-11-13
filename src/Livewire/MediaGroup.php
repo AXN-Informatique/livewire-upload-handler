@@ -4,57 +4,51 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire;
 
-use Livewire\Attributes\Locked;
-use Spatie\MediaLibrary\HasMedia;
+use Axn\LivewireUploadHandler\Livewire\Concerns\MediaCommon;
 
 class MediaGroup extends Group
 {
-    #[Locked]
-    public HasMedia $model;
-
-    #[Locked]
-    public ?string $mediaCollection = null;
-
-    #[Locked]
-    public ?array $mediaFilters = null;
+    use MediaCommon;
 
     protected array $medias = [];
 
-    public function mount(): void
+    protected function loadInitialItemsData(): void
     {
-        parent::mount();
-
-        $this->mediaCollection ??= $this->propertyValueFromItem('mediaCollection');
-        $this->mediaFilters ??= $this->propertyValueFromItem('mediaFilters');
-
-        if ($this->acceptsMimeTypes === []) {
-            $this->acceptsMimeTypes = $this->model->getMediaCollection($this->mediaCollection)->acceptsMimeTypes;
+        if ($this->onlyUpload) {
+            return;
         }
 
-        $this->maxFileSize ??= config('media-library.max_file_size');
+        $medias = $this->model->getMedia($this->mediaCollection, $this->mediaFilters);
 
-        if (! $this->onlyUpload) {
-            $this->loadExistingMedia();
-        }
-    }
+        if (old() !== []) {
+            $order = 1;
 
-    /**
-     * Load existing media items from the model.
-     */
-    protected function loadExistingMedia(): void
-    {
-        $itemsIdsByMediaId = collect($this->items)
-            ->whereNotNull('id')
-            ->mapWithKeys(fn (array $itemData, string $itemId): array => [$itemData['id'] => $itemId])
-            ->all();
+            foreach ($this->old() as $itemId => $old) {
+                $media = null;
 
-        foreach ($this->model->getMedia($this->mediaCollection, $this->mediaFilters) as $media) {
-            $itemId = $itemsIdsByMediaId[$media->id] ?? $this->addItem([
-                'id' => $media->id,
-                'order' => $media->order_column,
-            ]);
+                if (isset($old['id'])) {
+                    $media = $medias->where('id', $old['id'])->first();
+                    $this->medias[$itemId] = $media;
+                }
 
-            $this->medias[$itemId] = $media;
+                $this->items[$itemId] = [
+                    'id' => $media->id ?? null,
+                    'order' => $order++,
+                    'deleted' => ! empty($old['deleted']),
+                    ...$this->initialItemDataFromMediaOrOld($media, $old),
+                ];
+            }
+        } else {
+            foreach ($medias as $media) {
+                $itemId = $this->addItem([
+                    'id' => $media->id,
+                    'order' => $media->order_column,
+                    'deleted' => false,
+                    ...$this->initialItemDataFromMediaOrOld($media),
+                ]);
+
+                $this->medias[$itemId] = $media;
+            }
         }
     }
 

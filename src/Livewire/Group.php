@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
+use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
@@ -12,11 +13,9 @@ use Livewire\Attributes\Modelable;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
-use function Axn\LivewireUploadHandler\str_arr_to_dot;
-
 class Group extends Component
 {
-    use HasThemes;
+    use Common, HasThemes;
 
     #[Modelable]
     public array $items = [];
@@ -25,51 +24,29 @@ class Group extends Component
     public string $inputBaseName = 'files';
 
     #[Locked]
-    public ?array $acceptsMimeTypes = null;
-
-    #[Locked]
-    public ?int $maxFileSize = null;
-
-    #[Locked]
-    public ?array $compressorjsSettings = null;
-
-    #[Locked]
-    public ?bool $showFileSize = null;
-
-    #[Locked]
-    public ?bool $showImagePreview = null;
-
-    #[Locked]
-    public ?bool $autoSave = null;
-
-    #[Locked]
-    public ?bool $onlyUpload = null;
-
-    #[Locked]
     public bool $sortable = false;
 
     protected array $uploadFromGroupAtIndex = [];
 
     public function mount(): void
     {
-        $this->acceptsMimeTypes ??= $this->propertyValueFromItem('acceptsMimeTypes');
-        $this->maxFileSize ??= $this->propertyValueFromItem('maxFileSize');
-        $this->compressorjsSettings ??= $this->propertyValueFromItem('compressorjsSettings');
-        $this->showFileSize ??= $this->propertyValueFromItem('showFileSize');
-        $this->showImagePreview ??= $this->propertyValueFromItem('showImagePreview');
-        $this->autoSave ??= $this->propertyValueFromItem('autoSave');
-        $this->onlyUpload ??= $this->propertyValueFromItem('onlyUpload');
+        $this->loadInitialItemsData();
+    }
 
-        if (old() !== []) {
-            $order = 1;
+    protected function loadInitialItemsData(): void
+    {
+        if ($this->onlyUpload) {
+            return;
+        }
 
-            foreach (old(str_arr_to_dot($this->inputBaseName), []) as $itemId => $oldData) {
-                $this->items[$itemId] = [
-                    'id' => $oldData['id'] ?? null,
-                    'order' => $order++,
-                    'deleted' => ! empty($oldData['deleted']),
-                ];
-            }
+        $order = 1;
+
+        foreach ($this->old() as $itemId => $old) {
+            $this->items[$itemId] = [
+                'id' => $old['id'] ?? null,
+                'order' => $order++,
+                'deleted' => ! empty($old['deleted']),
+            ];
         }
     }
 
@@ -163,13 +140,5 @@ class Group extends Component
             'attachedToGroup' => true,
             'uploadFromGroupAtIndex' => $this->uploadFromGroupAtIndex[$itemId] ?? null,
         ];
-    }
-
-    /**
-     * Get property value from item component instance.
-     */
-    protected function propertyValueFromItem(string $property): mixed
-    {
-        return app($this->itemComponentClassName())->$property;
     }
 }
