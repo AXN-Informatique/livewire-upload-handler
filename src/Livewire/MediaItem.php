@@ -31,7 +31,7 @@ class MediaItem extends Item
         $this->itemData = [
             'id' => $this->media->id ?? null,
             'deleted' => ! empty($old['deleted']),
-            ...$this->initialItemDataFromMediaOrOld($this->media, $old),
+            ...$this->initialItemData($old, $this->media),
         ];
     }
 

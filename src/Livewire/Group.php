@@ -46,6 +46,7 @@ class Group extends Component
                 'id' => $old['id'] ?? null,
                 'order' => $order++,
                 'deleted' => ! empty($old['deleted']),
+                ...$this->initialItemData($old),
             ];
         }
     }

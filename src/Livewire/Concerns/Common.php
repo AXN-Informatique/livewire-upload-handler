@@ -33,4 +33,9 @@ trait Common
     {
         return (array) old(str_arr_to_dot($this->inputBaseName), []);
     }
+
+    protected function initialItemData(array $old = []): array
+    {
+        return [];
+    }
 }

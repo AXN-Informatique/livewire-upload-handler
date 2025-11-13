@@ -73,6 +73,7 @@ class Item extends Component
         $this->itemData = [
             'id' => $old['id'] ?? null,
             'deleted' => ! empty($old['deleted']),
+            ...$this->initialItemData($old),
         ];
     }
 

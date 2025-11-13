@@ -26,7 +26,7 @@ trait MediaCommon
         $this->maxFileSize ??= config('media-library.max_file_size');
     }
 
-    protected function initialItemDataFromMediaOrOld(?Media $media = null, array $old = []): array
+    protected function initialItemData(array $old = [], ?Media $media = null): array
     {
         return [];
     }

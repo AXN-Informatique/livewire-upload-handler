@@ -35,7 +35,7 @@ class MediaGroup extends Group
                     'id' => $media->id ?? null,
                     'order' => $order++,
                     'deleted' => ! empty($old['deleted']),
-                    ...$this->initialItemDataFromMediaOrOld($media, $old),
+                    ...$this->initialItemData($old, $media),
                 ];
             }
         } else {
@@ -44,7 +44,7 @@ class MediaGroup extends Group
                     'id' => $media->id,
                     'order' => $media->order_column,
                     'deleted' => false,
-                    ...$this->initialItemDataFromMediaOrOld($media),
+                    ...$this->initialItemData([], $media),
                 ]);
 
                 $this->medias[$itemId] = $media;
