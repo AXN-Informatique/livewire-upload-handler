@@ -31,7 +31,7 @@ document.addEventListener('alpine:init', () => {
     }
 
     function _validateFile(file, errors, $wire) {
-        if (! $wire.acceptsMimeTypes.includes(file.type)) {
+        if ($wire.acceptsMimeTypes.length > 0 && ! $wire.acceptsMimeTypes.includes(file.type)) {
             errors[file.name] = window.livewireUploadHandlerParams.invalidFileTypeErrorMessage
             return false
         }
@@ -357,4 +357,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.e076d650225cfffbc9fc131ff841ed30.js.map
+//# sourceMappingURL=scripts.13505c6331fd440b3c2057d57a6810ec.js.map

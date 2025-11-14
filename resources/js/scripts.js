@@ -27,7 +27,7 @@ document.addEventListener('alpine:init', () => {
     }
 
     function _validateFile(file, errors, $wire) {
-        if (! $wire.acceptsMimeTypes.includes(file.type)) {
+        if ($wire.acceptsMimeTypes.length > 0 && ! $wire.acceptsMimeTypes.includes(file.type)) {
             errors[file.name] = window.livewireUploadHandlerParams.invalidFileTypeErrorMessage
             return false
         }
