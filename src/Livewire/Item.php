@@ -351,22 +351,29 @@ class Item extends Component
         throw MethodNotImplementedException::savedFileSize(static::class);
     }
 
+    protected function fileMimeType(): ?string
+    {
+        if (! $this->hasFile()) {
+            return null;
+        }
+
+        return $this->hasUploadedFile()
+            ? $this->uploadedFile->getMimeType()
+            : $this->savedFileMimeType();
+    }
+
+    protected function savedFileMimeType(): string
+    {
+        throw MethodNotImplementedException::savedFileMimeType(static::class);
+    }
+
     protected function fileType(): ?FileType
     {
         if (! $this->hasFile()) {
             return null;
         }
 
-        $mimeType = $this->hasUploadedFile()
-            ? $this->uploadedFile->getMimeType()
-            : $this->savedFileMimeType();
-
-        return FileType::fromMimeType($mimeType);
-    }
-
-    protected function savedFileMimeType(): string
-    {
-        throw MethodNotImplementedException::savedFileMimeType(static::class);
+        return FileType::fromMimeType($this->fileMimeType());
     }
 
     protected function glideUrl(array $params = []): ?string
