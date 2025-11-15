@@ -12,6 +12,8 @@ use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
+use ReflectionClass;
+use ReflectionProperty;
 
 class Group extends Component
 {
@@ -131,15 +133,25 @@ class Group extends Component
             'itemId' => $itemId,
             'wire:model' => 'items.'.$itemId,
             'inputBaseName' => $this->inputBaseName.'['.$itemId.']',
-            'acceptsMimeTypes' => $this->acceptsMimeTypes,
-            'maxFileSize' => $this->maxFileSize,
-            'compressorjsSettings' => $this->compressorjsSettings,
-            'showFileSize' => $this->showFileSize,
-            'showImagePreview' => $this->showImagePreview,
-            'autoSave' => $this->autoSave,
-            'onlyUpload' => $this->onlyUpload,
             'attachedToGroup' => true,
             'uploadFromGroupAtIndex' => $this->uploadFromGroupAtIndex[$itemId] ?? null,
+            ...$this->publicPropsFrom(Common::class),
         ];
+    }
+
+    /**
+     * Used to extract public properties values of a common trait and pass them
+     * to item components (see method itemComponentParams).
+     */
+    protected function publicPropsFrom(string $trait): array
+    {
+        $props = (new ReflectionClass($trait))
+            ->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        return collect($props)
+            ->mapWithKeys(fn (ReflectionProperty $prop): array => [
+                $prop->getName() => $this->{$prop->getName()},
+            ])
+            ->all();
     }
 }

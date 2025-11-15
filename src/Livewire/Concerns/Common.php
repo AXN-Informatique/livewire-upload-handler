@@ -2,9 +2,9 @@
 
 namespace Axn\LivewireUploadHandler\Livewire\Concerns;
 
-use Livewire\Attributes\Locked;
-
 use function Axn\LivewireUploadHandler\str_arr_to_dot;
+
+use Livewire\Attributes\Locked;
 
 trait Common
 {

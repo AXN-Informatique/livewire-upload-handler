@@ -79,9 +79,7 @@ class MediaGroup extends Group
     {
         return [
             ...parent::itemComponentParams($itemId),
-            'model' => $this->model,
-            'mediaCollection' => $this->mediaCollection,
-            'mediaFilters' => $this->mediaFilters,
+            ...$this->publicPropsFrom(MediaCommon::class),
             'media' => $this->medias[$itemId] ?? null,
         ];
     }
