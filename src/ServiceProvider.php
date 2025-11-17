@@ -77,6 +77,7 @@ class ServiceProvider extends BaseServiceProvider
             'chunkSize' => $config['chunk_size'],
             'compressorjsVar' => $config['compressorjs_var'],
             'sortablejsVar' => $config['sortablejs_var'],
+            'maxFilesNumberReachedMessage' => __('livewire-upload-handler::errors.max_files_number_reached'),
             'invalidFileTypeErrorMessage' => __('livewire-upload-handler::errors.invalid_file_type'),
             'fileTooLoudErrorMessage' => __('livewire-upload-handler::errors.file_too_loud'),
             'uploadErrorMessage' => __('livewire-upload-handler::errors.upload'),

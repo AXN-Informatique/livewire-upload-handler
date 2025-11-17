@@ -26,6 +26,9 @@ class Group extends Component
     public string $inputBaseName = 'files';
 
     #[Locked]
+    public int $maxFilesNumber = 0;
+
+    #[Locked]
     public bool $sortable = false;
 
     protected array $uploadFromGroupAtIndex = [];

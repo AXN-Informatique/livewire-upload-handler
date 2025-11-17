@@ -15,6 +15,8 @@ return [
 
     'download_link' => 'icon-link',
 
+    'max_files_number_warning' => 'text-warning',
+
     'missing_file_warning' => 'text-danger',
 
     'temporary_file_warning' => 'text-secondary',

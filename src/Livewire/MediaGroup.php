@@ -12,6 +12,17 @@ class MediaGroup extends Group
 
     protected array $medias = [];
 
+    public function mount(): void
+    {
+        parent::mount();
+
+        $mediaCollectionSizeLimit = $this->model->getMediaCollection($this->mediaCollection)->collectionSizeLimit ?: 0;
+
+        if ($this->maxFilesNumber === 0 || ($mediaCollectionSizeLimit > 0 && $this->maxFilesNumber > $mediaCollectionSizeLimit)) {
+            $this->maxFilesNumber = $mediaCollectionSizeLimit;
+        }
+    }
+
     protected function loadInitialItemsData(): void
     {
         if ($this->onlyUpload) {

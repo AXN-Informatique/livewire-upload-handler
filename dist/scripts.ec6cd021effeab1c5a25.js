@@ -135,6 +135,18 @@ document.addEventListener('alpine:init', () => {
             return $wire.items[itemId].deleted
         },
 
+        visibleItemsLength() {
+            return Object.keys($wire.items).filter(itemId => ! this.itemHidden(itemId)).length
+        },
+
+        maxFilesNumberReached() {
+            if ($wire.maxFilesNumber <= 0) {
+                return false
+            }
+
+            return this.visibleItemsLength() >= $wire.maxFilesNumber
+        },
+
         async upload(files) {
             if (this.itemsIncrementInProgress) {
                 return
@@ -152,9 +164,17 @@ document.addEventListener('alpine:init', () => {
                 }
             }
 
+            const nbFilesToAdd = this.filesFromGroup.length
+
+            if ($wire.maxFilesNumber > 0) {
+                for (let i = $wire.maxFilesNumber - this.visibleItemsLength(); i < nbFilesToAdd; i++) {
+                    this.groupErrors[this.filesFromGroup[i].name] = window.livewireUploadHandlerParams.maxFilesNumberReachedMessage
+                }
+            }
+
             this._waitItemsActions(async () => {
                 this.sortablejsObj?.option('disabled', true)
-                await $wire.incrementItems(this.filesFromGroup.length)
+                await $wire.incrementItems(nbFilesToAdd)
                 this.sortablejsObj?.option('disabled', false)
                 this.itemsIncrementInProgress = false
             })
@@ -357,4 +377,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.13505c6331fd440b3c2057d57a6810ec.js.map
+//# sourceMappingURL=scripts.26ca2b5b538bfb6580747e732f521d9b.js.map

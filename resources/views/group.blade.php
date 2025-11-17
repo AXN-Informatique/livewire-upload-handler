@@ -27,6 +27,7 @@
         </div>
 
         @include('livewire-upload-handler::group.actions.add')
+        @include('livewire-upload-handler::group.warnings.max-files-number-warning')
         @include('livewire-upload-handler::errors', ['errorsVar' => 'groupErrors'])
     </x-livewire-upload-handler-dropzone>
 </div>
