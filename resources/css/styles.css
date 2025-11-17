@@ -44,7 +44,7 @@
  */
 
 .luh__sort-handle {
-    cursor: pointer;
+    cursor: grab;
 }
 
 
@@ -55,7 +55,6 @@
 
 .luh-group-item {
     display: flex;
-    align-items: center;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid lightgray;
