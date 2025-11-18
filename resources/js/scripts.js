@@ -131,7 +131,7 @@ document.addEventListener('alpine:init', () => {
             return $wire.items[itemId].deleted
         },
 
-        visibleItemsLength() {
+        visibleItemsNumber() {
             return Object.keys($wire.items).filter(itemId => ! this.itemHidden(itemId)).length
         },
 
@@ -140,7 +140,7 @@ document.addEventListener('alpine:init', () => {
                 return false
             }
 
-            return this.visibleItemsLength() >= $wire.maxFilesNumber
+            return this.visibleItemsNumber() >= $wire.maxFilesNumber
         },
 
         async upload(files) {
@@ -160,11 +160,13 @@ document.addEventListener('alpine:init', () => {
                 }
             }
 
-            const nbFilesToAdd = this.filesFromGroup.length
+            const nbFilesFromGroup = this.filesFromGroup.length
+            let nbFilesToAdd = nbFilesFromGroup
 
             if ($wire.maxFilesNumber > 0) {
-                for (let i = $wire.maxFilesNumber - this.visibleItemsLength(); i < nbFilesToAdd; i++) {
+                for (let i = $wire.maxFilesNumber - this.visibleItemsNumber(); i < nbFilesFromGroup; i++) {
                     this.groupErrors[this.filesFromGroup[i].name] = window.livewireUploadHandlerParams.maxFilesNumberReachedMessage
+                    nbFilesToAdd--
                 }
             }
 
