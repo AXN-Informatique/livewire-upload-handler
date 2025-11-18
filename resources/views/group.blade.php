@@ -3,7 +3,7 @@
         class="luh-dropzone"
         overlay-class="luh-dropzone-overlay"
     >
-        <div x-init="initSortable()">
+        <div x-init="initSortable()" wire:key="sortable">
             @foreach ($items as $itemId => $itemData)
                 <div
                     class="luh-group-item luh__sort-draggable"

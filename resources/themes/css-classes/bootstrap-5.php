@@ -17,9 +17,9 @@ return [
 
     'max_files_number_warning' => 'text-warning',
 
-    'missing_file_warning' => 'text-danger',
+    'missing_file_warning' => 'text-danger small',
 
-    'temporary_file_warning' => 'text-secondary',
+    'temporary_file_warning' => 'text-secondary small',
 
     'error' => 'text-danger lh-1 mt-2',
 ];

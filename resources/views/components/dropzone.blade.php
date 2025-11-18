@@ -3,6 +3,7 @@
         class="{!! $class !!} luh__dropzone"
         x-init="initDropzone()"
     @endif
+    wire:key="dropzone"
 >
     @if (! $disabled)
         <div class="{!! $overlayClass !!} luh__dropzone-overlay"></div>

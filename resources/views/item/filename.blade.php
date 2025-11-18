@@ -11,6 +11,3 @@
         {{ $this->fileName() }}
     @endif
 </div>
-
-@include('livewire-upload-handler::item.warnings.missing-file-warning')
-@include('livewire-upload-handler::item.warnings.temporary-file-warning')

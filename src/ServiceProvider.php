@@ -141,11 +141,12 @@ class ServiceProvider extends BaseServiceProvider
     {
         return collect([
             'components/',
-            'group/add.blade.php',
-            'item/actions.blade.php',
-            'item/add.blade.php',
-            'item/body.blade.php',
-            'item/progress.blade.php',
+            'group/actions/',
+            'group/warnings/',
+            'item/actions/',
+            'item/warnings/',
+            'item/filename.blade.php',
+            'item/uploading.blade.php',
             'item.blade.php',
             'group.blade.php',
             'errors.blade.php',

@@ -7,18 +7,20 @@
         :disabled="$attachedToGroup"
     >
         @if ($this->hasFile())
-            <div class="luh-item-content" x-show="! uploading">
+            <div class="luh-item-content" x-show="! uploading" wire:key="content">
                 @if ($showImagePreview && $this->fileType()->isImage())
                     <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
                         <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
                     </div>
                 @endif
 
-                <div class="luh-item-body" x-bind:class="{'luh-item-deleted': deleted}">
-                    @include('livewire-upload-handler::item.body')
+                <div class="luh-item-body" x-bind:class="{'luh-item-deleted': deleted}" wire:key="body">
+                    @include('livewire-upload-handler::item.filename')
+                    @include('livewire-upload-handler::item.warnings.missing-file-warning')
+                    @include('livewire-upload-handler::item.warnings.temporary-file-warning')
                 </div>
 
-                <div class="luh-item-actions">
+                <div class="luh-item-actions" wire:key="actions">
                     @include('livewire-upload-handler::item.actions.update')
                     @include('livewire-upload-handler::item.actions.delete')
                     @include('livewire-upload-handler::item.actions.undelete')
