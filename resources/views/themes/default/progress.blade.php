@@ -1,3 +1,3 @@
 <div>
-    <progress max="100" x-bind:value="getUploadProgress()"></progress>
+    <progress max="100" x-bind:value="uploadProgressValue()"></progress>
 </div>

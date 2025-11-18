@@ -233,7 +233,7 @@ document.addEventListener('alpine:init', () => {
             })
         },
 
-        getUploadProgress() {
+        uploadProgressValue() {
             if (! $wire.uploadingFileSize) {
                 return 0
             }
@@ -379,4 +379,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.68229b07658ff90885479a9d0ce7a99c.js.map
+//# sourceMappingURL=scripts.ac9ae450c4a394a58a08f5c90fc75df4.js.map
