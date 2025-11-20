@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a modern Laravel 12 package (requiring PHP 8.4+) that provides file upload handling using Livewire 3, with support for Spatie Media Library integration. The package handles chunked file uploads, image previews via Glide, file validation, and drag-and-drop functionality.
 
-**Modern PHP Features:** The codebase utilizes PHP 8.4 features including asymmetric visibility, property hooks, typed exceptions, and enums for type safety.
+**Modern PHP Features:** The codebase utilizes PHP 8.4 features including typed exceptions and enums for type safety.
 
 ## Development Commands
 
@@ -104,11 +104,20 @@ Assets are loaded via Blade directives:
 Key properties shared across Item/MediaItem:
 - `autoSave`: If true, files saved immediately; if false, kept as temp files
 - `onlyUpload`: If true, component shows only upload button (no file display)
-- `previewImage`: Enable/disable image thumbnails
+- `showImagePreview`: Enable/disable image thumbnails
+- `showFileSize`: Enable/disable file size display
 - `acceptsMimeTypes`: Array of allowed MIME types
 - `maxFileSize`: Maximum file size in KB
 - `compressorjsSettings`: Settings passed to Compressor.js
 - `glidePreviewSettings`: Dimensions/fit settings for thumbnails
+
+Key properties for Group/MediaGroup:
+- `maxFilesNumber`: Maximum number of files allowed (0 = unlimited). For MediaGroup, automatically limited by Media Library collection constraints
+
+Key properties specific to MediaGroup/MediaItem:
+- `model`: The HasMedia model instance to attach files to
+- `mediaCollection`: Name of the Media Library collection (default: 'default')
+- `mediaFilters`: Array of filters to apply when retrieving media from the collection
 
 ### Events Dispatched
 
@@ -123,8 +132,13 @@ Key properties shared across Item/MediaItem:
 
 To create custom upload handlers:
 1. Extend `Item` or `MediaItem`
-2. Override methods like `saveUploadedFile()`, `savedFileId()`, `savedFileName()`, etc.
+2. Override methods like `saveUploadedFile()`, `savedFileId()`, `savedFileName()`, `savedFileSize()`, `savedFileMimeType()`, etc.
 3. For groups, extend `Group` or `MediaGroup` and override `itemComponentClassName()`
+
+Key methods available in Item component:
+- `fileMimeType()`: Returns the MIME type of the current file (uploaded or saved)
+- `fileType()`: Returns a `FileType` enum representing the file category
+- `fileSize()`: Returns the file size in bytes
 
 ### Testing Chunked Uploads
 
@@ -155,25 +169,14 @@ After compilation, `build.js` merges partial manifests into final `dist/manifest
 
 The package uses enums for type-safe constants:
 
-- **`FileState`** (`src/Enums/FileState.php`): Represents file upload states (Uploading, Uploaded, Saved, Error, Deleted)
-- **`MediaType`** (`src/Enums/MediaType.php`): Represents media types with MIME type detection (Image, Video, Audio, Document, Archive, Other)
+- **`FileType`** (`src/Enums/FileType.php`): Represents file types with MIME type detection (Image, Video, Audio, Document, Archive, Other). Includes helper methods like `isImage()`, `isVideo()`, `supportsPreview()`, etc.
 - **`AssetType`** (`src/Enums/AssetType.php`): Represents asset types for the assets controller (JavaScript, CSS)
 
 ### Typed Exceptions
 
 Custom exceptions for better error handling:
 
-- **`UploadException`** (`src/Exceptions/UploadException.php`): For upload-related errors with factory methods like `chunkProcessingFailed()`, `validationFailed()`, `fileTooLarge()`
-- **`FileNotHandledException`** (`src/Exceptions/FileNotHandledException.php`): For unimplemented methods in base classes, with clear error messages guiding users to either implement the method or use Media Library components
-
-### Asymmetric Visibility (PHP 8.4)
-
-Used in `Item.php` for properties that should be publicly readable but privately writable:
-- `public private(set) ?int $uploadingFileSize`
-- `public private(set) bool $hasErrorOnUpload`
-- `public private(set) bool $hasFile`
-
-This ensures encapsulation while maintaining Livewire's reactivity.
+- **`MethodNotImplementedException`** (`src/Exceptions/MethodNotImplementedException.php`): For unimplemented methods in base classes, with clear error messages guiding users to either implement the method or use Media Library components. Includes factory methods for `saveUploadedFile()`, `deleteSavedFile()`, `downloadSavedFile()`, `saveItemOrder()`, `savedFileDisk()`, `savedFilePath()`, `savedFileName()`, `savedFileSize()`, and `savedFileMimeType()`
 
 ### Type Safety
 

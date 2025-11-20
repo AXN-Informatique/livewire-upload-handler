@@ -48,13 +48,13 @@ Files are saved directly to Media Library on upload.
 
 With sorting, `order_column` is automatically updated.
 
-## Custom Properties
+## Custom Filters
 
 ```blade
 <livewire:upload-handler.media-item
     :model="$product"
     mediaCollection="photos"
-    :mediaProperties="['featured' => true]"
+    :mediaFilters="['featured' => true]"
     :autoSave="true"
 />
 ```
@@ -65,7 +65,7 @@ With sorting, `order_column` is automatically updated.
 |----------|------|---------|-------------|
 | `model` | HasMedia | required | Model instance |
 | `mediaCollection` | string | `'default'` | Collection name |
-| `mediaProperties` | array\|null | `null` | Custom properties |
+| `mediaFilters` | array | `[]` | Filters for retrieving media |
 | `autoSave` | bool | `false` | Must be `true` for Media Library |
 
 **Note**: `autoSave` must be `true` for MediaItem/MediaGroup. Manual mode not supported.
@@ -110,7 +110,7 @@ See [Events](events.md) for details.
         :model="$product"
         mediaCollection="gallery"
         :sortable="true"
-        :previewImage="true"
+        :showImagePreview="true"
         :autoSave="true"
     />
 </div>

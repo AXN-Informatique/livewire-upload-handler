@@ -59,12 +59,12 @@ class CustomGroup extends Group
 
 ## Enums
 
-### MediaType
+### FileType
 
 ```php
-use Axn\LivewireUploadHandler\Enums\MediaType;
+use Axn\LivewireUploadHandler\Enums\FileType;
 
-$type = MediaType::fromMimeType('image/jpeg');
+$type = FileType::fromMimeType('image/jpeg');
 
 if ($type->isImage()) {
     // Handle image
@@ -78,31 +78,13 @@ if ($type->supportsPreview()) {
 Available types: `Image`, `Video`, `Audio`, `Document`, `Archive`, `Other`
 
 Methods:
-- `fromMimeType(string): MediaType`
+- `fromMimeType(string): FileType`
 - `isImage(): bool`
 - `isVideo(): bool`
 - `isAudio(): bool`
 - `isDocument(): bool`
 - `isArchive(): bool`
 - `supportsPreview(): bool`
-
-### FileState
-
-```php
-use Axn\LivewireUploadHandler\Enums\FileState;
-
-$state = FileState::Uploading;
-
-if ($state->isUploading()) {
-    // Show progress
-}
-
-if ($state->isComplete()) {
-    // File ready
-}
-```
-
-States: `Uploading`, `Uploaded`, `Saved`, `Error`, `Deleted`
 
 ### AssetType
 
@@ -117,37 +99,29 @@ Types: `JavaScript`, `CSS`
 
 ## Exceptions
 
-### UploadException
-
-```php
-use Axn\LivewireUploadHandler\Exceptions\UploadException;
-
-try {
-    // Upload code
-} catch (UploadException $e) {
-    logger()->error('Upload failed', ['exception' => $e]);
-}
-```
-
-Factory methods:
-- `chunkProcessingFailed(Throwable)`
-- `validationFailed(string)`
-- `fileNotFound(string)`
-- `invalidMimeType(string, array)`
-- `fileTooLarge(int, int)`
-
-### FileNotHandledException
+### MethodNotImplementedException
 
 Thrown when required methods not implemented in custom handlers.
 
 ```php
-use Axn\LivewireUploadHandler\Exceptions\FileNotHandledException;
+use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 
 protected function saveUploadedFile(TemporaryUploadedFile $file): void
 {
-    throw FileNotHandledException::saveUploadedFile(static::class);
+    throw MethodNotImplementedException::saveUploadedFile(static::class);
 }
 ```
+
+Factory methods:
+- `saveUploadedFile(string)`
+- `deleteSavedFile(string)`
+- `downloadSavedFile(string)`
+- `saveItemOrder(string)`
+- `savedFileDisk(string)`
+- `savedFilePath(string)`
+- `savedFileName(string)`
+- `savedFileSize(string)`
+- `savedFileMimeType(string)`
 
 Error message guides you to implement the method or use MediaItem/MediaGroup.
 

@@ -7,7 +7,7 @@
     wire:model="file"
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
     :maxFileSize="10240"
-    :previewImage="true"
+    :showImagePreview="true"
 />
 ```
 
@@ -52,7 +52,7 @@ public array $files = [];
 | `wire:model` | string | required | Livewire model binding |
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
 | `maxFileSize` | int\|null | `null` | Max size in KB |
-| `previewImage` | bool | `false` | Show image thumbnails |
+| `showImagePreview` | bool | `false` | Show image thumbnails |
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
 | `compressorjsSettings` | array | `[]` | Compressor.js options |
@@ -109,7 +109,7 @@ Files saved immediately. See [Media Library Integration](media-library.md).
 <livewire:upload-handler.item
     wire:model="photo"
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
-    :previewImage="true"
+    :showImagePreview="true"
     :compressorjsSettings="[
         'quality' => 0.8,
         'maxWidth' => 1920,
@@ -126,7 +126,7 @@ Requires [Compressor.js](https://github.com/fengyuanchen/compressorjs) loaded gl
 <livewire:upload-handler.group
     wire:model="gallery"
     :sortable="true"
-    :previewImage="true"
+    :showImagePreview="true"
     :acceptsMimeTypes="['image/jpeg', 'image/png', 'image/webp']"
 />
 ```

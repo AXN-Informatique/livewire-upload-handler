@@ -15,7 +15,7 @@ Base component for single file upload.
 | `inputBaseName` | string | `'file'` | Form input name |
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
 | `maxFileSize` | int\|null | `null` | Max size in KB |
-| `previewImage` | bool | `false` | Show image preview |
+| `showImagePreview` | bool | `false` | Show image preview |
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
 | `sortable` | bool | `false` | Enable sorting |
@@ -79,7 +79,7 @@ Extends `Item` for Spatie Media Library.
 |------|------|---------|-------------|
 | `model` | HasMedia | required | Model instance |
 | `mediaCollection` | string | `'default'` | Collection name |
-| `mediaProperties` | array | `[]` | Custom properties |
+| `mediaFilters` | array | `[]` | Filters for retrieving media |
 | `media` | Media\|null | `null` | Media model |
 
 **Overridden Methods:**
@@ -103,10 +103,10 @@ Same as `MediaItem`.
 
 ## Enums
 
-### MediaType
+### FileType
 
 ```php
-enum MediaType: string
+enum FileType: string
 {
     case Image = 'image';
     case Video = 'video';
@@ -127,25 +127,6 @@ enum MediaType: string
 - `isArchive(): bool`
 - `supportsPreview(): bool` - Returns `true` for Image/Video
 
-### FileState
-
-```php
-enum FileState: string
-{
-    case Uploading = 'uploading';
-    case Uploaded = 'uploaded';
-    case Saved = 'saved';
-    case Error = 'error';
-    case Deleted = 'deleted';
-}
-```
-
-**Methods:**
-
-- `isUploading(): bool`
-- `isComplete(): bool` - Returns `true` for Uploaded/Saved
-- `hasError(): bool`
-
 ### AssetType
 
 ```php
@@ -164,24 +145,10 @@ enum AssetType: string
 
 ## Exceptions
 
-### UploadException
+### MethodNotImplementedException
 
 ```php
-class UploadException extends RuntimeException
-```
-
-**Factory Methods:**
-
-- `static chunkProcessingFailed(Throwable): self`
-- `static validationFailed(string): self`
-- `static fileNotFound(string): self`
-- `static invalidMimeType(string, array): self`
-- `static fileTooLarge(int, int): self`
-
-### FileNotHandledException
-
-```php
-class FileNotHandledException extends LogicException
+class MethodNotImplementedException extends LogicException
 ```
 
 **Factory Methods:**
@@ -190,6 +157,11 @@ class FileNotHandledException extends LogicException
 - `static deleteSavedFile(string): self`
 - `static downloadSavedFile(string): self`
 - `static saveItemOrder(string): self`
+- `static savedFileDisk(string): self`
+- `static savedFilePath(string): self`
+- `static savedFileName(string): self`
+- `static savedFileSize(string): self`
+- `static savedFileMimeType(string): self`
 
 ## Helper Functions
 
