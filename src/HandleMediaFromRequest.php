@@ -14,8 +14,7 @@ class HandleMediaFromRequest
         string $mediaCollection = 'default',
         ?Closure $customizeMedia = null,
         ?int $order = null,
-    ): void
-    {
+    ): void {
         if ($data === null || $data === []) {
             return;
         }
@@ -59,8 +58,7 @@ class HandleMediaFromRequest
         HasMedia $model,
         string $mediaCollection = 'default',
         ?Closure $customizeMedia = null,
-    ): void
-    {
+    ): void {
         if ($data === null || $data === []) {
             return;
         }
