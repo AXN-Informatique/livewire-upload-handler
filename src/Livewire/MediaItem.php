@@ -77,7 +77,7 @@ class MediaItem extends Item
     {
         $customProperties = $this->mediaFilters;
 
-        if ($this->media !== null) {
+        if ($this->media instanceof Media) {
             $customProperties = $this->media->custom_properties;
             $this->media->delete();
         }

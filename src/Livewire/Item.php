@@ -28,7 +28,9 @@ use Throwable;
 #[Isolate]
 class Item extends Component
 {
-    use Common, HasThemes, WithFileUploads;
+    use Common;
+    use HasThemes;
+    use WithFileUploads;
 
     public ?int $uploadingFileSize = null;
 

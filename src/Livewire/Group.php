@@ -17,7 +17,8 @@ use ReflectionProperty;
 
 class Group extends Component
 {
-    use Common, HasThemes;
+    use Common;
+    use HasThemes;
 
     #[Modelable]
     public array $items = [];
@@ -148,7 +149,7 @@ class Group extends Component
      */
     protected function publicPropsFrom(string $trait): array
     {
-        $props = (new ReflectionClass($trait))
+        $props = new ReflectionClass($trait)
             ->getProperties(ReflectionProperty::IS_PUBLIC);
 
         return collect($props)
