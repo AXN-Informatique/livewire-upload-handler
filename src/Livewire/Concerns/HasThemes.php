@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Livewire\Concerns;
 
 use Livewire\Attributes\Computed;

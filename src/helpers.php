@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler;
 
 function bytes_to_int(string|int $value): int

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Axn\LivewireUploadHandler\Components;
 
 use Illuminate\View\Component;
