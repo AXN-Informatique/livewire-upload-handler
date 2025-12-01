@@ -7,7 +7,7 @@
         x-on:click="undeleteSavedFile()"
         wire:key="undelete"
     >
-        {!! $this->icons['undelete'] !!}
+        {!! $this->icons['undelete'] ?? '' !!}
         {!! __('livewire-upload-handler::actions.undelete') !!}
 
         @if ($autoSave)
