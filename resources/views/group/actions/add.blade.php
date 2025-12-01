@@ -1,7 +1,9 @@
 <label
     class="{!! $this->cssClasses['add_button'] ?? '' !!}"
     x-show="! maxFilesNumberReached()"
-    x-cloak
+    @if ($this->maxFilesNumberReached()) {{-- To avoid "blip" on page loading --}}
+        x-cloak
+    @endif
     wire:key="add"
 >
     @include('livewire-upload-handler::group.file-input')

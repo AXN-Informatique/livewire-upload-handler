@@ -118,6 +118,11 @@ class Group extends Component
         return view('livewire-upload-handler::group');
     }
 
+    protected function maxFilesNumberReached(): bool
+    {
+        return $this->maxFilesNumber > 0 && \count($this->items) >= $this->maxFilesNumber;
+    }
+
     /**
      * Get the item component class name.
      */
