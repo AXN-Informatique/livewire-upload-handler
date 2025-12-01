@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler;
 
+use Axn\LivewireUploadHandler\Exceptions\MediaCannotBeRetrievedException;
 use Closure;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class HandleMediaFromRequest
 {
@@ -22,7 +24,8 @@ class HandleMediaFromRequest
         }
 
         if (! empty($data['deleted']) && ! empty($data['id'])) {
-            $model->deleteMedia($data['id']);
+            $mediaToDelete = $this->retrieveMedia($model, $mediaCollection, $data['id']);
+            $mediaToDelete->delete();
 
             return;
         }
@@ -31,8 +34,9 @@ class HandleMediaFromRequest
             $customProperties = [];
 
             if (! empty($data['id'])) {
-                $customProperties = $model->media()->whereKey($data['id'])->value('custom_properties');
-                $model->deleteMedia($data['id']);
+                $mediaToReplace = $this->retrieveMedia($model, $mediaCollection, $data['id']);
+                $customProperties = $mediaToReplace->custom_properties;
+                $mediaToReplace->delete();
             }
 
             $tmpFile = TemporaryUploadedFile::createFromLivewire($data['tmpName']);
@@ -44,7 +48,7 @@ class HandleMediaFromRequest
                 ->toMediaCollection($mediaCollection);
 
         } else {
-            $media = $model->media()->findOrFail($data['id']);
+            $media = $this->retrieveMedia($model, $mediaCollection, $data['id']);
             $media->order_column = $order ?? $media->order_column;
         }
 
@@ -70,5 +74,23 @@ class HandleMediaFromRequest
         foreach ($data as $itemData) {
             $this->single($itemData, $model, $mediaCollection, $customizeMedia, $order++);
         }
+    }
+
+    protected function retrieveMedia(
+        HasMedia $model,
+        string $mediaCollection,
+        mixed $mediaId,
+    ): Media {
+        $media = $model->media()->find($mediaId);
+
+        if (! $media instanceof Media) {
+            throw MediaCannotBeRetrievedException::doesNotBelongToModel($model, $mediaId);
+        }
+
+        if ($media->collection_name !== $mediaCollection) {
+            throw MediaCannotBeRetrievedException::doesNotBelongToCollection($mediaCollection, $media);
+        }
+
+        return $media;
     }
 }
