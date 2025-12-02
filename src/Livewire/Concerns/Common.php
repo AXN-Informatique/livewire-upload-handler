@@ -17,9 +17,6 @@ trait Common
     public ?int $maxFileSize = null;
 
     #[Locked]
-    public array $compressorjsSettings = [];
-
-    #[Locked]
     public bool $showFileSize = false;
 
     #[Locked]
@@ -30,6 +27,9 @@ trait Common
 
     #[Locked]
     public bool $onlyUpload = false;
+
+    #[Locked]
+    public array $compressorjsSettings = [];
 
     protected function old(): array
     {

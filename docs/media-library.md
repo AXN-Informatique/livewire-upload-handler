@@ -52,7 +52,7 @@ With sorting, `order_column` is automatically updated.
 
 ```blade
 <livewire:upload-handler.media-item
-    :model="$product"
+    :model="$article"
     mediaCollection="photos"
     :mediaFilters="['featured' => true]"
     :autoSave="true"
@@ -68,8 +68,6 @@ With sorting, `order_column` is automatically updated.
 | `mediaFilters` | array | `[]` | Filters for retrieving media |
 | `autoSave` | bool | `false` | Must be `true` for Media Library |
 
-**Note**: `autoSave` must be `true` for MediaItem/MediaGroup. Manual mode not supported.
-
 ## MIME Types & Size
 
 MIME types and max file size are inherited from Media Collection definition. You can override:
@@ -84,18 +82,58 @@ MIME types and max file size are inherited from Media Collection definition. You
 />
 ```
 
+## Auto-Save vs Manual
+
+### Manual Mode (default)
+
+Files stored temporarily until form submission:
+
+```blade
+<form action="{!! route('article.files.store', $article) !!}" method="POST">
+    @csrf
+
+    <livewire:upload-handler.media-group
+        inputBaseName="article_images"
+        :model="$article"
+        mediaCollection="images"
+    />
+
+    <button type="submit">Save</button>
+</form>
+```
+
+Service `Axn\LivewireUploadHandler\HandleMediaFromRequest` can be used to handle save:
+
+```php
+use Axn\LivewireUploadHandler\HandleMediaFromRequest;
+
+public function store(Article $article, Request $request, HandleMediaFromRequest $handleMediaFromRequest)
+{
+    $handleMediaFromRequest->single(
+        data: $request->post('article_images'),
+        model: $article,
+        mediaCollection: 'images',
+    );
+}
+```
+
+### Auto-Save Mode
+
+Handled internally by the component `MediaItem`. Nothing more is needed.
+
 ## Events
 
 ```php
-protected $listeners = [
-    'livewire-upload-handler:media-saved' => 'onMediaSaved',
-    'livewire-upload-handler:media-deleted' => 'onMediaDeleted',
-];
-
-public function onMediaSaved($mediaId)
+#[On('livewire-upload-handler:media-saved')]
+public function onMediaSaved(int $mediaId)
 {
-    $media = Media::find($mediaId);
-    // Process saved media
+    // Some action on media saved
+}
+
+#[On('livewire-upload-handler:media-deleted')]
+public function onMediaDeleted(int $mediaId)
+{
+    // Some action on media deleted
 }
 ```
 

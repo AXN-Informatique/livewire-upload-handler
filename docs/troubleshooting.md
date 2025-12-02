@@ -2,21 +2,6 @@
 
 ## Upload Fails
 
-### File Too Large
-
-**Symptom:** Upload stops or fails for large files.
-
-**Solution:** Increase PHP limits in `php.ini`:
-
-```ini
-upload_max_filesize = 100M
-post_max_size = 100M
-max_execution_time = 300
-memory_limit = 256M
-```
-
-Restart web server after changes.
-
 ### Chunk Size Mismatch
 
 **Symptom:** Chunked uploads fail or corrupt files.

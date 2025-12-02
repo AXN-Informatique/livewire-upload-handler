@@ -44,7 +44,7 @@ Add to your layout:
 Single file upload:
 
 ```blade
-<livewire:upload-handler.item wire:model="file" />
+<livewire:upload-handler.item />
 ```
 
 ## Documentation

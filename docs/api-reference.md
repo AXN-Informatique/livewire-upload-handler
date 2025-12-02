@@ -20,7 +20,6 @@ Base component for single file upload.
 | `onlyUpload` | bool | `false` | Hide file display |
 | `sortable` | bool | `false` | Enable sorting |
 | `compressorjsSettings` | array | `[]` | Compression options |
-| `glidePreviewSettings` | array | config | Preview dimensions |
 | `theme` | string\|null | config | CSS theme |
 | `iconsTheme` | string\|null | config | Icons theme |
 
@@ -34,13 +33,13 @@ Base component for single file upload.
 
 **Protected Methods (Override in subclasses):**
 
+- `initialItemData(array $old): array` - To provide additionnal data to item, like file description
 - `saveUploadedFile(TemporaryUploadedFile): void` - Save uploaded file
-- `savedFileId(): ?string` - Get saved file ID
-- `savedFileName(): ?string` - Get saved file name
-- `savedImagePreviewUrl(): ?string` - Get saved image URL
-- `savedFileExists(): bool` - Check if saved file exists
-- `hasSavedFile(): bool` - Check if file is saved
-- `viewName(): string` - View path
+- `savedFileDisk(): string` - Get saved file disk
+- `savedFilePath(): string` - Get saved file path
+- `savedFileName(): string` - Get saved file name
+- `savedFileSize(): int` - Get saved file size (in KB)
+- `savedFileMimeType(): string` - Get saved file MIME type
 
 ### Group
 

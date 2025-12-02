@@ -4,43 +4,21 @@
 
 ```blade
 <livewire:upload-handler.item
-    wire:model="file"
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
     :maxFileSize="10240"
+    :showFileSize="true"
     :showImagePreview="true"
 />
-```
-
-In your Livewire component:
-
-```php
-use Livewire\Component;
-
-class MyComponent extends Component
-{
-    public array $file = [];
-
-    public function save()
-    {
-        // Access uploaded file via $this->file
-    }
-}
 ```
 
 ## Multiple Files Upload (Group)
 
 ```blade
 <livewire:upload-handler.group
-    wire:model="files"
-    :sortable="true"
     :acceptsMimeTypes="['image/jpeg', 'image/png', 'application/pdf']"
+    :maxFilesNumber="5"
+    :sortable="true"
 />
-```
-
-In your component:
-
-```php
-public array $files = [];
 ```
 
 ## Component Properties
@@ -49,21 +27,22 @@ public array $files = [];
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `wire:model` | string | required | Livewire model binding |
+| `inputBaseName` | string | `'file'` | Form input base name |
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
 | `maxFileSize` | int\|null | `null` | Max size in KB |
+| `showFileSize` | bool | `false` | Show file size in KB |
 | `showImagePreview` | bool | `false` | Show image thumbnails |
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
 | `compressorjsSettings` | array | `[]` | Compressor.js options |
-| `glidePreviewSettings` | array | config | Custom thumbnail size |
 
 ### Group-Only Properties
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
+| `inputBaseName` | string | `'files'` | Form input base name |
+| `maxFilesNumber` | int | `0` | Maximum number of files (0 = no limit) |
 | `sortable` | bool | `false` | Enable drag & drop sorting |
-| `inputBaseName` | string | `'files'` | Form input name |
 
 ## Auto-Save vs Manual
 
@@ -72,18 +51,26 @@ public array $files = [];
 Files stored temporarily until form submission:
 
 ```blade
-<form wire:submit="save">
-    <livewire:upload-handler.item wire:model="file" />
+<form action="{!! route('files.store') !!}" method="POST">
+    @csrf
+
+    <livewire:upload-handler.item />
+    <livewire:upload-handler.group />
+
     <button type="submit">Save</button>
 </form>
 ```
 
 ```php
-public function save()
+public function store(Request $request)
 {
-    // Process $this->file
-    $path = TemporaryUploadedFile::createFromLivewire($this->file['tmpName'])
-        ->store('uploads');
+    $uploadedFile = TemporaryUploadedFile::createFromLivewire($request->input('file.tmpName'));
+    // Handle $uploadedFile
+
+    foreach ($request->post('files') as $data) {
+        $uploadedFile = TemporaryUploadedFile::createFromLivewire($data['tmpName']);
+        // Handle $uploadedFile
+    }
 }
 ```
 
@@ -97,7 +84,6 @@ Files saved immediately. See [Media Library Integration](media-library.md).
 
 ```blade
 <livewire:upload-handler.item
-    wire:model="document"
     :acceptsMimeTypes="['application/pdf']"
     :maxFileSize="20480"
 />
@@ -107,7 +93,6 @@ Files saved immediately. See [Media Library Integration](media-library.md).
 
 ```blade
 <livewire:upload-handler.item
-    wire:model="photo"
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
     :showImagePreview="true"
     :compressorjsSettings="[
@@ -124,7 +109,6 @@ Requires [Compressor.js](https://github.com/fengyuanchen/compressorjs) loaded gl
 
 ```blade
 <livewire:upload-handler.group
-    wire:model="gallery"
     :sortable="true"
     :showImagePreview="true"
     :acceptsMimeTypes="['image/jpeg', 'image/png', 'image/webp']"

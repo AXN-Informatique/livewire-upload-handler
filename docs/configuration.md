@@ -43,18 +43,6 @@ Size of each chunk for large file uploads. Defaults to PHP's `upload_max_filesiz
 - `glide_sign_key`: Secret key for signed URLs (required for security)
 - `glide_base_url`: Base URL for image transformation endpoint
 
-### Preview Settings
-
-```php
-'glide_preview_settings' => [
-    'w' => 70,
-    'h' => 70,
-    'fit' => 'crop',
-],
-```
-
-Default thumbnail dimensions. Can be overridden per component.
-
 ## Environment Variables
 
 In `.env`:
@@ -68,17 +56,6 @@ Generate sign key:
 
 ```bash
 php -r "echo bin2hex(random_bytes(32));"
-```
-
-## PHP Settings
-
-For large file uploads, adjust in `php.ini`:
-
-```ini
-upload_max_filesize = 100M
-post_max_size = 100M
-max_execution_time = 300
-memory_limit = 256M
 ```
 
 ## Next Steps
