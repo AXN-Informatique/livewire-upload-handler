@@ -114,7 +114,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         // config
         $this->publishes([
-            $this->basePath.'config/livewire-upload-handler.stub' => $this->app->configPath('livewire-upload-handler.php'),
+            $this->basePath.'config/livewire-upload-handler.php' => $this->app->configPath('livewire-upload-handler.php'),
         ], 'livewire-upload-handler:config');
 
         // translations
