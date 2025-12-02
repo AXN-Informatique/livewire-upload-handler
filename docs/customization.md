@@ -94,7 +94,7 @@ Add new language:
 // lang/vendor/livewire-upload-handler/es/actions.php
 return [
     'add' => 'Añadir',
-    'update' => 'Reemplazar',
+    'replace' => 'Reemplazar',
     'delete' => 'Eliminar',
     'undelete' => 'Deshacer',
     'cancel' => 'Cancelar',

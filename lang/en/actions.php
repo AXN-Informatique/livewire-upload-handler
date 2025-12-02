@@ -2,7 +2,7 @@
 
 return [
     'add' => 'Add',
-    'update' => 'Replace',
+    'replace' => 'Replace',
     'delete' => 'Delete',
     'undelete' => 'Undelete',
     'cancel' => 'Cancel',

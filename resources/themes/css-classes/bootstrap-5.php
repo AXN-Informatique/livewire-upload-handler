@@ -3,7 +3,7 @@
 return [
     'add_button' => 'btn btn-sm btn-outline-primary',
 
-    'update_button' => 'btn btn-sm btn-outline-primary',
+    'replace_button' => 'btn btn-sm btn-outline-primary',
 
     'delete_button' => 'btn btn-sm btn-outline-danger',
 

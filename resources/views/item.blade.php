@@ -30,7 +30,7 @@
 
                     <div class="luh-item-actions" wire:key="actions">
                         <div class="{!! $this->cssClasses['actions_group'] ?? '' !!}">
-                            @include('livewire-upload-handler::item.actions.update')
+                            @include('livewire-upload-handler::item.actions.replace')
                             @include('livewire-upload-handler::item.actions.delete')
                             @include('livewire-upload-handler::item.actions.cancel')
                         </div>
