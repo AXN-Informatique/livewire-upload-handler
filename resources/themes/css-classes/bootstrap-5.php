@@ -13,6 +13,8 @@ return [
 
     'cancel_upload_button' => 'btn btn-link',
 
+    'actions_group' => 'btn-group',
+
     'download_link' => 'icon-link',
 
     'max_files_number_warning' => 'text-warning',

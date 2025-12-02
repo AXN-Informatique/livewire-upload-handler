@@ -29,10 +29,13 @@
                     </div>
 
                     <div class="luh-item-actions" wire:key="actions">
-                        @include('livewire-upload-handler::item.actions.update')
-                        @include('livewire-upload-handler::item.actions.delete')
+                        <div class="{!! $this->cssClasses['actions_group'] ?? '' !!}">
+                            @include('livewire-upload-handler::item.actions.update')
+                            @include('livewire-upload-handler::item.actions.delete')
+                            @include('livewire-upload-handler::item.actions.cancel')
+                        </div>
+
                         @include('livewire-upload-handler::item.actions.undelete')
-                        @include('livewire-upload-handler::item.actions.cancel')
                     </div>
                 </div>
             @endif
