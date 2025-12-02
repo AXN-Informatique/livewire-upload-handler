@@ -6,31 +6,37 @@
         overlay-class="luh-dropzone-overlay"
         :disabled="$attachedToGroup"
     >
-        @if ($this->hasFile())
-            <div class="luh-item-content" x-show="! uploading" wire:key="content">
-                @if ($showImagePreview && $this->fileType()->isImage())
-                    <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
-                        <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
+        <div x-show="! uploading">
+            @if ($this->hasFile())
+                <div class="luh-item-content" wire:key="content">
+                    @if ($showImagePreview && $this->fileType()->isImage())
+                        <div class="luh-item-preview" x-bind:class="{'luh-item-deleted': deleted}">
+                            <img src="{{ $this->glideUrl(['w' => 70, 'h' => 70, 'fit' => 'crop']) }}">
+                        </div>
+                    @endif
+
+                    <div class="luh-item-body" x-bind:class="{'luh-item-deleted': deleted}" wire:key="body">
+                        @include('livewire-upload-handler::item.filename')
+                        @include('livewire-upload-handler::item.warnings.missing-file-warning')
+                        @include('livewire-upload-handler::item.warnings.temporary-file-warning')
                     </div>
-                @endif
 
-                <div class="luh-item-body" x-bind:class="{'luh-item-deleted': deleted}" wire:key="body">
-                    @include('livewire-upload-handler::item.filename')
-                    @include('livewire-upload-handler::item.warnings.missing-file-warning')
-                    @include('livewire-upload-handler::item.warnings.temporary-file-warning')
+                    <div class="luh-item-actions" wire:key="actions">
+                        @include('livewire-upload-handler::item.actions.update')
+                        @include('livewire-upload-handler::item.actions.delete')
+                        @include('livewire-upload-handler::item.actions.undelete')
+                        @include('livewire-upload-handler::item.actions.cancel')
+                    </div>
                 </div>
+            @endif
 
-                <div class="luh-item-actions" wire:key="actions">
-                    @include('livewire-upload-handler::item.actions.update')
-                    @include('livewire-upload-handler::item.actions.delete')
-                    @include('livewire-upload-handler::item.actions.undelete')
-                    @include('livewire-upload-handler::item.actions.cancel')
-                </div>
-            </div>
-        @endif
+            @include('livewire-upload-handler::item.actions.add')
+        </div>
 
-        @include('livewire-upload-handler::item.actions.add')
-        @include('livewire-upload-handler::item.uploading')
+        <div x-show="uploading" x-cloak>
+            @include('livewire-upload-handler::item.uploading')
+        </div>
+
         @include('livewire-upload-handler::errors', ['errorsVar' => 'itemErrors'])
     </x-livewire-upload-handler-dropzone>
 </div>

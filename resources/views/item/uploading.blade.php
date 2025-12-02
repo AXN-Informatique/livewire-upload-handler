@@ -1,8 +1,4 @@
-<div
-    x-show="uploading"
-    x-cloak
-    wire:key="uploading"
->
+<div wire:key="uploading">
     <div>
         <span x-text="uploadingFileOriginalName"></span>
 
