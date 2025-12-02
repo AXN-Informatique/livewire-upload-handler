@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire\{{classRelativeName}};
+
+use App\Livewire\{{classRelativeName}}\Concerns\{{className}}Common;
+use Axn\LivewireUploadHandler\Livewire\MediaGroup as LuhMediaGroup;
+use Illuminate\Contracts\View\View;
+
+class Group extends LuhMediaGroup
+{
+    use {{className}}Common;
+
+    // #[Locked]
+    // public string $inputBaseName = 'files';
+
+    public function render(): View
+    {
+        return view('livewire.{{viewName}}.group');
+    }
+
+    protected function itemComponentClassName(): string
+    {
+        return Item::class;
+    }
+
+    protected function itemComponentParams(string $itemId): array
+    {
+        return [
+            ...parent::itemComponentParams($itemId),
+            ...$this->publicPropsFrom({{className}}Common::class),
+        ];
+    }
+}

@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire\{{classRelativeName}};
+
+use App\Livewire\{{classRelativeName}}\Concerns\{{className}}Common;
+use Axn\LivewireUploadHandler\Livewire\MediaItem as LuhMediaItem;
+use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Locked;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+
+#[Isolate]
+class Item extends LuhMediaItem
+{
+    use {{className}}Common;
+
+    // #[Locked]
+    // public string $inputBaseName = 'file';
+
+    public function render(): View
+    {
+        return view('livewire.{{viewName}}.item');
+    }
+
+    protected function uploadFinished(TemporaryUploadedFile $uploadedFile): void
+    {
+        parent::uploadFinished($uploadedFile);
+
+        // $this->itemData['name'] = $uploadedFile->getClientOriginalName();
+    }
+}

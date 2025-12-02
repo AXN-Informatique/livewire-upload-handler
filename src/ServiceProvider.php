@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler;
 
 use Axn\LivewireUploadHandler\Components\Dropzone;
+use Axn\LivewireUploadHandler\Console\MakeUploadHandlerCommand;
 use Axn\LivewireUploadHandler\Livewire\Group;
 use Axn\LivewireUploadHandler\Livewire\Item;
 use Axn\LivewireUploadHandler\Livewire\MediaGroup;
@@ -43,7 +44,7 @@ class ServiceProvider extends BaseServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                // ...
+                MakeUploadHandlerCommand::class,
             ]);
 
             $this->configurePublishing();

@@ -19,6 +19,13 @@
                         @include('livewire-upload-handler::item.filename')
                         @include('livewire-upload-handler::item.warnings.missing-file-warning')
                         @include('livewire-upload-handler::item.warnings.temporary-file-warning')
+
+                        {{-- <input
+                            type="text"
+                            name="{!! $inputBaseName !!}[name]"
+                            id="{!! $itemId !!}_name"
+                            wire:model="itemData.name"
+                        > --}}
                     </div>
 
                     <div class="luh-item-actions" wire:key="actions">
