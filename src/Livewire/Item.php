@@ -271,7 +271,7 @@ class Item extends Component
 
     protected function hasSavedFile(): bool
     {
-        return $this->itemData['id'] !== null;
+        return isset($this->itemData['id']);
     }
 
     protected function hasFile(): bool
