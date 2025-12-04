@@ -176,7 +176,7 @@ The package uses enums for type-safe constants:
 
 Custom exceptions for better error handling:
 
-- **`MethodNotImplementedException`** (`src/Exceptions/MethodNotImplementedException.php`): For unimplemented methods in base classes, with clear error messages guiding users to either implement the method or use Media Library components. Includes factory methods for `saveUploadedFile()`, `deleteSavedFile()`, `downloadSavedFile()`, `saveItemOrder()`, `savedFileDisk()`, `savedFilePath()`, `savedFileName()`, `savedFileSize()`, and `savedFileMimeType()`
+- **`MethodNotImplementedException`** (`src/Exceptions/MethodNotImplementedException.php`): For unimplemented methods in base classes, with clear error messages guiding users to either implement the method or use Media Library components. Includes factory methods for `saveUploadedFile()`, `deleteSavedFile()`, `downloadSavedFile()`, `saveFileOrder()`, `savedFileDisk()`, `savedFilePath()`, `savedFileName()`, `savedFileSize()`, and `savedFileMimeType()`
 
 ### Type Safety
 

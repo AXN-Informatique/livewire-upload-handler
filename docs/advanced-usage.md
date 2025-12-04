@@ -47,11 +47,11 @@ class CustomGroup extends Group
         return S3UploadItem::class;
     }
 
-    protected function saveItemOrder(string $itemId, int $order): void
+    protected function saveFileOrder(string|int $id, int $order): void
     {
         // Save order to database
         DB::table('uploads')
-            ->where('id', $this->items[$itemId]['id'])
+            ->where('id', $id)
             ->update(['order' => $order]);
     }
 }
@@ -116,7 +116,7 @@ Factory methods:
 - `saveUploadedFile(string)`
 - `deleteSavedFile(string)`
 - `downloadSavedFile(string)`
-- `saveItemOrder(string)`
+- `saveFileOrder(string)`
 - `savedFileDisk(string)`
 - `savedFilePath(string)`
 - `savedFileName(string)`

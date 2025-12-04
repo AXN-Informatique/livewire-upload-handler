@@ -63,10 +63,9 @@ Base component for multiple file uploads.
 **Protected Methods (Override in subclasses):**
 
 - `addItem(array): string` - Add single item
-- `saveItemOrder(string, int): void` - Save item order
+- `saveFileOrder(string|int, int): void` - Save file order
 - `itemComponentClassName(): string` - Item component class
 - `itemComponentParams(string): array` - Item parameters
-- `viewName(): string` - View path
 
 ### MediaItem
 
@@ -97,7 +96,7 @@ Same as `MediaItem`.
 
 **Overridden Methods:**
 
-- `saveItemOrder(string, int): void` - Updates `order_column`
+- `saveFileOrder(string|int, int): void` - Updates `order_column`
 - `itemComponentClassName(): string` - Returns `MediaItem::class`
 
 ## Enums
@@ -155,7 +154,7 @@ class MethodNotImplementedException extends LogicException
 - `static saveUploadedFile(string): self`
 - `static deleteSavedFile(string): self`
 - `static downloadSavedFile(string): self`
-- `static saveItemOrder(string): self`
+- `static saveFileOrder(string): self`
 - `static savedFileDisk(string): self`
 - `static savedFilePath(string): self`
 - `static savedFileName(string): self`

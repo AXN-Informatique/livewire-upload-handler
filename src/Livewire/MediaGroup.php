@@ -63,16 +63,10 @@ class MediaGroup extends Group
         }
     }
 
-    protected function saveItemOrder(string $itemId, int $order): void
+    protected function saveFileOrder(string|int $id, int $order): void
     {
-        $mediaId = $this->items[$itemId]['id'] ?? null;
-
-        if ($mediaId === null) {
-            return;
-        }
-
         $this->model->media()
-            ->whereKey($mediaId)
+            ->whereKey($id)
             ->update([
                 'order_column' => $order,
             ]);

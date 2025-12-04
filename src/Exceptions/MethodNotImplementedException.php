@@ -32,10 +32,10 @@ class MethodNotImplementedException extends LogicException
         );
     }
 
-    public static function saveItemOrder(string $componentClass): self
+    public static function saveFileOrder(string $componentClass): self
     {
         return new self(
-            \sprintf('`saveItemOrder` method not implemented in %s. ', $componentClass).
+            \sprintf('`saveFileOrder` method not implemented in %s. ', $componentClass).
             'Either extend this component and implement the method, or use the MediaGroup component for automatic Spatie Media Library integration.'
         );
     }

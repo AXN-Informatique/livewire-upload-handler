@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1.0 (UNRELEASED)
+------------------
+
+- `Group`: Method `saveItemOrder` become `saveFileOrder` (file `id` directly pass instead of `itemId`)
+
+
 1.0.1 (2025-12-03)
 ------------------
 

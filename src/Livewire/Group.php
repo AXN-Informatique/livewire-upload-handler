@@ -93,9 +93,10 @@ class Group extends Component
     {
         foreach ($sortedItemsIds as $order => $itemId) {
             $this->items[$itemId]['order'] = ++$order;
+            $id = $this->items[$itemId]['id'] ?? null;
 
-            if ($this->autoSave) {
-                $this->saveItemOrder($itemId, $order);
+            if ($this->autoSave && $id !== null) {
+                $this->saveFileOrder($id, $order);
             }
         }
 
@@ -103,14 +104,14 @@ class Group extends Component
     }
 
     /**
-     * Save item order to permanent storage.
+     * Save file order to permanent storage.
      * Must be implemented in child classes when using autoSave with sortable.
      *
      * @throws MethodNotImplementedException
      */
-    protected function saveItemOrder(string $itemId, int $order): void
+    protected function saveFileOrder(string|int $id, int $order): void
     {
-        throw MethodNotImplementedException::saveItemOrder(static::class);
+        throw MethodNotImplementedException::saveFileOrder(static::class);
     }
 
     public function render(): View
