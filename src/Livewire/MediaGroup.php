@@ -25,10 +25,6 @@ class MediaGroup extends Group
 
     protected function loadInitialItemsData(): void
     {
-        if ($this->onlyUpload) {
-            return;
-        }
-
         $medias = $this->model->getMedia($this->mediaCollection, $this->mediaFilters);
 
         if (old() !== []) {

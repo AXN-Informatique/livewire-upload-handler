@@ -18,14 +18,8 @@ class MediaItem extends Item
     #[Locked]
     public ?Media $media = null;
 
-    protected function loadInitialItemData(): void
+    protected function loadInitialItemData(array $old): void
     {
-        $old = $this->loadUploadedFileFromOldThenGetOld();
-
-        if ($old === null) {
-            return;
-        }
-
         $this->media = $this->model->getFirstMedia($this->mediaCollection);
 
         $this->itemData = [

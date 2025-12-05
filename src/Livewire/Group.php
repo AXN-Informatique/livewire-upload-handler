@@ -36,15 +36,15 @@ class Group extends Component
 
     public function mount(): void
     {
+        if ($this->onlyUpload) {
+            return;
+        }
+
         $this->loadInitialItemsData();
     }
 
     protected function loadInitialItemsData(): void
     {
-        if ($this->onlyUpload) {
-            return;
-        }
-
         $order = 1;
 
         foreach ($this->old() as $itemId => $old) {

@@ -61,43 +61,28 @@ class Item extends Component
 
     public function mount(): void
     {
-        $this->loadInitialItemData();
-    }
-
-    protected function loadInitialItemData(): void
-    {
-        $old = $this->loadUploadedFileFromOldThenGetOld();
-
-        if ($old === null) {
-            return;
-        }
-
-        $this->itemData = [
-            'id' => $old['id'] ?? null,
-            'deleted' => ! empty($old['deleted']),
-            ...$this->initialItemData($old),
-        ];
-    }
-
-    protected function loadUploadedFileFromOldThenGetOld(): ?array
-    {
         if ($this->onlyUpload) {
-            return null;
+            return;
         }
 
         $old = $this->old();
 
         if (isset($old['tmpName'])) {
             $this->uploadedFile = TemporaryUploadedFile::createFromLivewire($old['tmpName']);
-
-            unset($old['tmpName']);
         }
 
-        if ($this->attachedToGroup) {
-            return null;
+        if (! $this->attachedToGroup) {
+            $this->loadInitialItemData($old);
         }
+    }
 
-        return $old;
+    protected function loadInitialItemData(array $old): void
+    {
+        $this->itemData = [
+            'id' => $old['id'] ?? null,
+            'deleted' => ! empty($old['deleted']),
+            ...$this->initialItemData($old),
+        ];
     }
 
     /**
