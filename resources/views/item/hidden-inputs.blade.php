@@ -1,19 +1,19 @@
-@if ($this->hasFile() && ! $autoSave)
-    @if ($this->hasUploadedFile())
-        <input
-            type="hidden"
-            name="{!! $inputBaseName !!}[tmpName]"
-            value="{!! $uploadedFile->getFilename() !!}"
-        >
-    @endif
+@if ($this->hasUploadedFile())
+    <input
+        type="hidden"
+        name="{!! $inputBaseName !!}[tmpName]"
+        value="{!! $uploadedFile->getFilename() !!}"
+    >
+@endif
 
-    @if ($this->hasSavedFile())
-        <input
-            type="hidden"
-            name="{!! $inputBaseName !!}[id]"
-            value="{!! $itemData['id'] !!}"
-        >
+@if ($this->hasSavedFile())
+    <input
+        type="hidden"
+        name="{!! $inputBaseName !!}[id]"
+        value="{!! $itemData['id'] !!}"
+    >
 
+    @if (! $autoSave)
         <input
             type="checkbox"
             name="{!! $inputBaseName !!}[deleted]"

@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - `Group`: Method `saveItemOrder` become `saveFileOrder` (file `id` directly pass instead of `itemId`)
+- Fix: Items not loaded when back from redirection with auto-save mode
 
 
 1.0.1 (2025-12-03)
