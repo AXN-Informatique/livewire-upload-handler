@@ -12,9 +12,10 @@ Base component for single file upload.
 |------|------|---------|-------------|
 | `itemId` | string | - | Unique identifier |
 | `itemData` | array | `[]` | File metadata |
-| `inputBaseName` | string | `'file'` | Form input name |
+| `inputBaseName` | string | `'file'` | Form input base name |
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
 | `maxFileSize` | int\|null | `null` | Max size in KB |
+| `showFileSize` | bool | `false` | Show file size in KB |
 | `showImagePreview` | bool | `false` | Show image preview |
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
@@ -84,7 +85,6 @@ Extends `Item` for Spatie Media Library.
 
 - `saveUploadedFile(TemporaryUploadedFile): void` - Saves to Media Library
 - `deleteSavedFile(): void` - Deletes media
-- `downloadSavedFile(): Response` - Downloads media file
 
 ### MediaGroup
 
@@ -153,7 +153,6 @@ class MethodNotImplementedException extends LogicException
 
 - `static saveUploadedFile(string): self`
 - `static deleteSavedFile(string): self`
-- `static downloadSavedFile(string): self`
 - `static saveFileOrder(string): self`
 - `static savedFileDisk(string): self`
 - `static savedFilePath(string): self`

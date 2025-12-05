@@ -24,14 +24,6 @@ class MethodNotImplementedException extends LogicException
         );
     }
 
-    public static function downloadSavedFile(string $componentClass): self
-    {
-        return new self(
-            \sprintf('`downloadSavedFile` method not implemented in %s. ', $componentClass).
-            'Either extend this component and implement the method, or use the MediaItem component for automatic Spatie Media Library integration.'
-        );
-    }
-
     public static function saveFileOrder(string $componentClass): self
     {
         return new self(

@@ -30,7 +30,7 @@ class S3UploadItem extends Item
 Use it:
 
 ```blade
-<livewire:s3-upload-item wire:model="file" :autoSave="true" />
+<livewire:s3-upload-item :autoSave="true" />
 ```
 
 ## Custom Group Handler
@@ -115,7 +115,6 @@ protected function saveUploadedFile(TemporaryUploadedFile $file): void
 Factory methods:
 - `saveUploadedFile(string)`
 - `deleteSavedFile(string)`
-- `downloadSavedFile(string)`
 - `saveFileOrder(string)`
 - `savedFileDisk(string)`
 - `savedFilePath(string)`

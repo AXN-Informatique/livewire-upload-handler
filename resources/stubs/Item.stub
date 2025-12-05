@@ -26,8 +26,16 @@ class Item extends LuhMediaItem
 
     protected function uploadFinished(TemporaryUploadedFile $uploadedFile): void
     {
-        parent::uploadFinished($uploadedFile);
-
         // $this->itemData['name'] = $uploadedFile->getClientOriginalName();
+
+        parent::uploadFinished($uploadedFile);
+    }
+
+    protected function saveUploadedFile(TemporaryUploadedFile $uploadedFile): void
+    {
+        parent::saveUploadedFile($uploadedFile);
+
+        // $this->media->name = $this->itemData['name'];
+        // $this->media->save();
     }
 }
