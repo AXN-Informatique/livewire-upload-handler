@@ -79,7 +79,7 @@ class Item extends Component
     protected function loadInitialItemData(array $old): void
     {
         $this->itemData = [
-            'id' => $old['id'] ?? null,
+            'id' => null,
             'deleted' => ! empty($old['deleted']),
             ...$this->initialItemData($old),
         ];
