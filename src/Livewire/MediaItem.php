@@ -50,6 +50,7 @@ class MediaItem extends Item
 
         if (! $this->onlyUpload) {
             $this->itemData['id'] = $media->id;
+            $this->savedFileDisk = $media->disk;
             $this->savedFilePath = $media->getPathRelativeToRoot();
         }
 

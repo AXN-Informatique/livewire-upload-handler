@@ -32,7 +32,7 @@ document.addEventListener('alpine:init', () => {
             return false
         }
 
-        if ($wire.maxFileSize !== null && file.size > $wire.maxFileSize) {
+        if ($wire.maxFileSize > 0 && file.size > $wire.maxFileSize) {
             errors[file.name] = window.livewireUploadHandlerParams.fileTooLoudErrorMessage
             return false
         }

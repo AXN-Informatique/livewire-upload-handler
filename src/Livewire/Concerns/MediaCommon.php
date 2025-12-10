@@ -22,13 +22,13 @@ trait MediaCommon
 
     public function mountMediaCommon(): void
     {
-        $this->savedFileDisk = $this->model->getMediaCollection($this->mediaCollection)->diskName;
-
         if ($this->acceptsMimeTypes === []) {
             $this->acceptsMimeTypes = $this->model->getMediaCollection($this->mediaCollection)->acceptsMimeTypes;
         }
 
-        $this->maxFileSize ??= config('media-library.max_file_size');
+        if ($this->maxFileSize <= 0 || $this->maxFileSize > config('media-library.max_file_size')) {
+            $this->maxFileSize = config('media-library.max_file_size');
+        }
     }
 
     protected function initialItemData(array $old = [], ?Media $media = null): array
@@ -43,6 +43,7 @@ trait MediaCommon
     protected function initialItemParams(?Media $media = null): array
     {
         return [
+            'savedFileDisk' => $media?->disk,
             'savedFilePath' => $media?->getPathRelativeToRoot(),
         ];
     }

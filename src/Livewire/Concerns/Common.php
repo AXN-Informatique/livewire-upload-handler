@@ -14,7 +14,7 @@ trait Common
     public array $acceptsMimeTypes = [];
 
     #[Locked]
-    public ?int $maxFileSize = null;
+    public int $maxFileSize = 0;
 
     #[Locked]
     public bool $showFileSize = false;

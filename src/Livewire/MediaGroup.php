@@ -17,7 +17,7 @@ class MediaGroup extends Group
 
         $mediaCollectionSizeLimit = $this->model->getMediaCollection($this->mediaCollection)->collectionSizeLimit ?: 0;
 
-        if ($this->maxFilesNumber === 0 || ($mediaCollectionSizeLimit > 0 && $this->maxFilesNumber > $mediaCollectionSizeLimit)) {
+        if ($this->maxFilesNumber <= 0 || ($mediaCollectionSizeLimit > 0 && $this->maxFilesNumber > $mediaCollectionSizeLimit)) {
             $this->maxFilesNumber = $mediaCollectionSizeLimit;
         }
     }

@@ -159,7 +159,7 @@ class Item extends Component
             ], [
                 'uploadedFile' => 'file'
                     .($this->acceptsMimeTypes !== [] ? '|mimetypes:'.implode(',', $this->acceptsMimeTypes) : '')
-                    .($this->maxFileSize !== null ? '|max:'.$this->maxFileSize : ''),
+                    .($this->maxFileSize > 0 ? '|max:'.$this->maxFileSize : ''),
             ])->validate();
 
         } catch (ValidationException $validationException) {
