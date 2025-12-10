@@ -31,12 +31,20 @@ trait Common
     #[Locked]
     public array $compressorjsSettings = [];
 
+    #[Locked]
+    public string $savedFileDisk = 'local';
+
     protected function old(): array
     {
         return (array) old(str_arr_to_dot($this->inputBaseName), []);
     }
 
     protected function initialItemData(array $old = []): array
+    {
+        return [];
+    }
+
+    protected function initialItemParams(): array
     {
         return [];
     }

@@ -266,7 +266,7 @@ document.addEventListener('alpine:init', () => {
         cancelUpload() {
             this._waitGroupActions(() => {
                 this.uploading = false
-                $wire.itemData.deleted = ($wire.itemData.id === null)
+                $wire.itemData.deleted = ($wire.savedFilePath === null)
                 $wire.cancelUpload('chunkFile')
                 return $wire.deleteUploadingFile()
             })
@@ -274,7 +274,7 @@ document.addEventListener('alpine:init', () => {
 
         deleteUploadedFile() {
             this._waitGroupActions(() => {
-                $wire.itemData.deleted = ($wire.itemData.id === null)
+                $wire.itemData.deleted = ($wire.savedFilePath === null)
                 return $wire.deleteUploadedFile()
             })
         },
@@ -353,7 +353,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         _errorOnUpload() {
-            if ($wire.attachedToGroup && $wire.itemData.id === null) {
+            if ($wire.attachedToGroup && $wire.savedFilePath === null) {
                 this.groupErrors[this.uploadingFileOriginalName] = window.livewireUploadHandlerParams.uploadErrorMessage
             } else {
                 this.itemErrors[this.uploadingFileOriginalName] = window.livewireUploadHandlerParams.uploadErrorMessage

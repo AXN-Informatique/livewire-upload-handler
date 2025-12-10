@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Axn\LivewireUploadHandler\Livewire\Concerns;
 
+use Axn\LivewireUploadHandler\Exceptions\MediaCannotBeRetrievedException;
 use Livewire\Attributes\Locked;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -21,6 +22,8 @@ trait MediaCommon
 
     public function mountMediaCommon(): void
     {
+        $this->savedFileDisk = $this->model->getMediaCollection($this->mediaCollection)->diskName;
+
         if ($this->acceptsMimeTypes === []) {
             $this->acceptsMimeTypes = $this->model->getMediaCollection($this->mediaCollection)->acceptsMimeTypes;
         }
@@ -30,6 +33,32 @@ trait MediaCommon
 
     protected function initialItemData(array $old = [], ?Media $media = null): array
     {
-        return [];
+        return [
+            'id' => $media?->id,
+            'order' => $media?->order_column,
+            'deleted' => ! empty($old['deleted']),
+        ];
+    }
+
+    protected function initialItemParams(?Media $media = null): array
+    {
+        return [
+            'savedFilePath' => $media?->getPathRelativeToRoot(),
+        ];
+    }
+
+    protected function retrieveMedia(int $mediaId): Media
+    {
+        $media = $this->model->media()->find($mediaId);
+
+        if (! $media instanceof Media) {
+            throw MediaCannotBeRetrievedException::doesNotBelongToModel($this->model, $mediaId);
+        }
+
+        if ($media->collection_name !== $this->mediaCollection) {
+            throw MediaCannotBeRetrievedException::doesNotBelongToCollection($this->mediaCollection, $media);
+        }
+
+        return $media;
     }
 }

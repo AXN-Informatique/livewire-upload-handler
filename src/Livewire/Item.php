@@ -59,6 +59,9 @@ class Item extends Component
     #[Locked]
     public ?TemporaryUploadedFile $uploadedFile = null;
 
+    #[Locked]
+    public ?string $savedFilePath = null;
+
     public function mount(): void
     {
         if ($this->onlyUpload) {
@@ -72,17 +75,24 @@ class Item extends Component
         }
 
         if (! $this->attachedToGroup) {
-            $this->loadInitialItemData($old);
+            $this->initItem($old);
         }
     }
 
-    protected function loadInitialItemData(array $old): void
+    protected function initialEntity()
     {
-        $this->itemData = [
-            'id' => null,
-            'deleted' => ! empty($old['deleted']),
-            ...$this->initialItemData($old),
-        ];
+        return null;
+    }
+
+    protected function initItem(array $old): void
+    {
+        $entity = $this->initialEntity();
+
+        $this->itemData = $this->initialItemData($old, $entity);
+
+        foreach ($this->initialItemParams($entity) as $property => $value) {
+            $this->{$property} = $value;
+        }
     }
 
     /**
@@ -256,7 +266,7 @@ class Item extends Component
 
     protected function hasSavedFile(): bool
     {
-        return isset($this->itemData['id']);
+        return $this->savedFilePath !== null;
     }
 
     protected function hasFile(): bool
@@ -272,12 +282,7 @@ class Item extends Component
 
         return $this->hasUploadedFile()
             ? FileUploadConfiguration::disk()
-            : $this->savedFileDisk();
-    }
-
-    protected function savedFileDisk(): string
-    {
-        throw MethodNotImplementedException::savedFileDisk(static::class);
+            : $this->savedFileDisk;
     }
 
     protected function filePath(): ?string
@@ -288,12 +293,18 @@ class Item extends Component
 
         return $this->hasUploadedFile()
             ? FileUploadConfiguration::directory().'/'.$this->uploadedFile->getFilename()
-            : $this->savedFilePath();
+            : $this->savedFilePath;
     }
 
-    protected function savedFilePath(): string
+    protected function fileName(): ?string
     {
-        throw MethodNotImplementedException::savedFilePath(static::class);
+        if (! $this->hasFile()) {
+            return null;
+        }
+
+        return $this->hasUploadedFile()
+            ? $this->uploadedFile->getClientOriginalName()
+            : basename($this->savedFilePath);
     }
 
     protected function fileExists(): bool
@@ -306,57 +317,29 @@ class Item extends Component
             ->exists($this->filePath());
     }
 
-    protected function fileName(): ?string
-    {
-        if (! $this->hasFile()) {
-            return null;
-        }
-
-        return $this->hasUploadedFile()
-            ? $this->uploadedFile->getClientOriginalName()
-            : $this->savedFileName();
-    }
-
-    protected function savedFileName(): string
-    {
-        throw MethodNotImplementedException::savedFileName(static::class);
-    }
-
     protected function fileSize(): ?int
     {
-        if (! $this->hasFile()) {
+        if (! $this->fileExists()) {
             return null;
         }
 
-        return $this->hasUploadedFile()
-            ? $this->uploadedFile->getSize()
-            : $this->savedFileSize();
-    }
-
-    protected function savedFileSize(): int
-    {
-        throw MethodNotImplementedException::savedFileSize(static::class);
+        return Storage::disk($this->fileDisk())
+            ->size($this->filePath());
     }
 
     protected function fileMimeType(): ?string
     {
-        if (! $this->hasFile()) {
+        if (! $this->fileExists()) {
             return null;
         }
 
-        return $this->hasUploadedFile()
-            ? $this->uploadedFile->getMimeType()
-            : $this->savedFileMimeType();
-    }
-
-    protected function savedFileMimeType(): string
-    {
-        throw MethodNotImplementedException::savedFileMimeType(static::class);
+        return Storage::disk($this->fileDisk())
+            ->mimeType($this->filePath());
     }
 
     protected function fileType(): ?FileType
     {
-        if (! $this->hasFile()) {
+        if (! $this->fileExists()) {
             return null;
         }
 
@@ -365,7 +348,7 @@ class Item extends Component
 
     protected function glideUrl(array $params = []): ?string
     {
-        if (! $this->hasFile()) {
+        if (! $this->fileExists()) {
             return null;
         }
 

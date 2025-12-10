@@ -8,6 +8,7 @@ use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
 use Livewire\Attributes\Renderless;
@@ -32,7 +33,7 @@ class Group extends Component
     #[Locked]
     public bool $sortable = false;
 
-    protected array $uploadFromGroupAtIndex = [];
+    protected array $itemsParams = [];
 
     public function mount(): void
     {
@@ -40,20 +41,38 @@ class Group extends Component
             return;
         }
 
-        $this->loadInitialItemsData();
+        $this->initItems();
     }
 
-    protected function loadInitialItemsData(): void
+    protected function initialEntities(): array|Collection
     {
-        $order = 1;
+        return [];
+    }
 
-        foreach ($this->old() as $itemId => $old) {
-            $this->items[$itemId] = [
-                'id' => $old['id'] ?? null,
-                'order' => $order++,
-                'deleted' => ! empty($old['deleted']),
-                ...$this->initialItemData($old),
-            ];
+    protected function initItems(): void
+    {
+        $entities = $this->initialEntities();
+
+        if (old() !== []) {
+            foreach ($this->old() as $itemId => $old) {
+                $entity = isset($old['id']) && isset($entities[$old['id']])
+                    ? $entities[$old['id']]
+                    : null;
+
+                $this->addItem(
+                    $itemId,
+                    $this->initialItemData($old, $entity),
+                    $this->initialItemParams($entity),
+                );
+            }
+        } else {
+            foreach ($entities as $entity) {
+                $this->addItem(
+                    null,
+                    $this->initialItemData([], $entity),
+                    $this->initialItemParams($entity),
+                );
+            }
         }
     }
 
@@ -63,9 +82,7 @@ class Group extends Component
     public function incrementItems(int $count): void
     {
         for ($index = 0; $index < $count; $index++) {
-            $itemId = $this->addItem();
-
-            $this->uploadFromGroupAtIndex[$itemId] = $index;
+            $this->addItem(null, [], ['uploadFromGroupAtIndex' => $index]);
         }
     }
 
@@ -74,15 +91,18 @@ class Group extends Component
      *
      * @param  array{id?: int|string|null, order?: int, deleted?: bool}  $data
      */
-    protected function addItem(array $data = []): string
+    protected function addItem(?string $itemId = null, array $data = [], array $params = []): string
     {
+        $itemId ??= uniqid('_');
+
         $data['id'] ??= null;
         $data['order'] ??= collect($this->items)->max('order') + 1;
         $data['deleted'] ??= false;
 
-        $this->items[$id = uniqid('_')] = $data;
+        $this->items[$itemId] = $data;
+        $this->itemsParams[$itemId] = $params;
 
-        return $id;
+        return $itemId;
     }
 
     /**
@@ -144,7 +164,7 @@ class Group extends Component
             'wire:model' => 'items.'.$itemId,
             'inputBaseName' => $this->inputBaseName.'['.$itemId.']',
             'attachedToGroup' => true,
-            'uploadFromGroupAtIndex' => $this->uploadFromGroupAtIndex[$itemId] ?? null,
+            ...$this->itemsParams[$itemId] ?? [],
             ...$this->publicPropsFrom(Common::class),
         ];
     }

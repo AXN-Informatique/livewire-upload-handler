@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Livewire\Concerns\MediaCommon;
+use Illuminate\Support\Collection;
 
 class MediaGroup extends Group
 {
     use MediaCommon;
-
-    protected array $medias = [];
 
     public function mount(): void
     {
@@ -23,49 +22,18 @@ class MediaGroup extends Group
         }
     }
 
-    protected function loadInitialItemsData(): void
+    protected function initialEntities(): array|Collection
     {
-        $medias = $this->model->getMedia($this->mediaCollection, $this->mediaFilters);
-
-        if (old() !== []) {
-            $order = 1;
-
-            foreach ($this->old() as $itemId => $old) {
-                $media = null;
-
-                if (isset($old['id'])) {
-                    $media = $medias->where('id', $old['id'])->first();
-                    $this->medias[$itemId] = $media;
-                }
-
-                $this->items[$itemId] = [
-                    'id' => $media->id ?? null,
-                    'order' => $order++,
-                    'deleted' => ! empty($old['deleted']),
-                    ...$this->initialItemData($old, $media),
-                ];
-            }
-        } else {
-            foreach ($medias as $media) {
-                $itemId = $this->addItem([
-                    'id' => $media->id,
-                    'order' => $media->order_column,
-                    'deleted' => false,
-                    ...$this->initialItemData([], $media),
-                ]);
-
-                $this->medias[$itemId] = $media;
-            }
-        }
+        return $this->model
+            ->getMedia($this->mediaCollection, $this->mediaFilters)
+            ->keyBy('id');
     }
 
     protected function saveFileOrder(string|int $id, int $order): void
     {
-        $this->model->media()
-            ->whereKey($id)
-            ->update([
-                'order_column' => $order,
-            ]);
+        $this->retrieveMedia($id)->update([
+            'order_column' => $order,
+        ]);
     }
 
     protected function itemComponentClassName(): string
@@ -81,7 +49,6 @@ class MediaGroup extends Group
         return [
             ...parent::itemComponentParams($itemId),
             ...$this->publicPropsFrom(MediaCommon::class),
-            'media' => $this->medias[$itemId] ?? null,
         ];
     }
 }
