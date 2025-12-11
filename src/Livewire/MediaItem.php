@@ -48,6 +48,8 @@ class MediaItem extends Item
             ->withCustomProperties($customProperties)
             ->toMediaCollection($this->mediaCollection);
 
+        $this->mediaSaved($media);
+
         if (! $this->onlyUpload) {
             $this->itemData['id'] = $media->id;
             $this->savedFileDisk = $media->disk;
@@ -58,5 +60,10 @@ class MediaItem extends Item
             'livewire-upload-handler:media-saved',
             mediaId: $media->id,
         );
+    }
+
+    protected function mediaSaved(Media $media): void
+    {
+        //
     }
 }
