@@ -131,6 +131,7 @@ public function store(Article $article, Request $request, HandleMediaFromRequest
         // Optionnal... if you want to customize the media:
         customizeMedia: function (Media $media, array $data) {
             $media->name = $data['name']; // from input with name "article_files[$itemId][name]"
+            // You do not need to execute `$media->save()`: it is already done into the service
         }
     );
 }
