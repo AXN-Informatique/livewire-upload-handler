@@ -100,7 +100,11 @@ class Group extends Component
         $data['deleted'] ??= false;
 
         $this->items[$itemId] = $data;
-        $this->itemsParams[$itemId] = $params;
+
+        $this->itemsParams[$itemId] = [
+            ...$this->itemComponentParams($itemId),
+            ...$params,
+        ];
 
         return $itemId;
     }
@@ -164,7 +168,6 @@ class Group extends Component
             'wire:model' => 'items.'.$itemId,
             'inputBaseName' => $this->inputBaseName.'['.$itemId.']',
             'attachedToGroup' => true,
-            ...$this->itemsParams[$itemId] ?? [],
             ...$this->publicPropsFrom(Common::class),
         ];
     }

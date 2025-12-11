@@ -19,7 +19,7 @@
 
                     @livewire(
                         $this->itemComponentClassName(),
-                        $this->itemComponentParams($itemId),
+                        $this->itemsParams[$itemId] ?? [],
                         key($itemId)
                     )
                 </div>

@@ -1,7 +1,15 @@
 Changelog
 =========
 
-1.1.0 (UNRELEASED)
+1.1.1 (2025-12-11)
+------------------
+
+**Need to republish view `group.blade.php` if you publish it**
+
+- Fix common params overrides
+
+
+1.1.0 (2025-12-11)
 ------------------
 
 **Possible breaking changes if you extend components**
