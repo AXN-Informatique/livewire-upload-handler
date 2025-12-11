@@ -7,11 +7,13 @@
 @endif
 
 @if ($this->hasSavedFile())
-    <input
-        type="hidden"
-        name="{!! $inputBaseName !!}[id]"
-        value="{!! $itemData['id'] !!}"
-    >
+    @isset($itemData['id'])
+        <input
+            type="hidden"
+            name="{!! $inputBaseName !!}[id]"
+            value="{!! $itemData['id'] !!}"
+        >
+    @endisset
 
     @if (! $autoSave)
         <input
