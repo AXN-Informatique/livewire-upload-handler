@@ -54,10 +54,9 @@ Single file upload:
 - **[Basic Usage](docs/basic-usage.md)** - Single & multiple uploads
 - **[Media Library](docs/media-library.md)** - Spatie integration
 - **[Customization](docs/customization.md)** - Themes, views, translations
-- **[Advanced Usage](docs/advanced-usage.md)** - Custom handlers, enums, exceptions
+- **[Advanced Usage](docs/advanced-usage.md)** - Custom components
 - **[Events](docs/events.md)** - Livewire events reference
 - **[Troubleshooting](docs/troubleshooting.md)** - Common issues
-- **[API Reference](docs/api-reference.md)** - Complete component reference
 
 ## License
 

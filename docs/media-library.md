@@ -18,7 +18,7 @@ class Article extends Model implements HasMedia
     {
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png'])
-            ->maxFileSize(10 * 1024 * 1024);
+            ->useDisk('articles-images');
     }
 }
 ```
@@ -66,7 +66,6 @@ With sorting, `order_column` is automatically updated.
 | `model` | HasMedia | required | Model instance |
 | `mediaCollection` | string | `'default'` | Collection name |
 | `mediaFilters` | array | `[]` | Filters for retrieving media |
-| `autoSave` | bool | `false` | Must be `true` for Media Library |
 
 ## MIME Types & Size
 
@@ -92,10 +91,18 @@ Files stored temporarily until form submission:
 <form action="{!! route('article.files.store', $article) !!}" method="POST">
     @csrf
 
-    <livewire:upload-handler.media-group
-        inputBaseName="article_images"
+    {{-- ===== Single ===== --}}
+    <livewire:upload-handler.media-item
+        inputBaseName="article_file"
         :model="$article"
-        mediaCollection="images"
+        mediaCollection="file"
+    />
+
+    {{-- ===== Multiple ===== --}}
+    <livewire:upload-handler.media-group
+        inputBaseName="article_files"
+        :model="$article"
+        mediaCollection="files"
     />
 
     <button type="submit">Save</button>
@@ -109,10 +116,22 @@ use Axn\LivewireUploadHandler\HandleMediaFromRequest;
 
 public function store(Article $article, Request $request, HandleMediaFromRequest $handleMediaFromRequest)
 {
+    // ===== Single =====
     $handleMediaFromRequest->single(
-        data: $request->post('article_images'),
+        data: $request->post('article_file'),
         model: $article,
-        mediaCollection: 'images',
+        mediaCollection: 'file'
+    );
+
+    // ===== Multiple =====
+    $handleMediaFromRequest->multiple(
+        data: $request->post('article_files'),
+        model: $article,
+        mediaCollection: 'files',
+        // Optionnal... if you want to customize the media:
+        customizeMedia: function (Media $media, array $data) {
+            $media->name = $data['name']; // from input with name "article_files[$itemId][name]"
+        }
     );
 }
 ```
@@ -120,6 +139,9 @@ public function store(Article $article, Request $request, HandleMediaFromRequest
 ### Auto-Save Mode
 
 Handled internally by the component `MediaItem`. Nothing more is needed.
+
+If you want to customize the save process, you need to extend component.
+See [Advanced Usage](advanced-usage.md) for details.
 
 ## Events
 
@@ -163,7 +185,7 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaCollection('gallery')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
-            ->useDisk('public');
+            ->useDisk('products-gallery');
     }
 }
 ```
@@ -171,4 +193,4 @@ class Product extends Model implements HasMedia
 ## Next Steps
 
 - [Events](events.md) - Listen to media events
-- [Advanced Usage](advanced-usage.md) - Custom handlers
+- [Advanced Usage](advanced-usage.md) - Custom components

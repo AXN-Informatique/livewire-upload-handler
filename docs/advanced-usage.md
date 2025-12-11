@@ -1,60 +1,50 @@
 # Advanced Usage
 
-## Custom Upload Handler
+If you need more control on upload handler component, you can create custom upload handlers by extending components.
 
-Extend `Item` for custom storage:
+## Custom Handler
 
-```php
-namespace App\Livewire;
+Use command `php artisan make:upload-handler`
 
-use Axn\LivewireUploadHandler\Livewire\Item;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+Arguments:
+- `name`: The name of the upload handler component.
 
-class S3UploadItem extends Item
-{
-    protected function saveUploadedFile(TemporaryUploadedFile $file): void
-    {
-        $path = $file->storeAs('uploads', $file->getClientOriginalName(), 's3');
+Options:
+- `--single`: Generate component for single upload only
+- `--force`: Overwrite existing files
 
-        $this->itemData['path'] = $path;
-        $this->dispatch('file-saved', path: $path);
-    }
+### Examples
 
-    protected function savedFileName(): ?string
-    {
-        return $this->itemData['filename'] ?? null;
-    }
-}
+`php artisan make:upload-handler MyUploadHandler`
+
+Generated files:
+
+```
+app/
+    Livewire/
+        MyUploadHandler/
+            Concerns/
+                MyUploadHandlerCommon.php
+            Group.php
+            Item.php
+resources/
+    views/
+        livewire/
+            my-upload-handler/
+                group.blade.php
+                item.blade.php
 ```
 
-Use it:
+`php artisan make:upload-handler MyUploadHandler --single`
 
-```blade
-<livewire:s3-upload-item :autoSave="true" />
 ```
-
-## Custom Group Handler
-
-```php
-namespace App\Livewire;
-
-use Axn\LivewireUploadHandler\Livewire\Group;
-
-class CustomGroup extends Group
-{
-    protected function itemComponentClassName(): string
-    {
-        return S3UploadItem::class;
-    }
-
-    protected function saveFileOrder(string|int $id, int $order): void
-    {
-        // Save order to database
-        DB::table('uploads')
-            ->where('id', $id)
-            ->update(['order' => $order]);
-    }
-}
+app/
+    Livewire/
+        MyUploadHandler.php
+resources/
+    views/
+        livewire/
+            my-upload-handler.blade.php
 ```
 
 ## Enums
@@ -86,17 +76,6 @@ Methods:
 - `isArchive(): bool`
 - `supportsPreview(): bool`
 
-### AssetType
-
-```php
-use Axn\LivewireUploadHandler\Enums\AssetType;
-
-$type = AssetType::fromFilename('app.js');
-$mimeType = $type->withCharset(); // 'application/javascript; charset=utf-8'
-```
-
-Types: `JavaScript`, `CSS`
-
 ## Exceptions
 
 ### MethodNotImplementedException
@@ -116,11 +95,6 @@ Factory methods:
 - `saveUploadedFile(string)`
 - `deleteSavedFile(string)`
 - `saveFileOrder(string)`
-- `savedFileDisk(string)`
-- `savedFilePath(string)`
-- `savedFileName(string)`
-- `savedFileSize(string)`
-- `savedFileMimeType(string)`
 
 Error message guides you to implement the method or use MediaItem/MediaGroup.
 
@@ -162,5 +136,4 @@ Enable on Group:
 
 ## Next Steps
 
-- [API Reference](api-reference.md) - Complete method reference
 - [Troubleshooting](troubleshooting.md) - Common issues
