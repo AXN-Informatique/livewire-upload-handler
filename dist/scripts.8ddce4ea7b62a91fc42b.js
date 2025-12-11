@@ -36,7 +36,7 @@ document.addEventListener('alpine:init', () => {
             return false
         }
 
-        if ($wire.maxFileSize !== null && file.size > $wire.maxFileSize) {
+        if ($wire.maxFileSize > 0 && file.size > $wire.maxFileSize) {
             errors[file.name] = window.livewireUploadHandlerParams.fileTooLoudErrorMessage
             return false
         }
@@ -379,4 +379,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.13735afb983764fa6b98e08a7f298d47.js.map
+//# sourceMappingURL=scripts.6548b14ee244a33ce2d24f2850df4518.js.map
