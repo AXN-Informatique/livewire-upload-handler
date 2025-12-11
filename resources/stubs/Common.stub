@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire\{{classRelativeName}}\Concerns;
+namespace {{componentNamespace}}\Concerns;
 
 use Illuminate\Support\Arr;
 use Livewire\Attributes\Locked;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-trait {{className}}Common
+trait {{componentName}}Common
 {
     // #[Locked]
     // public ?string $someParam = null;
 
-    public function mount{{className}}Common(): void
+    public function mount{{componentName}}Common(): void
     {
         //
     }
@@ -21,6 +21,7 @@ trait {{className}}Common
     protected function initialItemData(array $old = [], ?Media $media = null): array
     {
         return [
+            ...parent::initialItemData($old, $media),
             // 'name' => Arr::get($old, 'name', $media?->name),
         ];
     }

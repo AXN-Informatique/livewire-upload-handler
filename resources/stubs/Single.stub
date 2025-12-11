@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace {{componentNamespace}};
 
-use {{componentNamespace}}\Concerns\{{componentName}}Common;
 use Axn\LivewireUploadHandler\Livewire\MediaItem as LuhMediaItem;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Isolate;
@@ -13,16 +12,29 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Isolate]
-class Item extends LuhMediaItem
+class {{componentName}} extends LuhMediaItem
 {
-    use {{componentName}}Common;
-
     // #[Locked]
     // public string $inputBaseName = 'file';
 
+    public function mount(): void
+    {
+        parent::mount();
+
+        //
+    }
+
     public function render(): View
     {
-        return view('{{viewNamespace}}.item');
+        return view('{{viewNamespace}}');
+    }
+
+    protected function initialItemData(array $old = [], ?Media $media = null): array
+    {
+        return [
+            ...parent::initialItemData($old, $media),
+            // 'name' => Arr::get($old, 'name', $media?->name),
+        ];
     }
 
     protected function uploadFinished(TemporaryUploadedFile $uploadedFile): void

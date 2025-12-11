@@ -4,12 +4,14 @@ namespace Axn\LivewireUploadHandler\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class MakeUploadHandlerCommand extends Command
 {
     protected $signature = 'make:upload-handler
         {name : The name of the upload handler component}
+        {--single : Generate component for single upload only}
         {--force : Overwrite existing files}';
 
     protected $description = 'Generate an upload handler component';
@@ -22,42 +24,56 @@ class MakeUploadHandlerCommand extends Command
     public function handle(): int
     {
         $nameTerms = explode('/', str_replace('\\', '/', trim($this->argument('name'), '\\/')));
+        $studlyNameTerms = array_map(fn (string $term) => Str::studly($term), $nameTerms);
+        $kebabNameTerms = array_map(fn (string $term) => Str::kebab($term), $nameTerms);
 
-        $classRelativeName = implode('\\', array_map(fn (string $term) => Str::studly($term), $nameTerms));
-        $classRelativePath = str_replace('\\', '/', $classRelativeName);
-        $className = basename($classRelativePath);
-        $classBasePath = app_path("Livewire/{$classRelativePath}");
+        $classBasePath = app_path('Livewire/'.implode('/', $studlyNameTerms));
+        $viewBasePath = resource_path('views/livewire/'.implode('/', $kebabNameTerms));
 
-        $viewRelativePath = implode('/', array_map(fn (string $term) => Str::kebab($term), $nameTerms));
-        $viewName = str_replace('/', '.', $viewRelativePath);
-        $viewBasePath = resource_path("views/livewire/{$viewRelativePath}");
+        $componentNamespace = 'App\\Livewire\\'.implode('\\', $studlyNameTerms);
+        $componentName = Arr::last($studlyNameTerms);
+        $viewNamespace = 'livewire.'.implode('.', $kebabNameTerms);
 
-        $this->files->ensureDirectoryExists($classBasePath);
-        $this->files->ensureDirectoryExists($classBasePath.'/Concerns');
-        $this->files->ensureDirectoryExists($viewBasePath);
+        if ($this->option('single')) {
+            $this->files->ensureDirectoryExists(dirname($classBasePath));
+            $this->files->ensureDirectoryExists(dirname($viewBasePath));
 
-        $this->generateClass('Item.stub', "$classBasePath/Item.php", [
-            '{{classRelativeName}}' => $classRelativeName,
-            '{{className}}' => $className,
-            '{{viewName}}' => $viewName,
-        ]);
+            $this->generateClass('Single.stub', "$classBasePath.php", [
+                '{{componentNamespace}}' => Str::of($componentNamespace)->beforeLast('\\'),
+                '{{componentName}}' => $componentName,
+                '{{viewNamespace}}' => $viewNamespace,
+            ]);
 
-        $this->generateClass('Group.stub', "$classBasePath/Group.php", [
-            '{{classRelativeName}}' => $classRelativeName,
-            '{{className}}' => $className,
-            '{{viewName}}' => $viewName,
-        ]);
+            $this->copyView('item.blade.php', "$viewBasePath.blade.php");
 
-        $this->generateClass('Common.stub', "$classBasePath/Concerns/{$className}Common.php", [
-            '{{classRelativeName}}' => $classRelativeName,
-            '{{className}}' => $className,
-        ]);
+        } else {
+            $this->files->ensureDirectoryExists($classBasePath);
+            $this->files->ensureDirectoryExists($classBasePath.'/Concerns');
+            $this->files->ensureDirectoryExists($viewBasePath);
 
-        $this->copyView('item.blade.php', "$viewBasePath/item.blade.php");
+            $this->generateClass('Item.stub', "$classBasePath/Item.php", [
+                '{{componentNamespace}}' => $componentNamespace,
+                '{{componentName}}' => $componentName,
+                '{{viewNamespace}}' => $viewNamespace,
+            ]);
 
-        $this->copyView('group.blade.php', "$viewBasePath/group.blade.php");
+            $this->generateClass('Group.stub', "$classBasePath/Group.php", [
+                '{{componentNamespace}}' => $componentNamespace,
+                '{{componentName}}' => $componentName,
+                '{{viewNamespace}}' => $viewNamespace,
+            ]);
 
-        $this->info("Upload handler [$classRelativeName] generated successfully.");
+            $this->generateClass('Common.stub', "$classBasePath/Concerns/{$componentName}Common.php", [
+                '{{componentNamespace}}' => $componentNamespace,
+                '{{componentName}}' => $componentName,
+            ]);
+
+            $this->copyView('item.blade.php', "$viewBasePath/item.blade.php");
+
+            $this->copyView('group.blade.php', "$viewBasePath/group.blade.php");
+        }
+
+        $this->info("Upload handler [$componentNamespace] generated successfully.");
 
         return Command::SUCCESS;
     }
