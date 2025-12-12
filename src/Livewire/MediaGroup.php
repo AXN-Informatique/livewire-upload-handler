@@ -42,13 +42,13 @@ class MediaGroup extends Group
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string>
      */
-    protected function itemComponentParams(string $itemId): array
+    protected function commonTraits(): array
     {
         return [
-            ...parent::itemComponentParams($itemId),
-            ...$this->publicPropsFrom(MediaCommon::class),
+            ...parent::commonTraits(),
+            MediaCommon::class,
         ];
     }
 }

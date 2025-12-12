@@ -9,6 +9,7 @@ use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
 use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
 use Livewire\Attributes\Renderless;
@@ -102,8 +103,12 @@ class Group extends Component
         $this->items[$itemId] = $data;
 
         $this->itemsParams[$itemId] = [
-            ...$this->itemComponentParams($itemId),
+            ...$this->commonParams,
             ...$params,
+            'itemId' => $itemId,
+            'wire:model' => 'items.'.$itemId,
+            'inputBaseName' => $this->inputBaseName.'['.$itemId.']',
+            'attachedToGroup' => true,
         ];
 
         return $itemId;
@@ -157,34 +162,37 @@ class Group extends Component
     }
 
     /**
-     * Get parameters to pass to item components.
+     * References Common Traits for extracting common params (public properties of the Traits)
+     * to pass them from group to item.
      *
-     * @return array<string, mixed>
+     * @return array<string>
      */
-    protected function itemComponentParams(string $itemId): array
+    protected function commonTraits(): array
     {
         return [
-            'itemId' => $itemId,
-            'wire:model' => 'items.'.$itemId,
-            'inputBaseName' => $this->inputBaseName.'['.$itemId.']',
-            'attachedToGroup' => true,
-            ...$this->publicPropsFrom(Common::class),
+            Common::class,
         ];
     }
 
     /**
-     * Used to extract public properties values of a common trait and pass them
-     * to item components (see method itemComponentParams).
+     * Extract common params from public properties defined in Common Traits.
      */
-    protected function publicPropsFrom(string $trait): array
+    #[Computed]
+    protected function commonParams(): array
     {
-        $props = new ReflectionClass($trait)
-            ->getProperties(ReflectionProperty::IS_PUBLIC);
+        $params = [];
 
-        return collect($props)
-            ->mapWithKeys(fn (ReflectionProperty $prop): array => [
-                $prop->getName() => $this->{$prop->getName()},
-            ])
-            ->all();
+        foreach ($this->commonTraits() as $trait) {
+            $props = new ReflectionClass($trait)
+                ->getProperties(ReflectionProperty::IS_PUBLIC);
+
+            foreach ($props as $prop) {
+                if (! array_key_exists($prop->getName(), $params)) {
+                    $params[$prop->getName()] = $this->{$prop->getName()};
+                }
+            }
+        }
+
+        return $params;
     }
 }

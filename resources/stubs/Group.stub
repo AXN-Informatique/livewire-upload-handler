@@ -25,11 +25,11 @@ class Group extends LuhMediaGroup
         return Item::class;
     }
 
-    protected function itemComponentParams(string $itemId): array
+    protected function commonTraits(): array
     {
         return [
-            ...parent::itemComponentParams($itemId),
-            ...$this->publicPropsFrom({{componentName}}Common::class),
+            ...parent::commonTraits(),
+            {{componentName}}Common::class,
         ];
     }
 }
