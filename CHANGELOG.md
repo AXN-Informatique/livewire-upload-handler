@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.2.0 (UNRELEASED)
+------------------
+
+**Breaking changes if you extend components**
+
+- `Group`: Remove method `itemComponentParams`
+- `Group`: Add method `commonTraits`
+- Property `savedFileDisk` can be `null` and is `null` by default
+
+
 1.1.1 (2025-12-11)
 ------------------
 
