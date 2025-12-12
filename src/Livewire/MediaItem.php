@@ -29,6 +29,7 @@ class MediaItem extends Item
         $this->retrieveMedia($this->itemData['id'])->delete();
 
         $this->itemData['id'] = null;
+        $this->savedFileDisk = null;
         $this->savedFilePath = null;
     }
 

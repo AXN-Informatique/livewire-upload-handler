@@ -32,7 +32,7 @@ trait Common
     public array $compressorjsSettings = [];
 
     #[Locked]
-    public string $savedFileDisk = 'local';
+    public ?string $savedFileDisk = null;
 
     protected function old(): array
     {

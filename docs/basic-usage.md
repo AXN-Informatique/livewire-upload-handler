@@ -34,7 +34,7 @@
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
 | `compressorjsSettings` | array | `[]` | Compressor.js options |
-| `savedFileDisk` | string | `'local'` | Saved files disk name |
+| `savedFileDisk` | string\|null | `null` | Saved files disk name |
 | `theme` | string\|null | `null` | CSS and views theme. If null, use `config('livewire-upload-handler.theme') ?: 'default'` |
 | `iconsTheme` | string\|null | `null` | Icons theme. If null, use `config('livewire-upload-handler.icons_theme')` |
 

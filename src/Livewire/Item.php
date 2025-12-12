@@ -266,7 +266,7 @@ class Item extends Component
 
     protected function hasSavedFile(): bool
     {
-        return $this->savedFilePath !== null;
+        return $this->savedFileDisk !== null && $this->savedFilePath !== null;
     }
 
     protected function hasFile(): bool

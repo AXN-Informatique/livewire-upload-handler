@@ -43,7 +43,7 @@ trait MediaCommon
     protected function initialItemParams(?Media $media = null): array
     {
         return [
-            'savedFileDisk' => $media->disk ?? $this->savedFileDisk,
+            'savedFileDisk' => $media?->disk,
             'savedFilePath' => $media?->getPathRelativeToRoot(),
         ];
     }
