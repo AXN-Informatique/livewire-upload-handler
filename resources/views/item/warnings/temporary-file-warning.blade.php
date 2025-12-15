@@ -1,4 +1,4 @@
-@if ($this->hasUploadedFile())
+@if ($showTemporaryFileWarning && $this->hasUploadedFile())
     <div
         class="{!! $this->cssClasses['temporary_file_warning'] ?? '' !!}"
         wire:key="temporary-file-warning"

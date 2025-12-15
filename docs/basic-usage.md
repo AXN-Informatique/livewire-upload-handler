@@ -31,6 +31,7 @@
 | `maxFileSize` | int | `0` | Max size in KB (0 = no limit) |
 | `showFileSize` | bool | `false` | Show file size in KB |
 | `showImagePreview` | bool | `false` | Show image thumbnails |
+| `showTemporaryFileWarning` | bool | `false` | Show message warning it is a temporary file |
 | `autoSave` | bool | `false` | Auto-save on upload |
 | `onlyUpload` | bool | `false` | Hide file display |
 | `compressorjsSettings` | array | `[]` | Compressor.js options |

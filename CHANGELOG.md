@@ -9,6 +9,7 @@ Changelog
 - `Group`: Remove method `itemComponentParams`
 - `Group`: Add method `commonTraits`
 - Property `savedFileDisk` can be `null` and is `null` by default
+- Add option `showTemporaryFileWarning` (temporary file warning is no longer shown by default)
 
 
 1.1.1 (2025-12-11)

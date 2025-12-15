@@ -23,6 +23,9 @@ trait Common
     public bool $showImagePreview = false;
 
     #[Locked]
+    public bool $showTemporaryFileWarning = false;
+
+    #[Locked]
     public bool $autoSave = false;
 
     #[Locked]
