@@ -60,6 +60,9 @@ class Item extends Component
     public ?TemporaryUploadedFile $uploadedFile = null;
 
     #[Locked]
+    public ?string $savedFileDisk = null;
+
+    #[Locked]
     public ?string $savedFilePath = null;
 
     public function mount(): void
@@ -202,6 +205,10 @@ class Item extends Component
         throw MethodNotImplementedException::saveUploadedFile(static::class);
     }
 
+    /**
+     * Called when upload is canceled before finished.
+     * Delete the partially uploaded file.
+     */
     public function deleteUploadingFile(): void
     {
         if ($this->uploadingFileName === null) {
@@ -214,6 +221,10 @@ class Item extends Component
         $this->uploadingFileName = null;
     }
 
+    /**
+     * Called when upload is canceled after finished.
+     * Delete the completely uploaded file.
+     */
     public function deleteUploadedFile(): void
     {
         if (! $this->hasUploadedFile()) {
@@ -304,7 +315,12 @@ class Item extends Component
 
         return $this->hasUploadedFile()
             ? $this->uploadedFile->getClientOriginalName()
-            : basename($this->savedFilePath);
+            : $this->savedFileName();
+    }
+
+    protected function savedFileName(): string
+    {
+        return basename($this->savedFilePath);
     }
 
     protected function fileExists(): bool

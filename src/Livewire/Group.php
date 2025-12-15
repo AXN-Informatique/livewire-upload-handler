@@ -155,6 +155,7 @@ class Group extends Component
 
     /**
      * Get the item component class name.
+     * Called in group view to load the corresponding item component.
      */
     protected function itemComponentClassName(): string
     {

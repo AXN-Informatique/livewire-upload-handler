@@ -34,15 +34,16 @@ trait MediaCommon
     protected function initialItemData(array $old = [], ?Media $media = null): array
     {
         return [
+            ...parent::initialItemData($old),
             'id' => $media?->id,
             'order' => $media?->order_column,
-            'deleted' => ! empty($old['deleted']),
         ];
     }
 
     protected function initialItemParams(?Media $media = null): array
     {
         return [
+            ...parent::initialItemParams(),
             'savedFileDisk' => $media?->disk,
             'savedFilePath' => $media?->getPathRelativeToRoot(),
         ];

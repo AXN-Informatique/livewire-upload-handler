@@ -31,9 +31,6 @@ trait Common
     #[Locked]
     public array $compressorjsSettings = [];
 
-    #[Locked]
-    public ?string $savedFileDisk = null;
-
     protected function old(): array
     {
         return (array) old(str_arr_to_dot($this->inputBaseName), []);
@@ -41,7 +38,9 @@ trait Common
 
     protected function initialItemData(array $old = []): array
     {
-        return [];
+        return [
+            'deleted' => ! empty($old['deleted']),
+        ];
     }
 
     protected function initialItemParams(): array
