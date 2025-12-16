@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler;
 
 use Axn\LivewireUploadHandler\Exceptions\MediaCannotBeRetrievedException;
+use Axn\LivewireUploadHandler\Exceptions\MediaCollectionNotRegisteredException;
 use Closure;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class HandleMediaFromRequest
@@ -21,6 +23,10 @@ class HandleMediaFromRequest
     ): void {
         if ($data === null || $data === []) {
             return;
+        }
+
+        if (! $model->getMediaCollection($mediaCollection) instanceof MediaCollection) {
+            throw MediaCollectionNotRegisteredException::make($model, $mediaCollection);
         }
 
         if (! empty($data['deleted']) && ! empty($data['id'])) {

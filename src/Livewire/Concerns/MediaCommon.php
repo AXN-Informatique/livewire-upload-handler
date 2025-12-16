@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire\Concerns;
 
 use Axn\LivewireUploadHandler\Exceptions\MediaCannotBeRetrievedException;
+use Axn\LivewireUploadHandler\Exceptions\MediaCollectionNotRegisteredException;
 use Livewire\Attributes\Locked;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\MediaCollections\MediaCollection;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 trait MediaCommon
@@ -19,6 +21,13 @@ trait MediaCommon
 
     #[Locked]
     public array $mediaFilters = [];
+
+    public function bootMediaCommon(): void
+    {
+        if (! $this->model->getMediaCollection($this->mediaCollection) instanceof MediaCollection) {
+            throw MediaCollectionNotRegisteredException::make($this->model, $this->mediaCollection);
+        }
+    }
 
     public function mountMediaCommon(): void
     {
