@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Livewire\Concerns\MediaCommon;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Isolate;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -27,7 +26,7 @@ class MediaItem extends Item
             mediaId: $this->itemData['id'],
         );
 
-        $this->media->delete();
+        $this->retrieveMedia($this->itemData['id'])->delete();
 
         $this->itemData['id'] = null;
         $this->savedFileDisk = null;
@@ -39,8 +38,9 @@ class MediaItem extends Item
         $customProperties = $this->mediaFilters;
 
         if ($this->hasSavedFile()) {
-            $customProperties = $this->media->custom_properties;
-            $this->media->delete();
+            $media = $this->retrieveMedia($this->itemData['id']);
+            $customProperties = $media->custom_properties;
+            $media->delete();
         }
 
         $media = $this->model
@@ -66,15 +66,5 @@ class MediaItem extends Item
     protected function mediaSaved(Media $media): void
     {
         //
-    }
-
-    #[Computed]
-    protected function media(): ?Media
-    {
-        if (! isset($this->itemData['id'])) {
-            return null;
-        }
-
-        return $this->retrieveMedia($this->itemData['id']);
     }
 }
