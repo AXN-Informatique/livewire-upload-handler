@@ -31,10 +31,4 @@ class Item extends LuhMediaItem
 
         parent::uploadFinished($uploadedFile);
     }
-
-    protected function mediaSaved(Media $media): void
-    {
-        // $media->name = $this->itemData['name'];
-        // $media->save();
-    }
 }
