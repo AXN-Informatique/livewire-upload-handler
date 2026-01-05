@@ -21,7 +21,7 @@ class HandleMediaFromRequest
         ?Closure $customizeMedia = null,
         ?int $order = null,
     ): void {
-        if ($data === null || $data === []) {
+        if (empty($data['tmpName']) && empty($data['id'])) {
             return;
         }
 
