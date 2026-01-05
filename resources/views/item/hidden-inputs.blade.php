@@ -21,7 +21,7 @@
             name="{!! $inputBaseName !!}[deleted]"
             value="1"
             style="display: none"
-            wire:model="itemData.deleted"
+            x-model="deleted"
         >
     @endif
 @endif

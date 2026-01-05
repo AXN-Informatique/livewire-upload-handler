@@ -84,6 +84,14 @@ document.addEventListener('alpine:init', () => {
         sortablejsObj: null,
         itemsIncrementInProgress: false,
 
+        init() {
+            $wire.watch('items', (value, oldValue) => {
+                if (value === null) {
+                    $wire.items = oldValue
+                }
+            })
+        },
+
         initDropzone() {
             _handleDropzone(this.$el, (e) => {
                 this.upload(e.dataTransfer.files)
@@ -128,6 +136,10 @@ document.addEventListener('alpine:init', () => {
         },
 
         itemHidden(itemId) {
+            if ($wire.items === null || ! $wire.items[itemId]) {
+                return false
+            }
+
             if (! $wire.autoSave && $wire.items[itemId].id !== null) {
                 return false
             }
@@ -136,7 +148,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         visibleItemsNumber() {
-            return Object.keys($wire.items).filter(itemId => ! this.itemHidden(itemId)).length
+            return Object.keys($wire.items ?? {}).filter(itemId => ! this.itemHidden(itemId)).length
         },
 
         maxFilesNumberReached() {
@@ -220,6 +232,12 @@ document.addEventListener('alpine:init', () => {
         deleteTimerInterval: null,
 
         init() {
+            $wire.watch('itemData', (value, oldValue) => {
+                if (value === null) {
+                    $wire.itemData = oldValue
+                }
+            })
+
             if ($wire.uploadFromGroupAtIndex !== null) {
                 this.upload(this.filesFromGroup[$wire.uploadFromGroupAtIndex])
             }
@@ -383,4 +401,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.47f4465d23f6a0007f9ca1291464cfbf.js.map
+//# sourceMappingURL=scripts.71afb9c629d5a76677652876960e7a92.js.map

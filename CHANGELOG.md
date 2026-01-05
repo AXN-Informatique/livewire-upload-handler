@@ -11,6 +11,8 @@ Changelog
 - Property `savedFileDisk` can be `null` and is `null` by default
 - Add option `showTemporaryFileWarning` (temporary file warning is no longer shown by default)
 - Exception `MediaCollectionNotRegisteredException` when media collection is not registered
+- Supports `wire:model` on Livewire Upload Handler components
+- Fix `HandleMediaFromRequest`: single item must have "tmpName" or "id"
 
 
 1.1.1 (2025-12-11)

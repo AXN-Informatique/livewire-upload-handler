@@ -18,6 +18,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Isolate;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -42,7 +43,7 @@ class Item extends Component
     public string $itemId;
 
     #[Modelable]
-    public array $itemData = [];
+    public ?array $itemData = [];
 
     #[Locked]
     public string $inputBaseName = 'file';
@@ -87,7 +88,7 @@ class Item extends Component
         return null;
     }
 
-    protected function initItem(array $old): void
+    protected function initItem(array $old = []): void
     {
         $entity = $this->initialEntity();
 
@@ -96,6 +97,22 @@ class Item extends Component
         foreach ($this->initialItemParams($entity) as $property => $value) {
             $this->{$property} = $value;
         }
+    }
+
+    #[On('livewire-upload-handler:refresh')]
+    public function refreshItem(?string $inputBaseName = null): void
+    {
+        if ($this->attachedToGroup) {
+            return;
+        }
+
+        if ($inputBaseName !== null && $inputBaseName !== $this->inputBaseName) {
+            return;
+        }
+
+        $this->uploadedFile = null;
+
+        $this->initItem();
     }
 
     /**
@@ -185,6 +202,7 @@ class Item extends Component
 
         if (! $this->onlyUpload) {
             $this->uploadedFile = $uploadedFile;
+            $this->itemData['tmpName'] = $uploadedFile->getFilename();
         }
 
         $this->dispatch(
@@ -239,6 +257,8 @@ class Item extends Component
 
         $this->uploadedFile->delete();
         $this->uploadedFile = null;
+
+        unset($this->itemData['tmpName']);
     }
 
     /**

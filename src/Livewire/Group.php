@@ -12,6 +12,7 @@ use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Modelable;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
 use ReflectionClass;
@@ -23,7 +24,7 @@ class Group extends Component
     use HasThemes;
 
     #[Modelable]
-    public array $items = [];
+    public ?array $items = [];
 
     #[Locked]
     public string $inputBaseName = 'files';
@@ -54,6 +55,8 @@ class Group extends Component
     {
         $entities = $this->initialEntities();
 
+        $this->items = [];
+
         if (old() !== []) {
             foreach ($this->old() as $itemId => $old) {
                 $entity = isset($old['id']) && isset($entities[$old['id']])
@@ -75,6 +78,16 @@ class Group extends Component
                 );
             }
         }
+    }
+
+    #[On('livewire-upload-handler:refresh')]
+    public function refreshItems(?string $inputBaseName = null): void
+    {
+        if ($inputBaseName !== null && $inputBaseName !== $this->inputBaseName) {
+            return;
+        }
+
+        $this->initItems();
     }
 
     /**

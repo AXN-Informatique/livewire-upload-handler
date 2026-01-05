@@ -114,28 +114,106 @@ Service `Axn\LivewireUploadHandler\HandleMediaFromRequest` can be used to handle
 ```php
 use Axn\LivewireUploadHandler\HandleMediaFromRequest;
 
-public function store(Article $article, Request $request, HandleMediaFromRequest $handleMediaFromRequest)
+class ArticleController
 {
-    // ===== Single =====
-    $handleMediaFromRequest->single(
-        data: $request->post('article_file'),
-        model: $article,
-        mediaCollection: 'file'
-    );
+    public function store(Article $article, Request $request, HandleMediaFromRequest $handleMediaFromRequest)
+    {
+        // ===== Single =====
+        $handleMediaFromRequest->single(
+            data: $request->post('article_file'),
+            model: $article,
+            mediaCollection: 'file'
+        );
 
-    // ===== Multiple =====
-    $handleMediaFromRequest->multiple(
-        data: $request->post('article_files'),
-        model: $article,
-        mediaCollection: 'files',
-        // Optionnal... if you want to customize the media:
-        customizeMedia: function (Media $media, array $data) {
-            $media->name = $data['name']; // from input with name "article_files[$itemId][name]"
-            // You do not need to execute `$media->save()`: it is already done into the service
-        }
-    );
+        // ===== Multiple =====
+        $handleMediaFromRequest->multiple(
+            data: $request->post('article_files'),
+            model: $article,
+            mediaCollection: 'files',
+            // Optionnal... if you want to customize the media:
+            customizeMedia: function (Media $media, array $data) {
+                $media->name = $data['name']; // from input with name "article_files[$itemId][name]"
+                // You do not need to execute `$media->save()`: it is already done into the service
+            }
+        );
+    }
 }
 ```
+
+### Manual Mode inside another Livewire Component
+
+If a Livewire Upload Handler component is used inside another Livewire component, and you want to handle save into this component
+(for example, on a `wire:save` action), you can use `wire:model` to get data from Livewire Upload Handler component:
+
+```blade
+<livewire:article-form :$article />
+```
+
+```blade
+{{-- resources/views/livewire/article-form.blade.php --}}
+
+<div wire:submit="store">
+    {{-- ===== Single ===== --}}
+    <livewire:upload-handler.media-item
+        inputBaseName="article_file"
+        :model="$article"
+        mediaCollection="file"
+        wire:model="articleFile"
+    />
+
+    {{-- ===== Multiple ===== --}}
+    <livewire:upload-handler.media-group
+        inputBaseName="article_files"
+        :model="$article"
+        mediaCollection="files"
+        wire:model="articleFiles"
+    />
+
+    <button type="submit">Save</button>
+</div>
+```
+
+```php
+// app/Livewire/ArticleForm.php
+
+use Axn\LivewireUploadHandler\HandleMediaFromRequest;
+
+class ArticleForm extends Component
+{
+    public Article $article;
+
+    // Must be null to prevent Livewire erasing the data initialized
+    // inside Livewire Upload Handler components
+    public ?array $articleFile = null;
+    public ?array $articleFiles = null;
+
+    public function store()
+    {
+        // ===== Single =====
+        app(HandleMediaFromRequest::class)->single(
+            data: $this->articleFile,
+            model: $article,
+            mediaCollection: 'file'
+        );
+
+        // ===== Multiple =====
+        app(HandleMediaFromRequest::class)->multiple(
+            data: $this->articleFiles,
+            model: $article,
+            mediaCollection: 'files',
+        );
+
+        // Force Livewire Upload Handler components to refresh data
+        $this->dispatch('livewire-upload-handler:refresh', inputBaseName: 'article_file');
+        $this->dispatch('livewire-upload-handler:refresh', inputBaseName: 'article_files');
+
+        // You can also send event without `inputBaseName` param to refresh
+        // all Livewire Upload Handler components
+        $this->dispatch('livewire-upload-handler:refresh');
+    }
+}
+```
+
 
 ### Auto-Save Mode
 

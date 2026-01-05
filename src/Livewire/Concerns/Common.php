@@ -42,6 +42,7 @@ trait Common
     protected function initialItemData(array $old = []): array
     {
         return [
+            'tmpName' => $old['tmpName'] ?? null,
             'deleted' => ! empty($old['deleted']),
         ];
     }
