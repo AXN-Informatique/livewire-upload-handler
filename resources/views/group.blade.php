@@ -17,11 +17,7 @@
                         </div>
                     @endif
 
-                    @livewire(
-                        $this->itemComponentClassName(),
-                        $this->itemsParams[$itemId] ?? [],
-                        key($itemId)
-                    )
+                    @include('livewire-upload-handler::group.item-component')
                 </div>
             @endforeach
         </div>

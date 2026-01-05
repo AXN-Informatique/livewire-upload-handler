@@ -8,6 +8,7 @@ Changelog
 
 - `Group`: Remove method `itemComponentParams`
 - `Group`: Add method `commonTraits`
+- `Group`: Add partial view `item-component`
 - Property `savedFileDisk` can be `null` and is `null` by default
 - Add option `showTemporaryFileWarning` (temporary file warning is no longer shown by default)
 - Exception `MediaCollectionNotRegisteredException` when media collection is not registered
