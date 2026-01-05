@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.0 (UNRELEASED)
+1.2.0 (2026-01-05)
 ------------------
 
 **Breaking changes if you extend components**
