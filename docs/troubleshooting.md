@@ -1,3 +1,8 @@
+---
+title: Troubleshooting
+order: 9
+---
+
 # Troubleshooting
 
 ## Upload Fails

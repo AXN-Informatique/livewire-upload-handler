@@ -1,3 +1,8 @@
+---
+title: Media Library
+order: 5
+---
+
 # Media Library Integration
 
 Direct integration with [Spatie Laravel Media Library](https://spatie.be/docs/laravel-medialibrary/).

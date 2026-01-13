@@ -1,3 +1,8 @@
+---
+title: Events
+order: 8
+---
+
 # Events
 
 All events are dispatched via Livewire's `dispatch()` method.
@@ -103,4 +108,5 @@ public function generateThumbnails(int $mediaId)
 
 ## Next Steps
 
-- [API Reference](api-reference.md) - Complete reference
+- [Advanced Usage](./advanced-usage.md) - Extend components
+- [Troubleshooting](./troubleshooting.md) - Common issues

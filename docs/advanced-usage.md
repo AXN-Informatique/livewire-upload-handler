@@ -1,3 +1,8 @@
+---
+title: Advanced Usage
+order: 7
+---
+
 # Advanced Usage
 
 If you need more control on upload handler component, you can create custom upload handlers by extending components.

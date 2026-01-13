@@ -1,3 +1,8 @@
+---
+title: Configuration
+order: 3
+---
+
 # Configuration
 
 File: `config/livewire-upload-handler.php`

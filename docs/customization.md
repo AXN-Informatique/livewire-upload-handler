@@ -1,3 +1,8 @@
+---
+title: Customization
+order: 6
+---
+
 # Customization
 
 ## Themes

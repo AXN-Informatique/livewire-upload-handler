@@ -4,15 +4,15 @@ Modern file upload handler for Livewire 3 with chunked uploads, image previews v
 
 ## Features
 
-- 📦 Chunked uploads for large files
-- 🖼️ Image previews with Glide
-- 🎯 Drag & drop support
-- 🔄 Sortable files (with Sortable.js)
-- ✅ MIME type & file size validation
-- 🎨 Themeable (CSS classes + icons)
-- 📱 Spatie Media Library integration
-- 🌍 i18n (English + French)
-- ⚡ Auto-save or manual mode
+- Chunked uploads for large files
+- Image previews with Glide
+- Drag & drop support
+- Sortable files (with Sortable.js)
+- MIME type & file size validation
+- Themeable (CSS classes + icons)
+- Spatie Media Library integration
+- i18n (English + French)
+- Auto-save or manual mode
 
 ## Requirements
 
