@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.2.1 (2026-01-13)
+------------------
+
+- Add YAML front-matter to documentation for Savane compatibility
+- Add `docs/index.md` as documentation entry point
+- Add `UPGRADE.md` with migration guides
+
+
 1.2.0 (2026-01-05)
 ------------------
 
