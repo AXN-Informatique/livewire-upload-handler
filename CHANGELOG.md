@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.X.X (2026-01-XX)
+------------------
+
+- Documentation : Ajout d'instructions pour exclure les fichiers temporaires de Git
+  - Section "Git Configuration" étendue dans `docs/installation.md`
+  - Documentation de `livewire-tmp/` (Livewire) et `.livewire-upload-handler-glide-cache/` (ce package)
+  - Note visible dans le `README.md` principal
+  - Commandes shell pour création automatique des `.gitignore`
+
+
 1.2.1 (2026-01-13)
 ------------------
 

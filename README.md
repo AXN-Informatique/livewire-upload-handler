@@ -41,6 +41,22 @@ Add to your layout:
 </body>
 ```
 
+**⚠️ Important:** Exclude temporary files from Git:
+
+```bash
+# Add livewire-tmp/ to main .gitignore
+if ! grep -q "livewire-tmp/" storage/app/.gitignore 2>/dev/null; then
+    echo "livewire-tmp/" >> storage/app/.gitignore
+fi
+
+# Create .gitignore for Glide cache
+mkdir -p storage/app/.livewire-upload-handler-glide-cache && \
+echo "*" > storage/app/.livewire-upload-handler-glide-cache/.gitignore && \
+echo "!.gitignore" >> storage/app/.livewire-upload-handler-glide-cache/.gitignore
+```
+
+See [Installation](docs/installation.md#git-configuration-important) for details.
+
 Single file upload:
 
 ```blade

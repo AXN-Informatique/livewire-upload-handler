@@ -77,6 +77,62 @@ Generate a sign key:
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
+## Git Configuration (Important)
+
+Lors de l'utilisation des uploads Livewire, deux répertoires de fichiers temporaires sont créés automatiquement :
+
+1. **`storage/app/livewire-tmp/`** - Fichiers temporaires Livewire (créé par Livewire)
+2. **`storage/app/.livewire-upload-handler-glide-cache/`** - Cache des prévisualisations Glide (créé par ce package)
+
+**Ces répertoires ne doivent pas être versionnés dans Git** car ils contiennent des fichiers temporaires régénérés automatiquement.
+
+### Configuration requise
+
+Ajoutez `livewire-tmp/` dans le `.gitignore` principal de votre application :
+
+**`storage/app/.gitignore`**
+
+```gitignore
+*
+!public/
+!.gitignore
+livewire-tmp/
+```
+
+Créez également un `.gitignore` dédié pour le cache Glide :
+
+**`storage/app/.livewire-upload-handler-glide-cache/.gitignore`**
+
+```gitignore
+*
+!.gitignore
+```
+
+### Pourquoi ?
+
+**`livewire-tmp/`** : Stocke temporairement les fichiers uploadés pendant le traitement. Ces fichiers sont automatiquement nettoyés par Livewire.
+
+**`.livewire-upload-handler-glide-cache/`** : Stocke les prévisualisations d'images générées par Glide lors des uploads. Ces fichiers sont :
+- Temporaires et régénérés à la demande
+- Spécifiques à chaque environnement
+- Inutiles dans le dépôt Git (augmentent sa taille sans raison)
+
+### Création automatique des fichiers
+
+Vous pouvez créer ces configurations manuellement ou utiliser cette commande :
+
+```bash
+# Ajouter livewire-tmp/ au .gitignore principal
+if ! grep -q "livewire-tmp/" storage/app/.gitignore 2>/dev/null; then
+    echo "livewire-tmp/" >> storage/app/.gitignore
+fi
+
+# Créer le .gitignore pour le cache Glide
+mkdir -p storage/app/.livewire-upload-handler-glide-cache && \
+echo "*" > storage/app/.livewire-upload-handler-glide-cache/.gitignore && \
+echo "!.gitignore" >> storage/app/.livewire-upload-handler-glide-cache/.gitignore
+```
+
 ## Next Steps
 
 - [Configuration](configuration.md) - Configure the package
