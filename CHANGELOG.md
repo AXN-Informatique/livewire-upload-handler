@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.X.X (2026-01-XX)
+1.2.2 (2026-01-18)
 ------------------
 
 - Documentation : Ajout d'instructions pour exclure les fichiers temporaires de Git
