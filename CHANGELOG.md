@@ -1,8 +1,10 @@
 Changelog
 =========
 
-1.3.0 (UNRELEASED)
+1.3.0 (2026-01-22)
 ------------------
+
+**Breaking changes if you used events**
 
 - Rename events (to be catched by Alpine `x-on` directive):
   - `livewire-upload-handler:uploaded` to `luh-uploaded`
