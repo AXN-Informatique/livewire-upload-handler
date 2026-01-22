@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.3.1 (2026-01-22)
+------------------
+
+- Add missing view `progress.blade.php` for theme `bootstrap-4`
+
+
 1.3.0 (2026-01-22)
 ------------------
 
