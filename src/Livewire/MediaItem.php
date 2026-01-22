@@ -22,7 +22,8 @@ class MediaItem extends Item
     public function deleteSavedFile(): void
     {
         $this->dispatch(
-            'livewire-upload-handler:media-deleted',
+            'luh-media-deleted',
+            inputBaseName: $this->inputBaseNameWithoutItemId(),
             mediaId: $this->itemData['id'],
         );
 
@@ -56,7 +57,8 @@ class MediaItem extends Item
         }
 
         $this->dispatch(
-            'livewire-upload-handler:media-saved',
+            'luh-media-saved',
+            inputBaseName: $this->inputBaseNameWithoutItemId(),
             mediaId: $media->id,
         );
     }

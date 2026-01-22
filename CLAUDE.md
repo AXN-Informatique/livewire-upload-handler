@@ -121,10 +121,10 @@ Key properties specific to MediaGroup/MediaItem:
 
 ### Events Dispatched
 
-- `livewire-upload-handler:uploaded`: When file upload completes (non-autoSave)
-- `livewire-upload-handler:canceled`: When uploaded file is deleted
-- `livewire-upload-handler:media-saved`: When file saved to Media Library
-- `livewire-upload-handler:media-deleted`: When media file deleted
+- `luh-uploaded`: When file upload completes (non-autoSave)
+- `luh-canceled`: When uploaded file is deleted
+- `luh-media-saved`: When file saved to Media Library
+- `luh-media-deleted`: When media file deleted
 
 ## Package Development Notes
 

@@ -206,7 +206,7 @@ class Item extends Component
         }
 
         $this->dispatch(
-            'livewire-upload-handler:uploaded',
+            'luh-uploaded',
             inputBaseName: $this->inputBaseNameWithoutItemId(),
             tmpName: $uploadedFile->getFilename(),
         );
@@ -250,7 +250,7 @@ class Item extends Component
         }
 
         $this->dispatch(
-            'livewire-upload-handler:canceled',
+            'luh-canceled',
             inputBaseName: $this->inputBaseNameWithoutItemId(),
             tmpName: $this->uploadedFile->getFilename(),
         );

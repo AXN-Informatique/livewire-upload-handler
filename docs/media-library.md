@@ -230,14 +230,14 @@ See [Advanced Usage](advanced-usage.md) for details.
 ## Events
 
 ```php
-#[On('livewire-upload-handler:media-saved')]
-public function onMediaSaved(int $mediaId)
+#[On('luh-media-saved')]
+public function onMediaSaved(string $inputBaseName, int $mediaId)
 {
     // Some action on media saved
 }
 
-#[On('livewire-upload-handler:media-deleted')]
-public function onMediaDeleted(int $mediaId)
+#[On('luh-media-deleted')]
+public function onMediaDeleted(string $inputBaseName, int $mediaId)
 {
     // Some action on media deleted
 }

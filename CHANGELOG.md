@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.3.0 (UNRELEASED)
+------------------
+
+- Rename events (to be catched by Alpine `x-on` directive):
+  - `livewire-upload-handler:uploaded` to `luh-uploaded`
+  - `livewire-upload-handler:canceled` to `luh-canceled`
+  - `livewire-upload-handler:media-saved` to `luh-media-saved`
+  - `livewire-upload-handler:media-deleted` to `luh-media-deleted`
+- Add `inputBaseName` parameter to `luh-media-saved` and `luh-media-deleted` events
+
+
 1.2.2 (2026-01-18)
 ------------------
 

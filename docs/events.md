@@ -9,7 +9,7 @@ All events are dispatched via Livewire's `dispatch()` method.
 
 ## Item Events
 
-### `livewire-upload-handler:uploaded`
+### `luh-uploaded`
 
 Fired when file upload completes (manual mode only, not autoSave).
 
@@ -18,7 +18,7 @@ Fired when file upload completes (manual mode only, not autoSave).
 - `tmpName` (string): Livewire temporary filename
 
 ```php
-#[On('livewire-upload-handler:uploaded')]
+#[On('luh-uploaded')]
 public function onUploaded(string $inputBaseName, string $tmpName)
 {
     $file = TemporaryUploadedFile::createFromLivewire($tmpName);
@@ -26,7 +26,7 @@ public function onUploaded(string $inputBaseName, string $tmpName)
 }
 ```
 
-### `livewire-upload-handler:canceled`
+### `luh-canceled`
 
 Fired when uploaded file is deleted before save.
 
@@ -35,7 +35,7 @@ Fired when uploaded file is deleted before save.
 - `tmpName` (string)
 
 ```php
-#[On('livewire-upload-handler:canceled')]
+#[On('luh-canceled')]
 public function onCanceled(string $inputBaseName, string $tmpName)
 {
     logger()->info('Upload canceled', ['file' => $tmpName]);
@@ -44,7 +44,7 @@ public function onCanceled(string $inputBaseName, string $tmpName)
 
 ## Media Library Events
 
-### `livewire-upload-handler:media-saved`
+### `luh-media-saved`
 
 Fired when file saved to Media Library (autoSave mode).
 
@@ -52,15 +52,15 @@ Fired when file saved to Media Library (autoSave mode).
 - `mediaId` (int): Saved media model ID
 
 ```php
-#[On('livewire-upload-handler:media-saved')]
-public function onMediaSaved(int $mediaId)
+#[On('luh-media-saved')]
+public function onMediaSaved(string $inputBaseName, int $mediaId)
 {
     $media = Media::find($mediaId);
     // Process media (e.g., generate conversions, notify user)
 }
 ```
 
-### `livewire-upload-handler:media-deleted`
+### `luh-media-deleted`
 
 Fired when media file deleted.
 
@@ -68,8 +68,8 @@ Fired when media file deleted.
 - `mediaId` (int)
 
 ```php
-#[On('livewire-upload-handler:media-deleted')]
-public function onMediaDeleted(int $mediaId)
+#[On('luh-media-deleted')]
+public function onMediaDeleted(string $inputBaseName, int $mediaId)
 {
     logger()->info('Media deleted', ['id' => $mediaId]);
 }
@@ -82,8 +82,8 @@ class ArticleForm extends Component
 {
     public Article $article;
 
-    #[On('livewire-upload-handler:media-saved')]
-    public function notifyImageSaved(int $mediaId)
+    #[On('luh-media-saved')]
+    public function notifyImageSaved(string $inputBaseName, int $mediaId)
     {
         $this->dispatch('notify',
             message: 'Image uploaded successfully!',
@@ -96,8 +96,8 @@ class ArticleForm extends Component
 ## Example: Processing on Upload
 
 ```php
-#[On('livewire-upload-handler:media-saved')]
-public function generateThumbnails(int $mediaId)
+#[On('luh-media-saved')]
+public function generateThumbnails(string $inputBaseName, int $mediaId)
 {
     $media = Media::find($mediaId);
 
