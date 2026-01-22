@@ -10,6 +10,8 @@ use function Axn\LivewireUploadHandler\str_arr_to_dot;
 
 trait Common
 {
+    use HasThemes;
+
     #[Locked]
     public array $acceptsMimeTypes = [];
 

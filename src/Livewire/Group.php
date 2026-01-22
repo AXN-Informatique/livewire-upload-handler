@@ -6,7 +6,6 @@ namespace Axn\LivewireUploadHandler\Livewire;
 
 use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
-use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
@@ -21,7 +20,6 @@ use ReflectionProperty;
 class Group extends Component
 {
     use Common;
-    use HasThemes;
 
     #[Modelable]
     public ?array $items = [];

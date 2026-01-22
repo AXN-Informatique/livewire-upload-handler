@@ -8,7 +8,6 @@ use Axn\LivewireUploadHandler\Enums\FileType;
 use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
-use Axn\LivewireUploadHandler\Livewire\Concerns\HasThemes;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +29,6 @@ use Throwable;
 class Item extends Component
 {
     use Common;
-    use HasThemes;
     use WithFileUploads;
 
     public ?int $uploadingFileSize = null;
