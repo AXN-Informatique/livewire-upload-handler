@@ -10,6 +10,7 @@ Changelog
   - `livewire-upload-handler:media-saved` to `luh-media-saved`
   - `livewire-upload-handler:media-deleted` to `luh-media-deleted`
 - Add `inputBaseName` parameter to `luh-media-saved` and `luh-media-deleted` events
+- Add `bootstrap-4` theme
 
 
 1.2.2 (2026-01-18)
