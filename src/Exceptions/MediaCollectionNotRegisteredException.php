@@ -11,6 +11,6 @@ class MediaCollectionNotRegisteredException extends Exception
     {
         $modelClass = $model::class;
 
-        return new self("Media collection `{$collectionName}` is not registered in model `{$modelClass}`.");
+        return new self(\sprintf('Media collection `%s` is not registered in model `%s`.', $collectionName, $modelClass));
     }
 }

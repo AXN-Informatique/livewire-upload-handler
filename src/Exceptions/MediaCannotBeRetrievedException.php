@@ -12,11 +12,11 @@ class MediaCannotBeRetrievedException extends Exception
     {
         $modelClass = $model::class;
 
-        return new self("Media with id `{$mediaId}` does not exist or does not belong to model `{$modelClass}` with id `{$model->getKey()}`.");
+        return new self(\sprintf('Media with id `%s` does not exist or does not belong to model `%s` with id `%s`.', $mediaId, $modelClass, $model->getKey()));
     }
 
     public static function doesNotBelongToCollection(string $collectionName, Media $media): self
     {
-        return new self("Media id `{$media->getKey()}` is not part of collection `{$collectionName}`.");
+        return new self(\sprintf('Media id `%s` is not part of collection `%s`.', $media->getKey(), $collectionName));
     }
 }

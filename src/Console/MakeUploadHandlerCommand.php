@@ -24,8 +24,8 @@ class MakeUploadHandlerCommand extends Command
     public function handle(): int
     {
         $nameTerms = explode('/', str_replace('\\', '/', trim($this->argument('name'), '\\/')));
-        $studlyNameTerms = array_map(fn (string $term) => Str::studly($term), $nameTerms);
-        $kebabNameTerms = array_map(fn (string $term) => Str::kebab($term), $nameTerms);
+        $studlyNameTerms = array_map(Str::studly(...), $nameTerms);
+        $kebabNameTerms = array_map(Str::kebab(...), $nameTerms);
 
         $classBasePath = app_path('Livewire/'.implode('/', $studlyNameTerms));
         $viewBasePath = resource_path('views/livewire/'.implode('/', $kebabNameTerms));
@@ -35,45 +35,45 @@ class MakeUploadHandlerCommand extends Command
         $viewNamespace = 'livewire.'.implode('.', $kebabNameTerms);
 
         if ($this->option('single')) {
-            $this->files->ensureDirectoryExists(dirname($classBasePath));
-            $this->files->ensureDirectoryExists(dirname($viewBasePath));
+            $this->files->ensureDirectoryExists(\dirname($classBasePath));
+            $this->files->ensureDirectoryExists(\dirname($viewBasePath));
 
-            $this->generateClass('Single.stub', "$classBasePath.php", [
+            $this->generateClass('Single.stub', $classBasePath.'.php', [
                 '{{componentNamespace}}' => Str::of($componentNamespace)->beforeLast('\\'),
                 '{{componentName}}' => $componentName,
                 '{{viewNamespace}}' => $viewNamespace,
             ]);
 
-            $this->copyView('item.blade.php', "$viewBasePath.blade.php");
+            $this->copyView('item.blade.php', $viewBasePath.'.blade.php');
 
         } else {
             $this->files->ensureDirectoryExists($classBasePath);
             $this->files->ensureDirectoryExists($classBasePath.'/Concerns');
             $this->files->ensureDirectoryExists($viewBasePath);
 
-            $this->generateClass('Item.stub', "$classBasePath/Item.php", [
+            $this->generateClass('Item.stub', $classBasePath.'/Item.php', [
                 '{{componentNamespace}}' => $componentNamespace,
                 '{{componentName}}' => $componentName,
                 '{{viewNamespace}}' => $viewNamespace,
             ]);
 
-            $this->generateClass('Group.stub', "$classBasePath/Group.php", [
+            $this->generateClass('Group.stub', $classBasePath.'/Group.php', [
                 '{{componentNamespace}}' => $componentNamespace,
                 '{{componentName}}' => $componentName,
                 '{{viewNamespace}}' => $viewNamespace,
             ]);
 
-            $this->generateClass('Common.stub', "$classBasePath/Concerns/{$componentName}Common.php", [
+            $this->generateClass('Common.stub', \sprintf('%s/Concerns/%sCommon.php', $classBasePath, $componentName), [
                 '{{componentNamespace}}' => $componentNamespace,
                 '{{componentName}}' => $componentName,
             ]);
 
-            $this->copyView('item.blade.php', "$viewBasePath/item.blade.php");
+            $this->copyView('item.blade.php', $viewBasePath.'/item.blade.php');
 
-            $this->copyView('group.blade.php', "$viewBasePath/group.blade.php");
+            $this->copyView('group.blade.php', $viewBasePath.'/group.blade.php');
         }
 
-        $this->info("Upload handler [$componentNamespace] generated successfully.");
+        $this->info(\sprintf('Upload handler [%s] generated successfully.', $componentNamespace));
 
         return Command::SUCCESS;
     }
@@ -81,7 +81,7 @@ class MakeUploadHandlerCommand extends Command
     protected function generateClass(string $stubName, string $targetPath, array $replacements): void
     {
         if ($this->files->exists($targetPath) && ! $this->option('force')) {
-            $this->warn("Skipped (exists): $targetPath");
+            $this->warn('Skipped (exists): '.$targetPath);
 
             return;
         }
@@ -98,7 +98,7 @@ class MakeUploadHandlerCommand extends Command
     protected function copyView(string $viewName, string $targetPath): void
     {
         if ($this->files->exists($targetPath) && ! $this->option('force')) {
-            $this->warn("Skipped (exists): $targetPath");
+            $this->warn('Skipped (exists): '.$targetPath);
 
             return;
         }
@@ -110,11 +110,11 @@ class MakeUploadHandlerCommand extends Command
 
     protected function getStub(string $file): string
     {
-        return $this->files->get(__DIR__."/../../resources/stubs/{$file}");
+        return $this->files->get(__DIR__.('/../../resources/stubs/'.$file));
     }
 
     protected function getView(string $file): string
     {
-        return $this->files->get(__DIR__."/../../resources/views/{$file}");
+        return $this->files->get(__DIR__.('/../../resources/views/'.$file));
     }
 }

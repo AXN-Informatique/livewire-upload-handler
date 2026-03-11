@@ -300,7 +300,11 @@ class Item extends Component
 
     protected function hasFile(): bool
     {
-        return $this->hasUploadedFile() || $this->hasSavedFile();
+        if ($this->hasUploadedFile()) {
+            return true;
+        }
+
+        return $this->hasSavedFile();
     }
 
     protected function fileDisk(): ?string
@@ -338,7 +342,7 @@ class Item extends Component
 
     protected function savedFileName(): string
     {
-        return basename($this->savedFilePath);
+        return basename((string) $this->savedFilePath);
     }
 
     protected function fileExists(): bool

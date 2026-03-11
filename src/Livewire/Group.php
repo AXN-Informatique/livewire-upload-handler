@@ -199,7 +199,7 @@ class Group extends Component
                 ->getProperties(ReflectionProperty::IS_PUBLIC);
 
             foreach ($props as $prop) {
-                if (! array_key_exists($prop->getName(), $params)) {
+                if (! \array_key_exists($prop->getName(), $params)) {
                     $params[$prop->getName()] = $this->{$prop->getName()};
                 }
             }
