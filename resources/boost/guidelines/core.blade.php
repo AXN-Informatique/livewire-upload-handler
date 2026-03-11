@@ -10,8 +10,7 @@ Modern file upload handler for Livewire 3 with chunked uploads, image previews v
 
 ### Blade Component
 
-- `@verbatim<x-livewire-upload-handler::dropzone>@endverbatim` — drag-and-drop zone wrapper
-
+- `x-livewire-upload-handler::dropzone` — drag-and-drop zone wrapper
 
 ### Blade Directives
 - `@livewireUploadHandlerScripts` — injects config + compiled JS

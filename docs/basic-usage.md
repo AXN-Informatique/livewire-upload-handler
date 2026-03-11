@@ -38,6 +38,10 @@ Component Properties
 |----------|------|---------|-------------|
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
 | `maxFileSize` | int | `0` | Max size in KB (0 = no limit) |
+| `minWidth` | int | `0` | Min image width in px (0 = no limit) |
+| `maxWidth` | int | `0` | Max image width in px (0 = no limit) |
+| `minHeight` | int | `0` | Min image height in px (0 = no limit) |
+| `maxHeight` | int | `0` | Max image height in px (0 = no limit) |
 | `showFileSize` | bool | `false` | Show file size in KB |
 | `showImagePreview` | bool | `false` | Show image thumbnails |
 | `showTemporaryFileWarning` | bool | `false` | Show message warning it is a temporary file |
@@ -114,6 +118,21 @@ Examples
     :maxFileSize="20480"
 />
 ```
+
+### Image with Dimension Constraints
+
+```blade
+<livewire:upload-handler.item
+    :acceptsMimeTypes="['image/jpeg', 'image/png']"
+    :showImagePreview="true"
+    :minWidth="800"
+    :minHeight="600"
+    :maxWidth="4000"
+    :maxHeight="3000"
+/>
+```
+
+Dimension validation is performed client-side using the Image API before upload starts.
 
 ### Image with Compression
 

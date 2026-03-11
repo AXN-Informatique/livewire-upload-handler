@@ -26,7 +26,22 @@ document.addEventListener('alpine:init', () => {
         })
     }
 
-    function _validateFile(file, errors, $wire) {
+    function _getImageDimensions(file) {
+        return new Promise((resolve) => {
+            const img = new Image()
+            img.onload = () => {
+                resolve({ width: img.naturalWidth, height: img.naturalHeight })
+                URL.revokeObjectURL(img.src)
+            }
+            img.onerror = () => {
+                resolve(null)
+                URL.revokeObjectURL(img.src)
+            }
+            img.src = URL.createObjectURL(file)
+        })
+    }
+
+    async function _validateFile(file, errors, $wire) {
         if ($wire.acceptsMimeTypes.length > 0 && ! $wire.acceptsMimeTypes.includes(file.type)) {
             errors[file.name] = window.livewireUploadHandlerParams.invalidFileTypeErrorMessage
             return false
@@ -35,6 +50,34 @@ document.addEventListener('alpine:init', () => {
         if ($wire.maxFileSize > 0 && file.size > $wire.maxFileSize) {
             errors[file.name] = window.livewireUploadHandlerParams.fileTooLoudErrorMessage
             return false
+        }
+
+        const hasMinWidth = ($wire.minWidth ?? 0) > 0
+        const hasMaxWidth = ($wire.maxWidth ?? 0) > 0
+        const hasMinHeight = ($wire.minHeight ?? 0) > 0
+        const hasMaxHeight = ($wire.maxHeight ?? 0) > 0
+
+        if (file.type.startsWith('image/') && (hasMinWidth || hasMaxWidth || hasMinHeight || hasMaxHeight)) {
+            const dims = await _getImageDimensions(file)
+
+            if (dims) {
+                if (hasMinWidth && dims.width < $wire.minWidth) {
+                    errors[file.name] = window.livewireUploadHandlerParams.imageTooSmallWidthErrorMessage.replace(':min', $wire.minWidth)
+                    return false
+                }
+                if (hasMaxWidth && dims.width > $wire.maxWidth) {
+                    errors[file.name] = window.livewireUploadHandlerParams.imageTooLargeWidthErrorMessage.replace(':max', $wire.maxWidth)
+                    return false
+                }
+                if (hasMinHeight && dims.height < $wire.minHeight) {
+                    errors[file.name] = window.livewireUploadHandlerParams.imageTooSmallHeightErrorMessage.replace(':min', $wire.minHeight)
+                    return false
+                }
+                if (hasMaxHeight && dims.height > $wire.maxHeight) {
+                    errors[file.name] = window.livewireUploadHandlerParams.imageTooLargeHeightErrorMessage.replace(':max', $wire.maxHeight)
+                    return false
+                }
+            }
         }
 
         return true
@@ -167,7 +210,7 @@ document.addEventListener('alpine:init', () => {
             for (let file of files) {
                 file = await _compressImage(file, $wire.compressorjsSettings)
 
-                if (_validateFile(file, this.groupErrors, $wire)) {
+                if (await _validateFile(file, this.groupErrors, $wire)) {
                     this.filesFromGroup.push(file)
                 }
             }
@@ -267,7 +310,7 @@ document.addEventListener('alpine:init', () => {
                     file = await _compressImage(file, $wire.compressorjsSettings)
                 }
 
-                if (! _validateFile(file, this.itemErrors, $wire)) {
+                if (! await _validateFile(file, this.itemErrors, $wire)) {
                     return
                 }
 

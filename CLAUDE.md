@@ -62,7 +62,7 @@ Both hierarchies follow the same pattern where:
 
 Located in `src/Livewire/Concerns/`:
 
-- **`Common`**: Shared properties for both Item and Group (`acceptsMimeTypes`, `maxFileSize`, `showFileSize`, `showImagePreview`, `showTemporaryFileWarning`, `autoSave`, `onlyUpload`, `compressorjsSettings`). Also provides `initialItemData()`, `initialItemParams()`, and `old()` methods.
+- **`Common`**: Shared properties for both Item and Group (`acceptsMimeTypes`, `maxFileSize`, `minWidth`, `maxWidth`, `minHeight`, `maxHeight`, `showFileSize`, `showImagePreview`, `showTemporaryFileWarning`, `autoSave`, `onlyUpload`, `compressorjsSettings`). Also provides `initialItemData()`, `initialItemParams()`, and `old()` methods.
 - **`MediaCommon`**: Shared properties for MediaItem and MediaGroup (`model`, `mediaCollection`, `mediaFilters`). Validates media collection exists on boot, inherits MIME types and max file size from collection definition.
 - **`HasThemes`**: Theme system (`theme`, `iconsTheme` properties). Loads CSS classes and icons from PHP config files with fallback chain: published vendor path → package resources path.
 
@@ -133,6 +133,10 @@ Assets are loaded via Blade directives:
 Key properties shared across Item/MediaItem (defined in `Common` trait):
 - `acceptsMimeTypes`: Array of allowed MIME types
 - `maxFileSize`: Maximum file size in KB (0 = unlimited)
+- `minWidth`: Minimum image width in px (0 = no limit, client-side validation)
+- `maxWidth`: Maximum image width in px (0 = no limit, client-side validation)
+- `minHeight`: Minimum image height in px (0 = no limit, client-side validation)
+- `maxHeight`: Maximum image height in px (0 = no limit, client-side validation)
 - `showFileSize`: Enable/disable file size display
 - `showImagePreview`: Enable/disable image thumbnails
 - `showTemporaryFileWarning`: Show warning for unsaved temporary files

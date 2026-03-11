@@ -4,6 +4,7 @@ Changelog
 1.4.0 (2026-03-11)
 ------------------
 
+- Add client-side image dimension validation (`minWidth`, `maxWidth`, `minHeight`, `maxHeight`)
 - Add Laravel Boost assets (`resources/boost/`)
 
 

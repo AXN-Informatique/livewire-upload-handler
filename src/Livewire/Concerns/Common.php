@@ -19,6 +19,18 @@ trait Common
     public int $maxFileSize = 0;
 
     #[Locked]
+    public int $minWidth = 0;
+
+    #[Locked]
+    public int $maxWidth = 0;
+
+    #[Locked]
+    public int $minHeight = 0;
+
+    #[Locked]
+    public int $maxHeight = 0;
+
+    #[Locked]
     public bool $showFileSize = false;
 
     #[Locked]

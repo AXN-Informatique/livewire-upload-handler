@@ -24,6 +24,10 @@ Two parallel hierarchies using a group/item architecture:
 | `showTemporaryFileWarning` | bool | false | Warning for unsaved temp files |
 | `acceptsMimeTypes` | array | [] | Allowed MIME types |
 | `maxFileSize` | int | 0 | Max file size in KB (0 = unlimited) |
+| `minWidth` | int | 0 | Min image width in px (0 = no limit) |
+| `maxWidth` | int | 0 | Max image width in px (0 = no limit) |
+| `minHeight` | int | 0 | Min image height in px (0 = no limit) |
+| `maxHeight` | int | 0 | Max image height in px (0 = no limit) |
 | `compressorjsSettings` | array | [] | Compressor.js options |
 
 ## Group Properties

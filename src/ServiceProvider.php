@@ -82,6 +82,10 @@ class ServiceProvider extends BaseServiceProvider
             'invalidFileTypeErrorMessage' => __('livewire-upload-handler::errors.invalid_file_type'),
             'fileTooLoudErrorMessage' => __('livewire-upload-handler::errors.file_too_loud'),
             'uploadErrorMessage' => __('livewire-upload-handler::errors.upload'),
+            'imageTooSmallWidthErrorMessage' => __('livewire-upload-handler::errors.image_too_small_width'),
+            'imageTooLargeWidthErrorMessage' => __('livewire-upload-handler::errors.image_too_large_width'),
+            'imageTooSmallHeightErrorMessage' => __('livewire-upload-handler::errors.image_too_small_height'),
+            'imageTooLargeHeightErrorMessage' => __('livewire-upload-handler::errors.image_too_large_height'),
         ], JSON_THROW_ON_ERROR);
 
         Blade::directive('livewireUploadHandlerScripts', fn (): string => <<<HTML
