@@ -3,11 +3,13 @@ title: Events
 order: 8
 ---
 
-# Events
+Events
+======
 
 All events are dispatched via Livewire's `dispatch()` method.
 
-## Item Events
+Item Events
+-----------
 
 ### `luh-uploaded`
 
@@ -42,13 +44,15 @@ public function onCanceled(string $inputBaseName, string $tmpName)
 }
 ```
 
-## Media Library Events
+Media Library Events
+--------------------
 
 ### `luh-media-saved`
 
 Fired when file saved to Media Library (autoSave mode).
 
 **Parameters:**
+- `inputBaseName` (string)
 - `mediaId` (int): Saved media model ID
 
 ```php
@@ -65,6 +69,7 @@ public function onMediaSaved(string $inputBaseName, int $mediaId)
 Fired when media file deleted.
 
 **Parameters:**
+- `inputBaseName` (string)
 - `mediaId` (int)
 
 ```php
@@ -75,7 +80,23 @@ public function onMediaDeleted(string $inputBaseName, int $mediaId)
 }
 ```
 
-## Example: Real-time Notifications
+Internal Events
+---------------
+
+### `livewire-upload-handler:refresh`
+
+Force Livewire Upload Handler components to refresh their data.
+
+**Parameters:**
+- `inputBaseName` (string|null): Target specific component, or null to refresh all
+
+```php
+$this->dispatch('livewire-upload-handler:refresh', inputBaseName: 'article_files');
+$this->dispatch('livewire-upload-handler:refresh'); // refresh all
+```
+
+Example: Real-time Notifications
+---------------------------------
 
 ```php
 class ArticleForm extends Component
@@ -93,7 +114,8 @@ class ArticleForm extends Component
 }
 ```
 
-## Example: Processing on Upload
+Example: Processing on Upload
+------------------------------
 
 ```php
 #[On('luh-media-saved')]
@@ -106,7 +128,8 @@ public function generateThumbnails(string $inputBaseName, int $mediaId)
 }
 ```
 
-## Next Steps
+Next Steps
+----------
 
-- [Advanced Usage](./advanced-usage.md) - Extend components
-- [Troubleshooting](./troubleshooting.md) - Common issues
+- [Advanced Usage](advanced-usage.md) - Extend components
+- [Troubleshooting](troubleshooting.md) - Common issues

@@ -3,15 +3,18 @@ title: Installation
 order: 2
 ---
 
-# Installation
+Installation
+============
 
-## Install Package
+Install Package
+---------------
 
 ```bash
 composer require axn/livewire-upload-handler
 ```
 
-## Add Blade Directives
+Add Blade Directives
+--------------------
 
 In your layout file (e.g., `resources/views/layouts/app.blade.php`):
 
@@ -28,7 +31,8 @@ In your layout file (e.g., `resources/views/layouts/app.blade.php`):
 </body>
 ```
 
-## Publish Assets (Optional)
+Publish Assets (Optional)
+-------------------------
 
 ### Config
 
@@ -62,7 +66,8 @@ php artisan vendor:publish --tag=livewire-upload-handler:themes
 
 Publishes themes to `resources/vendor/livewire-upload-handler/themes/`
 
-## Environment Variables
+Environment Variables
+---------------------
 
 Add to `.env` for Glide configuration:
 
@@ -77,7 +82,8 @@ Generate a sign key:
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
-## Git Configuration (Important)
+Git Configuration (Important)
+------------------------------
 
 When using Livewire uploads, two temporary file directories are automatically created:
 
@@ -133,7 +139,8 @@ echo "*" > storage/app/.livewire-upload-handler-glide-cache/.gitignore && \
 echo "!.gitignore" >> storage/app/.livewire-upload-handler-glide-cache/.gitignore
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Configuration](configuration.md) - Configure the package
 - [Basic Usage](basic-usage.md) - Start uploading files

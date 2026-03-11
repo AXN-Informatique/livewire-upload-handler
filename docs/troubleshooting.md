@@ -3,9 +3,11 @@ title: Troubleshooting
 order: 9
 ---
 
-# Troubleshooting
+Troubleshooting
+===============
 
-## Upload Fails
+Upload Fails
+------------
 
 ### Chunk Size Mismatch
 
@@ -29,7 +31,8 @@ order: 9
 />
 ```
 
-## Images Not Showing
+Images Not Showing
+------------------
 
 ### Missing Glide Sign Key
 
@@ -62,7 +65,8 @@ Set correct driver in `.env`:
 GLIDE_IMAGE_DRIVER=gd
 ```
 
-## Sortable Not Working
+Sortable Not Working
+--------------------
 
 **Symptom:** Drag & drop doesn't work.
 
@@ -74,7 +78,8 @@ GLIDE_IMAGE_DRIVER=gd
 @livewireUploadHandlerScripts
 ```
 
-## Compression Not Working
+Compression Not Working
+-----------------------
 
 **Symptom:** Images not compressed.
 
@@ -86,7 +91,8 @@ GLIDE_IMAGE_DRIVER=gd
 @livewireUploadHandlerScripts
 ```
 
-## Assets Not Loading
+Assets Not Loading
+------------------
 
 ### 404 on CSS/JS
 
@@ -110,7 +116,8 @@ php artisan view:clear
 php artisan cache:clear
 ```
 
-## Media Library Issues
+Media Library Issues
+--------------------
 
 ### Method Not Found
 
@@ -131,7 +138,8 @@ php artisan cache:clear
 />
 ```
 
-## Debug Mode
+Debug Mode
+----------
 
 Enable Livewire debug to see events:
 
@@ -148,8 +156,9 @@ public function boot()
 
 Check browser console for JavaScript errors.
 
-## Still Having Issues?
+Still Having Issues?
+--------------------
 
 1. Check [GitHub Issues](https://github.com/AXN-Informatique/livewire-upload-handler/issues)
 2. Review [configuration](configuration.md)
-3. Verify [requirements](../README.md#requirements)
+3. Verify [requirements](./_index.md#requirements)

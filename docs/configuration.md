@@ -3,11 +3,13 @@ title: Configuration
 order: 3
 ---
 
-# Configuration
+Configuration
+=============
 
 File: `config/livewire-upload-handler.php`
 
-## Theme Settings
+Theme Settings
+--------------
 
 ```php
 'theme' => 'bootstrap-5',
@@ -17,7 +19,8 @@ File: `config/livewire-upload-handler.php`
 - `theme`: CSS classes theme name
 - `icons_theme`: Icons theme name
 
-## JavaScript Libraries
+JavaScript Libraries
+--------------------
 
 ```php
 'compressorjs_var' => 'window.Compressor',
@@ -26,7 +29,8 @@ File: `config/livewire-upload-handler.php`
 
 Global variables for optional external libraries (must be loaded separately).
 
-## Upload Settings
+Upload Settings
+---------------
 
 ```php
 'chunk_size' => bytes_to_int(ini_get('upload_max_filesize')),
@@ -34,7 +38,8 @@ Global variables for optional external libraries (must be loaded separately).
 
 Size of each chunk for large file uploads. Defaults to PHP's `upload_max_filesize`.
 
-## Glide (Image Processing)
+Glide (Image Processing)
+-------------------------
 
 ```php
 'glide_max_image_size' => 2000 * 2000,
@@ -43,12 +48,13 @@ Size of each chunk for large file uploads. Defaults to PHP's `upload_max_filesiz
 'glide_base_url' => '/livewire-upload-handler/glide',
 ```
 
-- `glide_max_image_size`: Maximum pixels (width × height)
+- `glide_max_image_size`: Maximum pixels (width x height)
 - `glide_image_driver`: `'gd'` or `'imagick'`
 - `glide_sign_key`: Secret key for signed URLs (required for security)
 - `glide_base_url`: Base URL for image transformation endpoint
 
-## Environment Variables
+Environment Variables
+---------------------
 
 In `.env`:
 
@@ -63,6 +69,7 @@ Generate sign key:
 php -r "echo bin2hex(random_bytes(32));"
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Basic Usage](basic-usage.md) - Start using the components

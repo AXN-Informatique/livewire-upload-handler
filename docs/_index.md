@@ -3,11 +3,13 @@ title: Livewire Upload Handler
 order: 1
 ---
 
-# Livewire Upload Handler
+Livewire Upload Handler
+========================
 
 Modern file upload handler for Livewire 3 with chunked uploads, image previews via Glide, and Spatie Media Library integration.
 
-## Features
+Features
+--------
 
 - Chunked uploads for large files
 - Image previews with Glide
@@ -19,13 +21,15 @@ Modern file upload handler for Livewire 3 with chunked uploads, image previews v
 - i18n (English + French)
 - Auto-save or manual mode
 
-## Requirements
+Requirements
+------------
 
 - PHP 8.4+
 - Laravel 12+
 - Livewire 3.1+
 
-## Quick Start
+Quick Start
+-----------
 
 ```bash
 composer require axn/livewire-upload-handler
@@ -50,7 +54,8 @@ Single file upload:
 <livewire:upload-handler.item />
 ```
 
-## Table of Contents
+Table of Contents
+-----------------
 
 - [Installation](./installation.md)
 - [Configuration](./configuration.md)

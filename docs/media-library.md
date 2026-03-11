@@ -3,11 +3,13 @@ title: Media Library
 order: 5
 ---
 
-# Media Library Integration
+Media Library Integration
+=========================
 
 Direct integration with [Spatie Laravel Media Library](https://spatie.be/docs/laravel-medialibrary/).
 
-## Setup
+Setup
+-----
 
 Your model must implement `HasMedia`:
 
@@ -28,7 +30,8 @@ class Article extends Model implements HasMedia
 }
 ```
 
-## Single File (MediaItem)
+Single File (MediaItem)
+-----------------------
 
 ```blade
 <livewire:upload-handler.media-item
@@ -40,7 +43,8 @@ class Article extends Model implements HasMedia
 
 Files are saved directly to Media Library on upload.
 
-## Multiple Files (MediaGroup)
+Multiple Files (MediaGroup)
+---------------------------
 
 ```blade
 <livewire:upload-handler.media-group
@@ -53,7 +57,8 @@ Files are saved directly to Media Library on upload.
 
 With sorting, `order_column` is automatically updated.
 
-## Custom Filters
+Custom Filters
+--------------
 
 ```blade
 <livewire:upload-handler.media-item
@@ -64,7 +69,8 @@ With sorting, `order_column` is automatically updated.
 />
 ```
 
-## Properties
+Properties
+----------
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
@@ -72,7 +78,8 @@ With sorting, `order_column` is automatically updated.
 | `mediaCollection` | string | `'default'` | Collection name |
 | `mediaFilters` | array | `[]` | Filters for retrieving media |
 
-## MIME Types & Size
+MIME Types & Size
+-----------------
 
 MIME types and max file size are inherited from Media Collection definition. You can override:
 
@@ -86,7 +93,8 @@ MIME types and max file size are inherited from Media Collection definition. You
 />
 ```
 
-## Auto-Save vs Manual
+Auto-Save vs Manual
+--------------------
 
 ### Manual Mode (default)
 
@@ -227,7 +235,8 @@ Handled internally by the component `MediaItem`. Nothing more is needed.
 If you want to customize the save process, you need to extend component.
 See [Advanced Usage](advanced-usage.md) for details.
 
-## Events
+Events
+------
 
 ```php
 #[On('luh-media-saved')]
@@ -245,7 +254,8 @@ public function onMediaDeleted(string $inputBaseName, int $mediaId)
 
 See [Events](events.md) for details.
 
-## Example: Product Gallery
+Example: Product Gallery
+------------------------
 
 ```blade
 <div>
@@ -274,7 +284,8 @@ class Product extends Model implements HasMedia
 }
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Events](events.md) - Listen to media events
 - [Advanced Usage](advanced-usage.md) - Custom components

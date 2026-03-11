@@ -3,9 +3,11 @@ title: Basic Usage
 order: 4
 ---
 
-# Basic Usage
+Basic Usage
+===========
 
-## Single File Upload (Item)
+Single File Upload (Item)
+-------------------------
 
 ```blade
 <livewire:upload-handler.item
@@ -16,7 +18,8 @@ order: 4
 />
 ```
 
-## Multiple Files Upload (Group)
+Multiple Files Upload (Group)
+-----------------------------
 
 ```blade
 <livewire:upload-handler.group
@@ -26,7 +29,8 @@ order: 4
 />
 ```
 
-## Component Properties
+Component Properties
+--------------------
 
 ### Common Properties
 
@@ -59,7 +63,8 @@ order: 4
 | `savedFileDisk` | string\|null | `null` | Saved file disk name |
 | `savedFilePath` | string\|null | `null` | Saved file path relative to disk |
 
-## Auto-Save vs Manual
+Auto-Save vs Manual
+--------------------
 
 ### Manual Mode (default)
 
@@ -98,7 +103,8 @@ public function store(Request $request)
 
 Files saved immediately. See [Media Library Integration](media-library.md).
 
-## Examples
+Examples
+--------
 
 ### PDF Upload
 
@@ -146,7 +152,8 @@ Requires [Sortable.js](https://github.com/SortableJS/Sortable) loaded globally a
 />
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Media Library](media-library.md) - Direct integration with Spatie Media Library
 - [Events](events.md) - Listen to upload events

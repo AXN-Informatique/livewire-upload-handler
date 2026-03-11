@@ -3,11 +3,13 @@ title: Advanced Usage
 order: 7
 ---
 
-# Advanced Usage
+Advanced Usage
+==============
 
 If you need more control on upload handler component, you can create custom upload handlers by extending components.
 
-## Custom Handler
+Custom Handler
+--------------
 
 Use command `php artisan make:upload-handler`
 
@@ -52,7 +54,8 @@ resources/
             my-upload-handler.blade.php
 ```
 
-## Enums
+Enums
+-----
 
 ### FileType
 
@@ -81,7 +84,8 @@ Methods:
 - `isArchive(): bool`
 - `supportsPreview(): bool`
 
-## Exceptions
+Exceptions
+----------
 
 ### MethodNotImplementedException
 
@@ -103,7 +107,8 @@ Factory methods:
 
 Error message guides you to implement the method or use MediaItem/MediaGroup.
 
-## JavaScript Integration
+JavaScript Integration
+----------------------
 
 ### Compressor.js
 
@@ -139,6 +144,7 @@ Enable on Group:
 <livewire:upload-handler.group :sortable="true" />
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Troubleshooting](troubleshooting.md) - Common issues

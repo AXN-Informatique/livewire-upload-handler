@@ -3,9 +3,11 @@ title: Customization
 order: 6
 ---
 
-# Customization
+Customization
+=============
 
-## Themes
+Themes
+------
 
 Publish themes:
 
@@ -23,8 +25,18 @@ Create custom theme in `resources/vendor/livewire-upload-handler/themes/css-clas
 <?php
 
 return [
-    'error' => 'alert alert-danger lh-1 mt-2',
-    // ... see bootstrap-5.php for full list
+    'add_button' => 'btn btn-sm btn-outline-primary',
+    'replace_button' => 'btn btn-sm btn-outline-primary',
+    'delete_button' => 'btn btn-sm btn-outline-danger',
+    'undelete_button' => 'btn btn-sm btn-outline-success',
+    'cancel_button' => 'btn btn-sm btn-outline-secondary',
+    'cancel_upload_button' => 'btn btn-link',
+    'actions_group' => 'btn-group',
+    'download_link' => 'icon-link',
+    'max_files_number_warning' => 'text-warning',
+    'missing_file_warning' => 'text-danger small',
+    'temporary_file_warning' => 'text-secondary small',
+    'error' => 'text-danger lh-1 mt-2',
 ];
 ```
 
@@ -53,6 +65,9 @@ return [
     'add' => '<svg>...</svg>',
     'replace' => '<svg>...</svg>',
     'delete' => '<svg>...</svg>',
+    'undelete' => '<svg>...</svg>',
+    'cancel' => '<svg>...</svg>',
+    'cancel_upload' => '<svg>...</svg>',
     'download' => '<svg>...</svg>',
     'sort' => '<svg>...</svg>',
 ];
@@ -64,7 +79,8 @@ Set in config or per component:
 <livewire:upload-handler.item iconsTheme="my-icons" />
 ```
 
-## Views
+Views
+-----
 
 Publish views:
 
@@ -89,7 +105,8 @@ Modify in `resources/views/vendor/livewire-upload-handler/`:
 
 Override per theme in `resources/views/vendor/livewire-upload-handler/themes/my-theme/progress.blade.php`.
 
-## Translations
+Translations
+------------
 
 Publish translations:
 
@@ -108,7 +125,7 @@ Add new language:
 ```php
 // lang/vendor/livewire-upload-handler/es/actions.php
 return [
-    'add' => 'Añadir',
+    'add' => 'Anadir',
     'replace' => 'Reemplazar',
     'delete' => 'Eliminar',
     'undelete' => 'Deshacer',
@@ -116,7 +133,8 @@ return [
 ];
 ```
 
-## Custom Dropzone
+Custom Dropzone
+---------------
 
 ```blade
 <x-livewire-upload-handler-dropzone
@@ -127,6 +145,7 @@ return [
 </x-livewire-upload-handler-dropzone>
 ```
 
-## Next Steps
+Next Steps
+----------
 
 - [Advanced Usage](advanced-usage.md) - Extend components
