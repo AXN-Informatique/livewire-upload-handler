@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.4.1 (2026-03-11)
+------------------
+
+- Fix `resources/boost/` missing from composer archive
+
+
 1.4.0 (2026-03-11)
 ------------------
 
