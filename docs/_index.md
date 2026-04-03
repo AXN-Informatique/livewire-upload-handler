@@ -25,7 +25,7 @@ Requirements
 ------------
 
 - PHP 8.4+
-- Laravel 12+
+- Laravel 12+ / 13+
 - Livewire 3.1+
 
 Quick Start
