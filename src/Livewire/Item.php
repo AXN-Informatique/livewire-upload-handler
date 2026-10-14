@@ -9,7 +9,6 @@ use Axn\LivewireUploadHandler\Exceptions\MethodNotImplementedException;
 use Axn\LivewireUploadHandler\GlideServerFactory;
 use Axn\LivewireUploadHandler\Livewire\Concerns\Common;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -133,7 +132,7 @@ class Item extends Component
             $this->processChunk();
 
         } catch (Throwable $throwable) {
-            Log::error($throwable);
+            report($throwable);
 
             $this->hasErrorOnUpload = true;
 
@@ -147,7 +146,19 @@ class Item extends Component
             $this->uploadingFileName = null;
 
             $this->validateUploadedFile($finalFile);
-            $this->uploadFinished($finalFile);
+
+            try {
+                $this->uploadFinished($finalFile);
+
+            } catch (ValidationException $validationException) {
+                throw $validationException;
+            } catch (Throwable $throwable) {
+                report($throwable);
+
+                $finalFile->delete();
+
+                $this->hasErrorOnUpload = true;
+            }
         }
     }
 
@@ -158,12 +169,25 @@ class Item extends Component
     {
         $chunkContent = file_get_contents($this->chunkFile->getPathname());
 
-        $this->chunkFile->delete();
+        $this->deleteTemporaryFile($this->chunkFile);
         $this->chunkFile = null;
 
         $finalFilePath = TemporaryUploadedFile::createFromLivewire($this->uploadingFileName)->getPathname();
 
         file_put_contents($finalFilePath, $chunkContent, FILE_APPEND);
+    }
+
+    /**
+     * Delete a temporary uploaded file, along with the meta file
+     * that Livewire 4 stores next to it.
+     */
+    protected function deleteTemporaryFile(TemporaryUploadedFile $file): void
+    {
+        $file->delete();
+
+        FileUploadConfiguration::storage()->delete(
+            FileUploadConfiguration::path($file->getFilename().'.json')
+        );
     }
 
     /**

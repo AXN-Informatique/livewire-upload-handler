@@ -5,6 +5,8 @@
 /CLAUDE.md          export-ignore
 /package.json       export-ignore
 /package-lock.json  export-ignore
+/phpunit.xml        export-ignore
 /pint.json          export-ignore
 /rector.php         export-ignore
+/tests              export-ignore
 /webpack            export-ignore

@@ -31,6 +31,13 @@ In your layout file (e.g., `resources/views/layouts/app.blade.php`):
 </body>
 ```
 
+### Livewire 4
+
+The package works with Livewire 3 and Livewire 4 without any change in your code. With Livewire 4, keep in mind that:
+
+- `@livewireUploadHandlerScripts` must still be placed **after** `@livewireScripts`
+- `<livewire:upload-handler.* />` tags must be self-closed, otherwise the following content is treated as a slot
+
 Publish Assets (Optional)
 -------------------------
 

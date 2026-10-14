@@ -55,7 +55,7 @@ class Group extends Component
 
         $this->items = [];
 
-        if (old() !== []) {
+        if (filled(old())) {
             foreach ($this->old() as $itemId => $old) {
                 $entity = isset($old['id']) && isset($entities[$old['id']])
                     ? $entities[$old['id']]

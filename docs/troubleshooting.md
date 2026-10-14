@@ -31,6 +31,22 @@ Upload Fails
 />
 ```
 
+### Upload Error With a Large Group (Livewire 4)
+
+**Symptom:** With Livewire 4, actions on a group with many files fail with `TooManyComponentsException` or `PayloadTooLargeException`.
+
+**Cause:** Each file of a group is a Livewire component bound to the group, and Livewire 4 limits the number of components and the size of a request (`livewire.payload.max_components` defaults to 200, `livewire.payload.max_size` to 1 MB).
+
+**Solution:** Limit the number of files with `maxFilesNumber`, or raise these limits in `config/livewire.php`.
+
+### Temporary Disk Configured to Throw (Livewire 4)
+
+**Symptom:** With Livewire 4, uploaded file names cannot be read (`UnableToReadFile` on a `.json` file).
+
+**Cause:** Livewire 4 looks for a `.json` meta file next to each temporary file. Files assembled from chunks by this package have no meta file, so the lookup fails when the temporary upload disk has `'throw' => true`.
+
+**Solution:** Keep `'throw' => false` (Laravel default) on the disk used for temporary uploads (`livewire.temporary_file_upload.disk`).
+
 Images Not Showing
 ------------------
 

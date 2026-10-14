@@ -1,6 +1,6 @@
 # Livewire Upload Handler
 
-Modern file upload handler for Livewire 3 with chunked uploads, image previews via Glide, and Spatie Media Library integration.
+Modern file upload handler for Livewire 3 & 4 with chunked uploads, image previews via Glide, and Spatie Media Library integration.
 
 ## Features
 
@@ -18,7 +18,7 @@ Modern file upload handler for Livewire 3 with chunked uploads, image previews v
 
 - PHP 8.4+
 - Laravel 12+
-- Livewire 3.1+
+- Livewire 3.1+ or 4.0+
 
 > Uses PHP 8.4 features: asymmetric visibility, enums, typed exceptions.
 

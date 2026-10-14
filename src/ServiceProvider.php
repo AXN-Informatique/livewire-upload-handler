@@ -10,9 +10,12 @@ use Axn\LivewireUploadHandler\Livewire\Group;
 use Axn\LivewireUploadHandler\Livewire\Item;
 use Axn\LivewireUploadHandler\Livewire\MediaGroup;
 use Axn\LivewireUploadHandler\Livewire\MediaItem;
+use Closure;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
+use Livewire\Component;
+use Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys;
 use Livewire\Livewire;
 
 class ServiceProvider extends BaseServiceProvider
@@ -39,6 +42,8 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerBladeDirectives();
 
         $this->registerLivewireComponents();
+
+        $this->isolateCompiledWireKeys();
 
         $this->registerBladeComponents();
 
@@ -105,6 +110,42 @@ class ServiceProvider extends BaseServiceProvider
 
         Livewire::component('upload-handler.media-group', MediaGroup::class);
         Livewire::component('upload-handler.media-item', MediaItem::class);
+    }
+
+    /**
+     * Render the upload handler components with their own smart wire keys state.
+     *
+     * Each `wire:key` of their views sets a static state that Livewire also uses to generate
+     * the keys of the next Livewire components of the parent view. These components are only
+     * rendered when mounted: the keys generated after them would differ on next parent
+     * renders, and the matching components would be mounted again (losing their state).
+     */
+    private function isolateCompiledWireKeys(): void
+    {
+        if (! class_exists(SupportCompiledWireKeys::class)) {
+            return;
+        }
+
+        Livewire::listen('render', function (Component $component): ?Closure {
+            if (! $component instanceof Item && ! $component instanceof Group) {
+                return null;
+            }
+
+            $loopStack = SupportCompiledWireKeys::$loopStack;
+            $currentLoop = SupportCompiledWireKeys::$currentLoop;
+
+            SupportCompiledWireKeys::$loopStack = [];
+            SupportCompiledWireKeys::$currentLoop = [
+                'count' => null,
+                'index' => null,
+                'key' => null,
+            ];
+
+            return function () use ($loopStack, $currentLoop): void {
+                SupportCompiledWireKeys::$loopStack = $loopStack;
+                SupportCompiledWireKeys::$currentLoop = $currentLoop;
+            };
+        });
     }
 
     private function registerBladeComponents(): void

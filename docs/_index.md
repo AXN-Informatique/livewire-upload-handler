@@ -6,7 +6,7 @@ order: 1
 Livewire Upload Handler
 ========================
 
-Modern file upload handler for Livewire 3 with chunked uploads, image previews via Glide, and Spatie Media Library integration.
+Modern file upload handler for Livewire 3 & 4 with chunked uploads, image previews via Glide, and Spatie Media Library integration.
 
 Features
 --------
@@ -26,7 +26,7 @@ Requirements
 
 - PHP 8.4+
 - Laravel 12+ / 13+
-- Livewire 3.1+
+- Livewire 3.1+ or 4.0+
 
 Quick Start
 -----------
