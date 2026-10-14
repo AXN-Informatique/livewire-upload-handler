@@ -108,10 +108,13 @@ document.addEventListener('alpine:init', () => {
         }
 
         return new Promise((resolve, reject) => {
-            settings.success = resolve
-            settings.error = reject
-
-            new compressorjs(file, settings)
+            // Copy the settings: they are the locked $wire.compressorjsSettings property,
+            // that Livewire 4 would send back to the server if mutated
+            new compressorjs(file, {
+                ...settings,
+                success: resolve,
+                error: reject,
+            })
         })
     }
 
