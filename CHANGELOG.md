@@ -10,6 +10,7 @@ Changelog
 - Livewire 4: actions of components containing upload handler items (group, parent component bound with `wire:model`...) are held while an item request is in progress, as Livewire 3 does, so that an outdated item state is never sent
 - Livewire 4: a failed group request (sorting, adding files) no longer blocks the following group/items actions
 - Livewire 4: fix `CannotUpdateLockedPropertyException` on `compressorjsSettings` when uploading an image with Compressor.js settings (the settings are no longer mutated client-side)
+- Livewire 4 (smart wire keys): fix the Livewire components placed after an upload handler component in a parent view being mounted again on the first parent update (a `media-group` bound with `wire:model` then failed on every request with `Typed property MediaItem::$model must not be accessed before initialization`)
 - Fix group items not loaded from entities when the request has no session
 - Add a test suite (Orchestra Testbench)
 
