@@ -95,6 +95,15 @@ document.addEventListener('alpine:init', () => {
         return new Promise(r => setTimeout(r, timeToWait))
     }
 
+    async function _runAction(action) {
+        // Livewire 4 rejects $wire promises on request failure (Livewire 3 leaves them pending)
+        try {
+            await action()
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     function _compressImage(file, settings) {
         const compressorjs = eval(window.livewireUploadHandlerParams.compressorjsVar);
 
@@ -107,6 +116,68 @@ document.addEventListener('alpine:init', () => {
             settings.error = reject
 
             new compressorjs(file, settings)
+        })
+    }
+
+    // LIVEWIRE 4: HOLD ANCESTORS ACTIONS WHILE AN ITEM REQUEST IS IN PROGRESS
+    // =========================================================================
+    // Livewire 4 sends the state of wire:model-bound children along with every request
+    // of their ancestors (group, parent component...), without waiting for the children
+    // requests in progress like Livewire 3 does: the ancestor response could then restore
+    // an outdated item state (e.g. losing a file whose upload has just finished).
+
+    const _itemsComponentsIds = new Set()
+    const _itemsActiveMessages = new Map()
+    const _heldActions = new Set()
+
+    function _hasBusyBoundItem(component) {
+        let hasBusyBoundItem = false
+
+        component.getDeepChildrenWithBindings?.((child) => {
+            hasBusyBoundItem ||= _itemsActiveMessages.has(child.id)
+        })
+
+        return hasBusyBoundItem
+    }
+
+    function _releaseHeldActions() {
+        _heldActions.forEach((action) => {
+            if (! _hasBusyBoundItem(action.component)) {
+                _heldActions.delete(action)
+                action.fire()
+            }
+        })
+    }
+
+    if (typeof Livewire.interceptAction === 'function' && typeof Livewire.interceptMessage === 'function') {
+        Livewire.interceptMessage(({ message, onFinish }) => {
+            const componentId = message.component.id
+
+            if (! _itemsComponentsIds.has(componentId)) {
+                return
+            }
+
+            _itemsActiveMessages.set(componentId, (_itemsActiveMessages.get(componentId) ?? 0) + 1)
+
+            onFinish(() => {
+                const nbActiveMessages = _itemsActiveMessages.get(componentId) - 1
+
+                if (nbActiveMessages > 0) {
+                    _itemsActiveMessages.set(componentId, nbActiveMessages)
+                } else {
+                    _itemsActiveMessages.delete(componentId)
+                }
+
+                _releaseHeldActions()
+            })
+        })
+
+        Livewire.interceptAction(({ action }) => {
+            // An action already deferred by Livewire is fired by Livewire itself
+            if (! action.isDeferred() && _hasBusyBoundItem(action.component)) {
+                action.defer()
+                _heldActions.add(action)
+            }
         })
     }
 
@@ -170,8 +241,11 @@ document.addEventListener('alpine:init', () => {
                         that.sortablejsObj.option('disabled', true)
 
                         that._waitItemsActions(async () => {
-                            await $wire.sortItems(sort.toArray())
-                            that.sortablejsObj.option('disabled', false)
+                            try {
+                                await $wire.sortItems(sort.toArray())
+                            } finally {
+                                that.sortablejsObj.option('disabled', false)
+                            }
                         })
                     }
                 }
@@ -231,9 +305,13 @@ document.addEventListener('alpine:init', () => {
 
             this._waitItemsActions(async () => {
                 this.sortablejsObj?.option('disabled', true)
-                await $wire.incrementItems(nbFilesToAdd)
-                this.sortablejsObj?.option('disabled', false)
-                this.itemsIncrementInProgress = false
+
+                try {
+                    await $wire.incrementItems(nbFilesToAdd)
+                } finally {
+                    this.sortablejsObj?.option('disabled', false)
+                    this.itemsIncrementInProgress = false
+                }
             })
         },
 
@@ -250,7 +328,7 @@ document.addEventListener('alpine:init', () => {
             }
 
             this.nbRunningActions[key]++
-            await action()
+            await _runAction(action)
             this.nbRunningActions[key]--
 
             if (this.nbRunningActions[key] <= 0) {
@@ -275,6 +353,8 @@ document.addEventListener('alpine:init', () => {
         deleteTimerInterval: null,
 
         init() {
+            _itemsComponentsIds.add($wire.$id)
+
             $wire.watch('itemData', (value, oldValue) => {
                 if (value === null) {
                     $wire.itemData = oldValue
@@ -398,6 +478,11 @@ document.addEventListener('alpine:init', () => {
 
                 await _waitBeforeNextUpload()
 
+                // The upload may have been canceled while this action was queued or waiting
+                if (! this.uploading) {
+                    return
+                }
+
                 $wire.upload('chunkFile', chunkFile, () => {
                     if ($wire.hasErrorOnUpload) {
                         this._errorOnUpload()
@@ -433,7 +518,7 @@ document.addEventListener('alpine:init', () => {
 
         _waitGroupActions(itemAction) {
             if (! $wire.attachedToGroup) {
-                itemAction()
+                _runAction(itemAction)
                 return
             }
 
@@ -444,4 +529,4 @@ document.addEventListener('alpine:init', () => {
 
 /******/ })()
 ;
-//# sourceMappingURL=scripts.f3a0e90cfcfdd81b793def5293be487c.js.map
+//# sourceMappingURL=scripts.1402454674e1062db5f8d94d71459b05.js.map

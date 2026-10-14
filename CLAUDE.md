@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a modern Laravel 12 package (requiring PHP 8.4+) that provides file upload handling using Livewire 3, with support for Spatie Media Library integration. The package handles chunked file uploads, image previews via Glide, file validation, and drag-and-drop functionality.
+This is a modern Laravel 12 package (requiring PHP 8.4+) that provides file upload handling using Livewire 3 or 4, with support for Spatie Media Library integration. The package handles chunked file uploads, image previews via Glide, file validation, and drag-and-drop functionality.
 
 **Modern PHP Features:** The codebase utilizes PHP 8.4 features including typed exceptions and enums for type safety.
 
@@ -33,6 +33,17 @@ Automated PHP refactoring (configured in `rector.php`).
 composer install
 npm install
 ```
+
+### Run Tests
+```bash
+composer test
+```
+Feature tests (Orchestra Testbench + `Livewire::test()`) in `tests/`, with a `HasMedia` fixture model in `tests/Fixtures/`. The package supports Livewire 3 and 4: run the suite against both versions before releasing.
+```bash
+composer update livewire/livewire -W --with=livewire/livewire:^3.8 && composer test
+composer update livewire/livewire -W --with=livewire/livewire:^4.0 && composer test
+```
+The JavaScript (`resources/js/scripts.js`) has no automated tests: check uploads, sorting and cancellation in a browser under both versions.
 
 ## Architecture
 

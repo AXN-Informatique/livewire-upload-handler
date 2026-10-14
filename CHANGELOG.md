@@ -1,6 +1,18 @@
 Changelog
 =========
 
+1.6.0 (unreleased)
+------------------
+
+- Add Livewire 4 support (Livewire 3 is still supported)
+- Delete the `.json` meta files that Livewire 4 stores next to each uploaded chunk
+- An error while finishing an upload (e.g. saving the file with `autoSave`) is now reported (`report()`) and displayed as an upload error, instead of failing the Livewire request
+- Livewire 4: actions of components containing upload handler items (group, parent component bound with `wire:model`...) are held while an item request is in progress, as Livewire 3 does, so that an outdated item state is never sent
+- Livewire 4: a failed group request (sorting, adding files) no longer blocks the following group/items actions
+- Fix group items not loaded from entities when the request has no session
+- Add a test suite (Orchestra Testbench)
+
+
 1.5.2 (2026-07-22)
 ------------------
 

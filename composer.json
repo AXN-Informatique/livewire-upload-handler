@@ -1,6 +1,6 @@
 {
     "name": "axn/livewire-upload-handler",
-    "description": "Modern file upload handler for Livewire 3 with chunked uploads, image previews, and Spatie Media Library integration",
+    "description": "Modern file upload handler for Livewire 3 & 4 with chunked uploads, image previews, and Spatie Media Library integration",
     "keywords": ["laravel", "livewire", "upload", "file-upload", "media-library", "spatie", "chunked-upload", "glide"],
     "homepage": "https://github.com/AXN-Informatique/livewire-upload-handler",
     "support": {
@@ -18,12 +18,14 @@
         "php": "^8.4",
         "axn/laravel-glide": "^3.0 || ^4.0",
         "laravel/framework": "^12.0 || ^13.0",
-        "livewire/livewire": "^3.1",
+        "livewire/livewire": "^3.1 || ^4.0",
         "spatie/laravel-medialibrary": "^11.0"
     },
     "require-dev": {
         "laravel/pint": "^1.29.0",
         "driftingly/rector-laravel": "^2.2.0",
+        "orchestra/testbench": "^10.0 || ^11.0",
+        "phpunit/phpunit": "^11.5.3 || ^12.0",
         "rector/rector": "^2.3.9"
     },
     "autoload": {
@@ -33,6 +35,14 @@
         "files": [
             "src/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Axn\\LivewireUploadHandler\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
     },
     "extra": {
         "laravel": {
