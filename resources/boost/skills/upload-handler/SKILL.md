@@ -23,7 +23,7 @@ Two parallel hierarchies using a group/item architecture:
 | `showFileSize` | bool | false | Display file size |
 | `showTemporaryFileWarning` | bool | false | Warning for unsaved temp files |
 | `acceptsMimeTypes` | array | [] | Allowed MIME types |
-| `maxFileSize` | int | 0 | Max file size in KB (0 = unlimited) |
+| `maxFileSize` | int | 0 | Max file size in bytes (0 = unlimited) |
 | `minWidth` | int | 0 | Min image width in px (0 = no limit) |
 | `maxWidth` | int | 0 | Max image width in px (0 = no limit) |
 | `minHeight` | int | 0 | Min image height in px (0 = no limit) |
@@ -62,7 +62,7 @@ Two parallel hierarchies using a group/item architecture:
 <livewire:upload-handler.item
     inputBaseName="avatar"
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
-    :maxFileSize="2048"
+    :maxFileSize="2 * 1024 * 1024"
     :showImagePreview="true"
 />
 ```

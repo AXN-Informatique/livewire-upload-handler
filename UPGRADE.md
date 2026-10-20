@@ -9,6 +9,12 @@ No breaking change: the package now supports both Livewire 3 and Livewire 4.
 
 - **`Item`**: an exception thrown by `uploadFinished()` (and so by `saveUploadedFile()` with `autoSave`) is now reported (`report()`), the uploaded file is deleted and the upload is flagged as failed (`hasErrorOnUpload`). Validation exceptions are still thrown.
 
+### `maxFileSize` is in bytes
+
+The documentation gave `maxFileSize` in kilobytes, but the browser check and the Media Library default (`media-library.max_file_size`) have always used bytes. Only the server-side check used kilobytes, so its limit was 1024 times too high. It now uses bytes too.
+
+If you passed kilobytes as previously documented, multiply your value by 1024, e.g. `:maxFileSize="2 * 1024 * 1024"` for 2 MB.
+
 ### If you upgrade your application to Livewire 4
 
 - Keep `@livewireUploadHandlerScripts` after `@livewireScripts`, and self-close the `<livewire:upload-handler.* />` tags

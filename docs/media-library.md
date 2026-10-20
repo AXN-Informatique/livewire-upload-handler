@@ -88,7 +88,7 @@ MIME types and max file size are inherited from Media Collection definition. You
     :model="$article"
     mediaCollection="images"
     :acceptsMimeTypes="['image/webp']"
-    :maxFileSize="5120"
+    :maxFileSize="5 * 1024 * 1024"
     :autoSave="true"
 />
 ```

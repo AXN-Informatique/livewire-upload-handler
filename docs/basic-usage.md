@@ -12,7 +12,7 @@ Single File Upload (Item)
 ```blade
 <livewire:upload-handler.item
     :acceptsMimeTypes="['image/jpeg', 'image/png']"
-    :maxFileSize="10240"
+    :maxFileSize="10 * 1024 * 1024"
     :showFileSize="true"
     :showImagePreview="true"
 />
@@ -37,7 +37,7 @@ Component Properties
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `acceptsMimeTypes` | array | `[]` | Allowed MIME types |
-| `maxFileSize` | int | `0` | Max size in KB (0 = no limit) |
+| `maxFileSize` | int | `0` | Max size in bytes (0 = no limit) |
 | `minWidth` | int | `0` | Min image width in px (0 = no limit) |
 | `maxWidth` | int | `0` | Max image width in px (0 = no limit) |
 | `minHeight` | int | `0` | Min image height in px (0 = no limit) |
@@ -115,7 +115,7 @@ Examples
 ```blade
 <livewire:upload-handler.item
     :acceptsMimeTypes="['application/pdf']"
-    :maxFileSize="20480"
+    :maxFileSize="20 * 1024 * 1024"
 />
 ```
 

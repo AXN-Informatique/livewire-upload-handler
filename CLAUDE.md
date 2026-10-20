@@ -143,7 +143,7 @@ Assets are loaded via Blade directives:
 
 Key properties shared across Item/MediaItem (defined in `Common` trait):
 - `acceptsMimeTypes`: Array of allowed MIME types
-- `maxFileSize`: Maximum file size in KB (0 = unlimited)
+- `maxFileSize`: Maximum file size in bytes (0 = unlimited)
 - `minWidth`: Minimum image width in px (0 = no limit, client-side validation)
 - `maxWidth`: Maximum image width in px (0 = no limit, client-side validation)
 - `minHeight`: Minimum image height in px (0 = no limit, client-side validation)

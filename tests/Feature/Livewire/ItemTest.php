@@ -86,6 +86,28 @@ class ItemTest extends TestCase
         $this->assertSame([], $this->temporaryDirectoryFiles());
     }
 
+    public function test_upload_one_byte_over_max_file_size_in_bytes_is_rejected(): void
+    {
+        $component = Livewire::test(Item::class, ['maxFileSize' => 1500])
+            ->set('uploadingFileSize', 1501)
+            ->upload('chunkFile', [UploadedFile::fake()->createWithContent('report.txt', str_repeat('a', 1501))]);
+
+        $component
+            ->assertHasErrors('uploadedFile')
+            ->assertNotDispatched('luh-uploaded');
+    }
+
+    public function test_upload_of_exactly_max_file_size_in_bytes_is_accepted(): void
+    {
+        $component = Livewire::test(Item::class, ['maxFileSize' => 1500])
+            ->set('uploadingFileSize', 1500)
+            ->upload('chunkFile', [UploadedFile::fake()->createWithContent('report.txt', str_repeat('a', 1500))]);
+
+        $component
+            ->assertHasNoErrors('uploadedFile')
+            ->assertDispatched('luh-uploaded');
+    }
+
     public function test_failure_while_finishing_upload_flags_upload_error_and_deletes_assembled_file(): void
     {
         $component = Livewire::test(Item::class, ['autoSave' => true])

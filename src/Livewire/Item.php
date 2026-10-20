@@ -192,6 +192,8 @@ class Item extends Component
 
     /**
      * Validate the uploaded file against MIME types and size constraints.
+     *
+     * maxFileSize is in bytes, while the "max" rule measures files in kilobytes.
      */
     protected function validateUploadedFile(TemporaryUploadedFile $uploadedFile): void
     {
@@ -201,7 +203,7 @@ class Item extends Component
             ], [
                 'uploadedFile' => 'file'
                     .($this->acceptsMimeTypes !== [] ? '|mimetypes:'.implode(',', $this->acceptsMimeTypes) : '')
-                    .($this->maxFileSize > 0 ? '|max:'.$this->maxFileSize : ''),
+                    .($this->maxFileSize > 0 ? '|max:'.($this->maxFileSize / 1024) : ''),
             ])->validate();
 
         } catch (ValidationException $validationException) {
