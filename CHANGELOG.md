@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.6.1 (2026-11-12)
+------------------
+
+- Build the assets with esbuild instead of webpack: same JS and CSS, without the vulnerable build dependencies reported by Dependabot
+
+
 1.6.0 (2026-10-20)
 ------------------
 
