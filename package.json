@@ -1,17 +1,9 @@
 {
     "private": true,
     "scripts": {
-        "build": "node ./build.js"
+        "build": "node build.mjs"
     },
     "devDependencies": {
-        "css-loader": "^7.1.4",
-        "css-minimizer-webpack-plugin": "^7.0.4",
-        "mini-css-extract-plugin": "^2.10.1",
-        "path": "^0.12.7",
-        "style-loader": "^4.0.0",
-        "terser-webpack-plugin": "^5.4.0",
-        "webpack": "^5.105.4",
-        "webpack-cli": "^6.0.1",
-        "webpack-manifest-plugin": "^5.0.1"
+        "esbuild": "^0.28.2"
     }
 }

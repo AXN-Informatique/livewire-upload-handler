@@ -14,7 +14,7 @@ This is a modern Laravel 12 package (requiring PHP 8.4+) that provides file uplo
 ```bash
 npm run build
 ```
-Compiles JavaScript and CSS using webpack. Creates both minified and non-minified JS builds, plus CSS bundle in `dist/` directory with a manifest.
+Compiles JavaScript and CSS using esbuild (`build.mjs`). Creates both minified and non-minified JS builds, plus CSS bundle in `dist/` directory with a manifest.
 
 ### PHP Code Formatting
 ```bash
@@ -229,14 +229,16 @@ Located in `src/helpers.php`:
 - Registering `MakeUploadHandlerCommand`
 - Publishing config, translations, views, and themes
 
-### Webpack Build
+### Assets Build
 
-The build system uses three separate webpack configs (in `webpack/` directory) that compile:
-1. Non-minified JS (`scripts.js`)
+`build.mjs` runs esbuild (the only npm dependency) three times, emptying `dist/` first:
+1. Non-minified JS (`scripts.js`), loaded when `app.debug` is true
 2. Minified JS (`scripts.min.js`)
-3. CSS bundle (`styles.css`)
+3. Minified CSS (`styles.css`)
 
-After compilation, `build.js` merges partial manifests into final `dist/manifest.json`.
+Output files have hashed names; `build.mjs` writes `dist/manifest.json`, whose keys (`scripts.js`, `scripts.min.js`, `styles.css`) are read by `ServiceProvider`. `dist/` is versioned: commit it after each build, a release is needed for applications to get the new assets.
+
+No `target` is set, so the sources ship as written (native CSS nesting included). The JS is not bundled (`bundle: false`): it has no `import`, and its direct `eval()` calls (global `compressorjs_var` / `sortablejs_var`) would otherwise make esbuild wrap it as a CommonJS module. Adding an `import` requires `bundle: true`.
 
 ### Translations
 
